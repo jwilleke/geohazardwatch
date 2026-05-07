@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-05-07
+
+### Fixed
+
+- `Dockerfile` — base image reference was `ghcr.io/jwilleke/ngdpbase:v3.10.0`,
+  which doesn't exist. Published `ngdpbase` image tags don't carry the `v`
+  prefix (the `docker/metadata-action` strips it), and the most recent
+  published `ngdpbase` release is `3.9.0`, not `3.10.0`. Pinned to `3.9.0` —
+  Renovate will PR an upgrade once `ngdpbase` publishes `3.10.0`. Without this
+  fix, the v1.1.0 release workflow failed at `FROM` resolution.
+
 ## [1.1.0] - 2026-05-07
 
 ### Added
@@ -72,4 +83,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [1.0.1]: https://github.com/jwilleke/geohazardwatch/compare/v1.0.0...v1.0.1
 [1.1.0]: https://github.com/jwilleke/geohazardwatch/compare/v1.0.1...v1.1.0
+[1.1.1]: https://github.com/jwilleke/geohazardwatch/compare/v1.1.0...v1.1.1
 [1.0.0]: https://github.com/jwilleke/geohazardwatch/releases/tag/v1.0.0

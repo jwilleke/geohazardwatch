@@ -52,7 +52,7 @@ const _intervals = [];
 
 module.exports = {
   name: 've-geology',
-  version: '1.1.0',
+  version: '1.1.1',
   description: 'Volcano & geology data platform — GVP structured records, search, infoboxes, maps',
   author: 'jwilleke',
   dependencies: [],

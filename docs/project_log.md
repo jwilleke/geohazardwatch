@@ -39,6 +39,21 @@ This document tracks ongoing work and session history for the ve-geology project
 
 ## Session Logs
 
+### 2026-05-07-03
+
+- **Agent:** Claude Opus 4.7
+- **Subject:** v1.1.1 — fix broken Dockerfile base image reference
+- **Work Done:**
+  - v1.1.0 publish-image workflow failed at `FROM ghcr.io/jwilleke/ngdpbase:v3.10.0` — `not found`.
+  - Two issues: ngdpbase's `docker/metadata-action` strips the `v` from published image tags (so the published tag is `3.10.0`, not `v3.10.0`), AND ngdpbase's latest *published* release is `v3.9.0` — `v3.10.0` is in-progress in `package.json` but not yet tagged on the ngdpbase repo.
+  - Pinned base image to `3.9.0`. Renovate will auto-PR an upgrade once `ngdpbase` publishes `3.10.0`.
+  - Bumped to v1.1.1 (patch — broken-on-arrival fix).
+- **Files Modified:**
+  - `Dockerfile`
+  - `package.json`, `addons/ve-geology/index.js`
+  - `CHANGELOG.md`
+  - `docs/project_log.md` (this file)
+
 ### 2026-05-07-02
 
 - **Agent:** Claude Opus 4.7

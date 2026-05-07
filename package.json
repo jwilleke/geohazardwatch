@@ -1,6 +1,6 @@
 {
   "name": "ve-geology",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Volcano & geology add-on for ngdpbase",
   "private": true,
   "scripts": {
