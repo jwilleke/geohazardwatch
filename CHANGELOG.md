@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.5] - 2026-05-07
+
+### Changed
+
+- Bumped `Dockerfile` base image from `ghcr.io/jwilleke/ngdpbase:3.10.1` to
+  `3.10.2`. ngdpbase 3.10.2 ships the `themes/` directory in the runtime
+  image (per `jwilleke/ngdpbase#652`); 3.10.1 omitted it, which broke the
+  volcano theme, favicon, and core CSS variables in the cluster deployment
+  (geohazardwatch#26).
+
 ## [1.1.4] - 2026-05-07
 
 ### Changed
@@ -123,4 +133,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.1.2]: https://github.com/jwilleke/geohazardwatch/compare/v1.1.1...v1.1.2
 [1.1.3]: https://github.com/jwilleke/geohazardwatch/compare/v1.1.2...v1.1.3
 [1.1.4]: https://github.com/jwilleke/geohazardwatch/compare/v1.1.3...v1.1.4
+[1.1.5]: https://github.com/jwilleke/geohazardwatch/compare/v1.1.4...v1.1.5
 [1.0.0]: https://github.com/jwilleke/geohazardwatch/releases/tag/v1.0.0
