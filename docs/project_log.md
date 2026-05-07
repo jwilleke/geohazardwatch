@@ -39,6 +39,24 @@ This document tracks ongoing work and session history for the ve-geology project
 
 ## Session Logs
 
+### 2026-05-07-06
+
+- **Agent:** Claude Opus 4.7
+- **Subject:** v1.1.4 — bump ngdpbase base image to 3.10.1
+- **Symptom on cluster:** Logged-in `admin` user had no Edit button and no admin dashboard. The page showed `GeoHazardWatch v3.9.0`.
+- **Root cause:** Cluster image was layered on `ghcr.io/jwilleke/ngdpbase:3.9.0`.
+  ngdpbase 3.10 introduced OrganizationRole records in `data/roles/` (per
+  `User.ts:78` deprecation note for the legacy `roles[]` field). 3.9's headless
+  install never created those records, so `UserManager.resolveUserRoles('admin')`
+  returned an empty role set and the policy evaluator treated the admin user as
+  `Anonymous|All`.
+- **Fix:** Bumped `Dockerfile` `ARG NGDPBASE_VERSION=3.9.0` → `3.10.1`. v3.10.0 was cut earlier today and v3.10.1 (just published) is the first release with the image landing in `ghcr.io/jwilleke/ngdpbase`.
+- **Files Modified:**
+  - `Dockerfile`
+  - `package.json`, `addons/ve-geology/index.js`
+  - `CHANGELOG.md`
+  - `docs/project_log.md` (this file)
+
 ### 2026-05-07-05
 
 - **Agent:** Claude Opus 4.7

@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.4] - 2026-05-07
+
+### Changed
+
+- Bumped `Dockerfile` base image from `ghcr.io/jwilleke/ngdpbase:3.9.0` to
+  `3.10.1`. 3.10 introduced the OrganizationRole-based role assignment that
+  the headless install needs in order for the seeded `admin` user to actually
+  carry the `admin` role at login. Without it (3.9.x), `admin` resolved to the
+  implicit `All` role and the cluster deployment showed no Edit button or
+  admin dashboard.
+
 ## [1.1.3] - 2026-05-07
 
 ### Fixed
@@ -111,4 +122,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.1.1]: https://github.com/jwilleke/geohazardwatch/compare/v1.1.0...v1.1.1
 [1.1.2]: https://github.com/jwilleke/geohazardwatch/compare/v1.1.1...v1.1.2
 [1.1.3]: https://github.com/jwilleke/geohazardwatch/compare/v1.1.2...v1.1.3
+[1.1.4]: https://github.com/jwilleke/geohazardwatch/compare/v1.1.3...v1.1.4
 [1.0.0]: https://github.com/jwilleke/geohazardwatch/releases/tag/v1.0.0
