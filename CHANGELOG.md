@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-05-07
+
+### Added
+
+- `Dockerfile` — layered on `ghcr.io/jwilleke/ngdpbase`; copies addon and root deps into `/opt/geohazardwatch/`. Imported data stays on a runtime volume, not baked in.
+- `.dockerignore` — keeps the build context small (excludes `node_modules`, `private/`, `addons/ve-geology/data/`, etc.).
+- `.github/workflows/publish-image.yml` — tag-triggered build, multi-tag semver push to `ghcr.io/jwilleke/geohazardwatch`, smoke test, Trivy scan.
+- `renovate.json` — minor + patch auto-merge for the base image and npm deps; majors require manual review; weekly schedule.
+
+### Changed
+
+- Repo renamed from `jwilleke/ve-geology` to `jwilleke/geohazardwatch`. Old URLs redirect; canonical name now matches the public domain.
+
+### Fixed
+
 ## [1.0.1] - 2026-03-31
 
 ### Added
@@ -55,5 +70,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Addon context page at `/wiki/ve-geology-about`
 - ESLint + markdownlint + Prettier + Husky pre-commit hook
 
-[1.0.1]: https://github.com/jwilleke/ve-geology/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/jwilleke/ve-geology/releases/tag/v1.0.0
+[1.0.1]: https://github.com/jwilleke/geohazardwatch/compare/v1.0.0...v1.0.1
+[1.1.0]: https://github.com/jwilleke/geohazardwatch/compare/v1.0.1...v1.1.0
+[1.0.0]: https://github.com/jwilleke/geohazardwatch/releases/tag/v1.0.0

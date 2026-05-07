@@ -39,6 +39,22 @@ This document tracks ongoing work and session history for the ve-geology project
 
 ## Session Logs
 
+### 2026-05-07-02
+
+- **Agent:** Claude Opus 4.7
+- **Subject:** Release v1.1.0 — first dockerized release
+- **Work Done:**
+  - Merged `#19` (Dockerfile, image-publish workflow, Renovate) onto `main`.
+  - `npm run version:bump -- minor` → 1.0.1 → 1.1.0 (updated `package.json`, `addons/ve-geology/index.js`, `CHANGELOG.md`).
+  - Filled in CHANGELOG `[1.1.0]` section with the new artifacts and the repo rename note.
+  - Replaced stale `jwilleke/ve-geology` URLs in `src/utils/version.ts` and CHANGELOG link footers with the new `jwilleke/geohazardwatch` canonical URL.
+  - Tag `v1.1.0` will trigger `publish-image.yml` to publish `ghcr.io/jwilleke/geohazardwatch:{1.1.0, 1.1, 1, latest}`.
+- **Files Modified:**
+  - `package.json`, `addons/ve-geology/index.js`
+  - `CHANGELOG.md`
+  - `src/utils/version.ts`
+  - `docs/project_log.md` (this file)
+
 ### 2026-05-07-01
 
 - **Agent:** Claude Opus 4.7

@@ -94,7 +94,7 @@ function updateChangelog(next: string, prev: string): void {
     '',
   ].join('\n');
 
-  const linkLine = `[${next}]: https://github.com/jwilleke/ve-geology/compare/v${prev}...v${next}`;
+  const linkLine = `[${next}]: https://github.com/jwilleke/geohazardwatch/compare/v${prev}...v${next}`;
 
   // Insert new section before the first ## [x.y.z] heading
   const updated = content
