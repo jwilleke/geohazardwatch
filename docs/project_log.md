@@ -39,6 +39,31 @@ This document tracks ongoing work and session history for the ve-geology project
 
 ## Session Logs
 
+### 2026-05-08-03
+
+- **Agent:** Claude Opus 4.7
+- **Subject:** Post-rename hygiene — slash commands, issue closures, AGENTS table refresh
+- **Current Issue:** #23 (closed), #11 (closed)
+- **Tests:** lint clean (`npm run lint`)
+- **Work Done:**
+  - Committed 7 project-shared slash command definitions (`docs`, `othersites`, `perf-test`, `release`, `semver`, `session-commit`, `sync-template`) under `.claude/commands/`.
+  - Deleted stale `ve-geology.code-workspace`; the updated `.gitignore` already catches `geohazardwatch.code-workspace`.
+  - Pushed `main` (geohazardwatch) and `master` (ngdpbase) to their remotes.
+  - Posted summary comment on #23 and closed as completed — the rename EPIC shipped in this session via `fe8c4d3`.
+  - Verified #11 was already implemented in `1c6973f` but never closed; posted comment noting the post-rename mount path (`/addons/geohazardwatch`) and closed as completed.
+  - Refreshed AGENTS.md "Key open issues" table — removed 5 closed issues (#1, #2, #8, #411, #412), added 4 open ones (#12, #13, #14, #29).
+- **Commits:** `51a4299`, `6d577d8`
+- **Files Modified:**
+  - `.claude/commands/docs.md`
+  - `.claude/commands/othersites.md`
+  - `.claude/commands/perf-test.md`
+  - `.claude/commands/release.md`
+  - `.claude/commands/semver.md`
+  - `.claude/commands/session-commit.md`
+  - `.claude/commands/sync-template.md`
+  - `AGENTS.md`
+  - `ve-geology.code-workspace` *(deleted)*
+
 ### 2026-05-08-02
 
 - **Agent:** Claude Opus 4.7
