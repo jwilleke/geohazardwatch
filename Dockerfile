@@ -8,7 +8,7 @@
 # /app/data — NOT baked into the image — so a CronJob can refresh it
 # without rebuilding.
 
-ARG NGDPBASE_VERSION=3.10.2
+ARG NGDPBASE_VERSION=3.10.3
 FROM ghcr.io/jwilleke/ngdpbase:${NGDPBASE_VERSION}
 
 LABEL org.opencontainers.image.title="geohazardwatch"

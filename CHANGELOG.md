@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.6] - 2026-05-08
+
+### Added
+
+- New seed page `addons/ve-geology/pages/ve-geology-request-access.md`
+  (slug `request-access`). Destination for the **Request access** button
+  shown when ngdpbase's `ngdpbase.application.registration` flag is `false`.
+  Operator edits the page in the wiki UI to customize contact instructions
+  or drop in a `[{Form …}]` plugin invocation.
+
+### Changed
+
+- Bumped `Dockerfile` base image from `ghcr.io/jwilleke/ngdpbase:3.10.2` to
+  `3.10.3`. ngdpbase 3.10.3 introduces the `ngdpbase.application.registration`
+  config flag (default `true`); operators set it to `false` to lock down
+  self-registration. See ngdpbase PR #654.
+
 ## [1.1.5] - 2026-05-07
 
 ### Changed
@@ -134,4 +151,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.1.3]: https://github.com/jwilleke/geohazardwatch/compare/v1.1.2...v1.1.3
 [1.1.4]: https://github.com/jwilleke/geohazardwatch/compare/v1.1.3...v1.1.4
 [1.1.5]: https://github.com/jwilleke/geohazardwatch/compare/v1.1.4...v1.1.5
+[1.1.6]: https://github.com/jwilleke/geohazardwatch/compare/v1.1.5...v1.1.6
 [1.0.0]: https://github.com/jwilleke/geohazardwatch/releases/tag/v1.0.0
