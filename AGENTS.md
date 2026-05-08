@@ -122,22 +122,21 @@ See [addons/geohazardwatch/README.md](./addons/geohazardwatch/README.md) for con
 
 Track all bugs and features on GitHub:
 
-- jwilleke/geohazardwatch — addon issues (pagination, FIRMS, VAACs, polling)
-- jwilleke/ngdpbase — platform issues (admin addons panel #412, page conflicts #411)
+- jwilleke/geohazardwatch — addon and deployment issues
+- jwilleke/ngdpbase — platform issues
 
 Key open issues:
 
 | Issue | Repo | Summary |
 |-------|------|---------|
-| #1 | geohazardwatch | VolcanoList/EarthquakeList pagination |
-| #2 | geohazardwatch | Plugin syntax quick-reference wiki page |
 | #4 | geohazardwatch | NASA FIRMS satellite thermal data |
 | #5 | geohazardwatch | VAAC ash advisories |
 | #6 | geohazardwatch | MIROVA/MODVOLC satellite monitoring |
 | #7 | geohazardwatch | VolcanoDiscovery RSS (licensing TBD) |
-| #8 | geohazardwatch | Periodic refresh via BackgroundJobManager |
-| #411 | ngdpbase | Page name conflict detection |
-| #412 | ngdpbase | Admin panel Add-ons section |
+| #12 | geohazardwatch | [BUG] VolcanoInfobox placement on page |
+| #13 | geohazardwatch | Tsunami and landslide feeds *(good first issue)* |
+| #14 | geohazardwatch | [EPIC] Cloudflare Tunnel Setup for geohazardwatch.com |
+| #29 | geohazardwatch | Deterministic container deployment builds |
 
 ## Agent Priority Matrix
 
