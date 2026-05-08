@@ -18,14 +18,14 @@ Read [GLOBAL-CODE-PREFERENCES.md](./GLOBAL-CODE-PREFERENCES.md) first — overar
 
 ## What This Project Is
 
-**ve-geology** is an [ngdpbase](https://github.com/jwilleke/ngdpbase) add-on that provides volcano and geology data to a wiki platform. It is **not a standalone app** — it runs inside an ngdpbase instance as an external addon loaded via `AddonsManager`.
+**geohazardwatch** is an [ngdpbase](https://github.com/jwilleke/ngdpbase) add-on that provides volcano and geology data to a wiki platform. It is **not a standalone app** — it runs inside an ngdpbase instance as an external addon loaded via `AddonsManager`.
 
 The addon:
 
 - Imports GVP volcano/eruption data and USGS earthquake/HANS alert data into local JSON snapshots
 - Registers data managers with the ngdpbase engine so plugins can access them
 - Registers seven wiki markup plugins (`[{PluginName param='value'}]` syntax)
-- Mounts REST API routes at `/api/ve-geology/*`
+- Mounts REST API routes at `/api/geohazardwatch/*`
 - Seeds demo wiki pages into the ngdpbase instance on first load
 
 ## Commands
@@ -42,7 +42,7 @@ npm run import:hans              # USGS HANS real-time US volcano alerts
 ```
 
 Earthquake import requires `volcanoes.json` to exist first (proximity matching).
-All data lands in `addons/ve-geology/data/` (gitignored).
+All data lands in `addons/geohazardwatch/data/` (gitignored).
 
 ### Lint
 
@@ -58,7 +58,7 @@ Pre-commit hook runs `npm run lint` automatically via Husky.
 ### No build step, no test suite
 
 The addon is plain CommonJS JavaScript — no TypeScript compile needed.
-No test suite exists yet (see open issue jwilleke/ve-geology#1 area for future work).
+No test suite exists yet (see open issue jwilleke/geohazardwatch#1 area for future work).
 
 ### ngdpbase (sister repo at `/Volumes/hd2A/workspaces/github/ngdpbase`)
 
@@ -76,12 +76,12 @@ ngdpbase runs on port 3333. Admin panel at `/admin`, wiki at `/wiki/<slug>`.
 ### How the addon loads
 
 ngdpbase's `AddonsManager` discovers addons via the `addons-path` config key, finds
-`addons/ve-geology/index.js`, and calls `module.exports.register(engine, config)`.
+`addons/geohazardwatch/index.js`, and calls `module.exports.register(engine, config)`.
 The `engine` object provides access to all ngdpbase managers and the Express app.
 
 ```
 ngdpbase/src/managers/AddonsManager.ts
-  → loads addons/ve-geology/index.js
+  → loads addons/geohazardwatch/index.js
   → calls register(engine, config)
     → initialises VolcanoDataManager, EarthquakeDataManager, HansDataManager
     → registers 7 plugins with PluginManager
@@ -94,7 +94,7 @@ ngdpbase/src/managers/AddonsManager.ts
 ```
 External API (GVP WFS / USGS / HANS)
   → import/*.js scripts          (run manually or via npm run import:*)
-  → addons/ve-geology/data/*.json  (gitignored snapshots)
+  → addons/geohazardwatch/data/*.json  (gitignored snapshots)
   → managers/*DataManager.js     (load on addon start, serve from memory)
   → plugins/*Plugin.js           (render HTML from manager data)
   → routes/api.js                (REST endpoints for client-side widgets)
@@ -108,7 +108,7 @@ at page render time. `context.engine.getManager('XxxDataManager')` gives plugin
 access to in-memory data.
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for repo structure, data pipeline depth, and guide to adding new data sources.
-See [addons/ve-geology/README.md](./addons/ve-geology/README.md) for config keys, plugin syntax, and API reference.
+See [addons/geohazardwatch/README.md](./addons/geohazardwatch/README.md) for config keys, plugin syntax, and API reference.
 
 ## Key Decisions
 
@@ -122,20 +122,20 @@ See [addons/ve-geology/README.md](./addons/ve-geology/README.md) for config keys
 
 Track all bugs and features on GitHub:
 
-- jwilleke/ve-geology — addon issues (pagination, FIRMS, VAACs, polling)
+- jwilleke/geohazardwatch — addon issues (pagination, FIRMS, VAACs, polling)
 - jwilleke/ngdpbase — platform issues (admin addons panel #412, page conflicts #411)
 
 Key open issues:
 
 | Issue | Repo | Summary |
 |-------|------|---------|
-| #1 | ve-geology | VolcanoList/EarthquakeList pagination |
-| #2 | ve-geology | Plugin syntax quick-reference wiki page |
-| #4 | ve-geology | NASA FIRMS satellite thermal data |
-| #5 | ve-geology | VAAC ash advisories |
-| #6 | ve-geology | MIROVA/MODVOLC satellite monitoring |
-| #7 | ve-geology | VolcanoDiscovery RSS (licensing TBD) |
-| #8 | ve-geology | Periodic refresh via BackgroundJobManager |
+| #1 | geohazardwatch | VolcanoList/EarthquakeList pagination |
+| #2 | geohazardwatch | Plugin syntax quick-reference wiki page |
+| #4 | geohazardwatch | NASA FIRMS satellite thermal data |
+| #5 | geohazardwatch | VAAC ash advisories |
+| #6 | geohazardwatch | MIROVA/MODVOLC satellite monitoring |
+| #7 | geohazardwatch | VolcanoDiscovery RSS (licensing TBD) |
+| #8 | geohazardwatch | Periodic refresh via BackgroundJobManager |
 | #411 | ngdpbase | Page name conflict detection |
 | #412 | ngdpbase | Admin panel Add-ons section |
 
@@ -166,7 +166,7 @@ See [docs/project_log.md](docs/project_log.md) for session history and next step
 ## Quick Navigation
 
 - [README.md](./README.md) — Setup and repo layout
-- [addons/ve-geology/README.md](./addons/ve-geology/README.md) — Plugin syntax and API reference
+- [addons/geohazardwatch/README.md](./addons/geohazardwatch/README.md) — Plugin syntax and API reference
 - [GLOBAL-CODE-PREFERENCES.md](./GLOBAL-CODE-PREFERENCES.md) — Overarching principles
 - [CODE_STANDARDS.md](./CODE_STANDARDS.md) — Linting, formatting, commit conventions
 - [ARCHITECTURE.md](./ARCHITECTURE.md) — Repo structure, data pipeline, adding new sources

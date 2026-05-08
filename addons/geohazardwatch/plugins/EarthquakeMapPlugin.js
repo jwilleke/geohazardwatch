@@ -39,8 +39,8 @@ module.exports = {
 <div class="earthquake-map">
   <div id="${mapId}" style="height:${height}px;width:100%;"></div>
 </div>
-<link rel="stylesheet" href="/addons/ve-geology/vendor/leaflet/leaflet.css">
-<script src="/addons/ve-geology/vendor/leaflet/leaflet.js"></script>
+<link rel="stylesheet" href="/addons/geohazardwatch/vendor/leaflet/leaflet.css">
+<script src="/addons/geohazardwatch/vendor/leaflet/leaflet.js"></script>
 <script>
 (function () {
   var SHOW_VOLCANOES = ${showVolcanoes};
@@ -65,7 +65,7 @@ module.exports = {
     }).addTo(map);
 
     // Earthquake markers
-    fetch('/api/ve-geology/earthquakes/search?${eqParams.toString()}')
+    fetch('/api/geohazardwatch/earthquakes/search?${eqParams.toString()}')
       .then(function (r) { return r.json(); })
       .then(function (data) {
         data.earthquakes.forEach(function (e) {
@@ -88,7 +88,7 @@ module.exports = {
 
     // Optional volcano markers
     if (SHOW_VOLCANOES) {
-      fetch('/api/ve-geology/search?${volcParams.toString()}')
+      fetch('/api/geohazardwatch/search?${volcParams.toString()}')
         .then(function (r) { return r.json(); })
         .then(function (data) {
           data.volcanoes.forEach(function (v) {

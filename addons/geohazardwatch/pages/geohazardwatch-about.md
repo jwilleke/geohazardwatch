@@ -1,15 +1,15 @@
 ---
-title: About ve-geology
+title: About geohazardwatch
 uuid: 98f2df76-5d86-472a-9862-9a01267cf4a7
-slug: ve-geology-about
-description: What ve-geology is, where the data comes from, and how to interpret data freshness
+slug: geohazardwatch-about
+description: What geohazardwatch is, where the data comes from, and how to interpret data freshness
 tags: [geology, about, data-sources, volcanoes, earthquakes]
 author: system
 ---
 
-## About ve-geology
+## About geohazardwatch
 
-**ve-geology** is an open-source add-on for the [ngdpbase](https://github.com/jwilleke/ngdpbase)
+**geohazardwatch** is an open-source add-on for the [ngdpbase](https://github.com/jwilleke/ngdpbase)
 wiki platform that brings volcano and earthquake data into wiki pages via simple markup tags.
 
 It is not a live data feed — it works by importing snapshots from public scientific APIs and
@@ -34,7 +34,7 @@ outages, at the cost of some data freshness.
 ### Smithsonian Global Volcanism Program (GVP)
 
 The GVP maintains the world's most comprehensive catalog of volcanic activity.
-The ve-geology volcano catalog is drawn from the GVP WFS API and covers:
+The geohazardwatch volcano catalog is drawn from the GVP WFS API and covers:
 
 - Basic facts: name, GVP number, country, region, coordinates, elevation
 - Classification: volcano type, dominant rock type, tectonic setting
@@ -47,7 +47,7 @@ Smithsonian Institution. [https://doi.org/10.5479/si.GVP.VOTW5-2023.5.3](https:/
 
 ### USGS Earthquake Hazards Program
 
-The USGS monitors global seismic activity in near-real-time. ve-geology imports the
+The USGS monitors global seismic activity in near-real-time. geohazardwatch imports the
 M4.5+ past-7-days feed by default. Earthquakes are cross-referenced with the GVP
 volcano catalog to identify events within 50 km of a known volcano.
 
@@ -106,11 +106,11 @@ Seven wiki markup plugins are available:
 | `[{EarthquakeMap}]` | Interactive Leaflet map of earthquake events |
 | `[{HansAlerts}]` | US volcano alert level table |
 
-Full usage guide with examples: [Plugin Guide](/wiki/ve-geology-plugins)
+Full usage guide with examples: [Plugin Guide](/wiki/geohazardwatch-plugins)
 
 ---
 
 ## Open source
 
-ve-geology is open source and available at [github.com/jwilleke/ve-geology](https://github.com/jwilleke/ve-geology).
+geohazardwatch is open source and available at [github.com/jwilleke/geohazardwatch](https://github.com/jwilleke/geohazardwatch).
 The ngdpbase platform that powers this wiki is at [github.com/jwilleke/ngdpbase](https://github.com/jwilleke/ngdpbase).

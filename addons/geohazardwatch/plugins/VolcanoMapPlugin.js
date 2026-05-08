@@ -42,8 +42,8 @@ module.exports = {
 <div class="volcano-map">
   <div id="${mapId}" style="height:${height}px; width:100%;"></div>
 </div>
-<link rel="stylesheet" href="/addons/ve-geology/vendor/leaflet/leaflet.css">
-<script src="/addons/ve-geology/vendor/leaflet/leaflet.js"></script>
+<link rel="stylesheet" href="/addons/geohazardwatch/vendor/leaflet/leaflet.css">
+<script src="/addons/geohazardwatch/vendor/leaflet/leaflet.js"></script>
 <script>
 (function () {
   function initMap() {
@@ -55,7 +55,7 @@ module.exports = {
       maxZoom: 18
     }).addTo(map);
 
-    fetch('/api/ve-geology/search?${apiParams.toString()}')
+    fetch('/api/geohazardwatch/search?${apiParams.toString()}')
       .then(function (r) { return r.json(); })
       .then(function (data) {
         data.volcanoes.forEach(function (v) {

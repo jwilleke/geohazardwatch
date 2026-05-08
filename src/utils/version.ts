@@ -1,10 +1,10 @@
 #!/usr/bin/env tsx
 /**
- * Version bump utility for ve-geology.
+ * Version bump utility for geohazardwatch.
  *
  * Updates the version consistently across:
  *   - package.json
- *   - addons/ve-geology/index.js
+ *   - addons/geohazardwatch/index.js
  *   - CHANGELOG.md  (prepends a new [x.y.z] section)
  *
  * Usage:
@@ -65,18 +65,18 @@ function updatePackageJson(next: string): void {
 }
 
 function updateIndexJs(next: string): void {
-  const rel = 'addons/ve-geology/index.js';
+  const rel = 'addons/geohazardwatch/index.js';
   const content = readFile(rel);
   const updated = content.replace(
     /(\bversion:\s*['"])\d+\.\d+\.\d+(['"])/,
     `$1${next}$2`
   );
   if (updated === content) {
-    console.warn('  addons/ve-geology/index.js  — version string not found, skipped');
+    console.warn('  addons/geohazardwatch/index.js  — version string not found, skipped');
     return;
   }
   writeFile(rel, updated);
-  console.log(`  addons/ve-geology/index.js  ${next}`);
+  console.log(`  addons/geohazardwatch/index.js  ${next}`);
 }
 
 function updateChangelog(next: string, prev: string): void {
@@ -130,7 +130,7 @@ function main(): void {
   console.log(`\nNext steps:`);
   console.log(`  1. Fill in the [${next}] section in CHANGELOG.md`);
   console.log(`  2. git add -A && git commit -m "chore: release v${next}"`);
-  console.log(`  3. git tag -a v${next} -m "ve-geology v${next}"`);
+  console.log(`  3. git tag -a v${next} -m "geohazardwatch v${next}"`);
 }
 
 main();

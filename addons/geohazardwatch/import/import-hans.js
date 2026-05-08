@@ -40,7 +40,7 @@ async function fetchJson(endpoint, label) {
 /**
  * Import HANS volcano alert data and write activity.json.
  *
- * @param {string} dataDir  Path to the ve-geology data directory
+ * @param {string} dataDir  Path to the geohazardwatch data directory
  * @returns {{ elevatedCount: number, monitoredCount: number }}
  */
 async function runImport(dataDir) {

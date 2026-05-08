@@ -118,7 +118,7 @@ function loadVolcanoes(dataDir) {
 /**
  * Import earthquake data and write earthquakes.json.
  *
- * @param {string} dataDir   Path to the ve-geology data directory
+ * @param {string} dataDir   Path to the geohazardwatch data directory
  * @param {string} [feedName='4.5-week']  USGS feed name
  * @returns {{ total: number, nearVolcano: number }}
  */

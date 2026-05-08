@@ -1,11 +1,11 @@
-# ve-geology Add-on
+# geohazardwatch Add-on
 
 Volcano & geology data platform for [ngdpbase](https://github.com/jwilleke/ngdpbase), powered by
 [Global Volcanism Program (GVP)](https://volcano.si.edu/) and
 [USGS Earthquake Hazards Program](https://earthquake.usgs.gov/) data.
 
 For end-user documentation (what renders, when to use each plugin, example combinations),
-see the in-wiki guide seeded at `/wiki/ve-geology-plugins`.
+see the in-wiki guide seeded at `/wiki/geohazardwatch-plugins`.
 
 ## Plugins
 
@@ -190,7 +190,7 @@ on an Alaska-specific page. Covers US volcanoes only.
 
 ## API Endpoints
 
-All endpoints are mounted at `/api/ve-geology`.
+All endpoints are mounted at `/api/geohazardwatch`.
 
 ### Volcano endpoints
 
@@ -221,7 +221,7 @@ All endpoints are mounted at `/api/ve-geology`.
 
 ## Import scripts
 
-Run from the ve-geology repo root (requires internet access).
+Run from the geohazardwatch repo root (requires internet access).
 
 ```sh
 # Volcanoes only
@@ -244,10 +244,10 @@ Custom options (run directly):
 
 ```sh
 # Custom data directory
-node addons/ve-geology/import/import-volcanoes.js --data-dir /path/to/data
+node addons/geohazardwatch/import/import-volcanoes.js --data-dir /path/to/data
 
 # Specific earthquake feed
-node addons/ve-geology/import/import-earthquakes.js --feed=significant-week
+node addons/geohazardwatch/import/import-earthquakes.js --feed=significant-week
 # Available feeds: significant-week, 4.5-week, 2.5-week, 4.5-month, significant-month
 ```
 
@@ -261,15 +261,15 @@ Set in your ngdpbase `app-custom-config.json`:
 
 | Key | Default | Description |
 |-----|---------|-------------|
-| `ngdpbase.addons.ve-geology.enabled` | `false` | Enable the add-on |
-| `ngdpbase.addons.ve-geology.dataPath` | `./data/ve-geology` | Path to data directory |
+| `ngdpbase.addons.geohazardwatch.enabled` | `false` | Enable the add-on |
+| `ngdpbase.addons.geohazardwatch.dataPath` | `./data/geohazardwatch` | Path to data directory |
 
 ---
 
 ## Structure
 
 ```
-addons/ve-geology/
+addons/geohazardwatch/
 ├── index.js                        ← AddonModule entry point
 ├── managers/
 │   ├── VolcanoDataManager.js       ← Loads volcanoes.json + eruptions.json
@@ -282,17 +282,17 @@ addons/ve-geology/
 │   ├── EarthquakeListPlugin.js
 │   └── EarthquakeMapPlugin.js
 ├── routes/
-│   └── api.js                      ← /api/ve-geology/* endpoints
+│   └── api.js                      ← /api/geohazardwatch/* endpoints
 ├── import/
 │   ├── import-volcanoes.js         ← GVP WFS API importer
 │   └── import-earthquakes.js       ← USGS feed importer + proximity matching
 ├── pages/                          ← Seeded into ngdpbase on first load
-│   ├── ve-geology-volcanoes.md
-│   ├── ve-geology-earthquakes.md
-│   ├── ve-geology-demo.md
-│   └── ve-geology-japan.md
+│   ├── geohazardwatch-volcanoes.md
+│   ├── geohazardwatch-earthquakes.md
+│   ├── geohazardwatch-demo.md
+│   └── geohazardwatch-japan.md
 ├── public/
-│   └── css/ve-geology.css          ← Served at /addons/ve-geology/css/
+│   └── css/geohazardwatch.css          ← Served at /addons/geohazardwatch/css/
 └── data/                           ← volcanoes.json, eruptions.json, earthquakes.json (gitignored)
 ```
 

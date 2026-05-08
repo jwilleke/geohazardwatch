@@ -40,12 +40,12 @@ yarn-error.log*
 Thumbs.db
 
 # Generated data files (run npm run import to regenerate)
-addons/ve-geology/data/volcanoes.json
-addons/ve-geology/data/eruptions.json
-addons/ve-geology/data/global-activity.json
-addons/ve-geology/data/earthquakes.json
-addons/ve-geology/data/activity.json
-ve-geology.code-workspace
+addons/geohazardwatch/data/volcanoes.json
+addons/geohazardwatch/data/eruptions.json
+addons/geohazardwatch/data/global-activity.json
+addons/geohazardwatch/data/earthquakes.json
+addons/geohazardwatch/data/activity.json
+geohazardwatch.code-workspace
 
 # Private notes (never commit)
 private/

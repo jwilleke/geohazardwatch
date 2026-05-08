@@ -3,8 +3,8 @@ title: Request Access
 uuid: 2731a6b1-1ef6-465b-80b3-2f8ed148476b
 slug: request-access
 system-category: addon
-addon: ve-geology
-author: ve-geology
+addon: geohazardwatch
+author: geohazardwatch
 description: How to request an account on geohazardwatch.com when self-registration is closed
 ---
 

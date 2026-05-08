@@ -113,7 +113,7 @@ module.exports = {
 
   function goTo(newOffset) {
     var params = Object.assign({}, apiFilters, { limit: limit, offset: newOffset });
-    fetch('/api/ve-geology/search?' + new URLSearchParams(params))
+    fetch('/api/geohazardwatch/search?' + new URLSearchParams(params))
       .then(function (r) { return r.json(); })
       .then(function (data) {
         offset = newOffset;

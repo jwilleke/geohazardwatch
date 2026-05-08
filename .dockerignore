@@ -19,5 +19,5 @@ tests
 **/tests
 .eslintcache
 .husky
-addons/ve-geology/data
+addons/geohazardwatch/data
 **/.DS_Store

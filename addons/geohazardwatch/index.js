@@ -1,25 +1,25 @@
 'use strict';
 
 /**
- * ve-geology Add-on
+ * geohazardwatch Add-on
  *
  * Volcano & geology data platform built on ngdpbase.
  * Loads GVP volcano and eruption data, exposes search/filter API routes,
  * and registers wiki markup plugins for infoboxes, lists, and maps.
  *
  * Wire into your ngdpbase instance config:
- *   "ngdpbase.managers.addons-manager.addons-path": "/path/to/ve-geology/addons",
- *   "ngdpbase.addons.ve-geology.enabled": true,
- *   "ngdpbase.addons.ve-geology.dataPath": "./data/ve-geology"
+ *   "ngdpbase.managers.addons-manager.addons-path": "/path/to/geohazardwatch/addons",
+ *   "ngdpbase.addons.geohazardwatch.enabled": true,
+ *   "ngdpbase.addons.geohazardwatch.dataPath": "./data/geohazardwatch"
  *
  * Optional polling config (set to 0 to disable):
- *   "ngdpbase.addons.ve-geology.hansIntervalMs": 600000   (default 10 min)
- *   "ngdpbase.addons.ve-geology.eqIntervalMs":  1200000  (default 20 min)
+ *   "ngdpbase.addons.geohazardwatch.hansIntervalMs": 600000   (default 10 min)
+ *   "ngdpbase.addons.geohazardwatch.eqIntervalMs":  1200000  (default 20 min)
  *
  * Import data first:
- *   node addons/ve-geology/import/import-volcanoes.js
- *   node addons/ve-geology/import/import-volcanoes.js --eruptions
- *   node addons/ve-geology/import/import-volcanoes.js --activity
+ *   node addons/geohazardwatch/import/import-volcanoes.js
+ *   node addons/geohazardwatch/import/import-volcanoes.js --eruptions
+ *   node addons/geohazardwatch/import/import-volcanoes.js --activity
  *
  * @type {import('../../src/managers/AddonsManager').AddonModule}
  */
@@ -51,7 +51,7 @@ let hansManager = null;
 const _intervals = [];
 
 module.exports = {
-  name: 've-geology',
+  name: 'geohazardwatch',
   version: '1.1.6',
   description: 'Volcano & geology data platform — GVP structured records, search, infoboxes, maps',
   author: 'jwilleke',
@@ -63,7 +63,7 @@ module.exports = {
    */
   async register(engine, config) {
     // ── 1. Initialize data manager ───────────────────────────────────────────
-    const dataPath = String(config.dataPath || './data/ve-geology');
+    const dataPath = String(config.dataPath || './data/geohazardwatch');
     dataManager = new VolcanoDataManager(dataPath);
     await dataManager.load();
     engine.registerManager('VolcanoDataManager', dataManager);
@@ -92,7 +92,7 @@ module.exports = {
 
     // ── 3. Serve static assets ───────────────────────────────────────────────
     engine.app.use(
-      '/addons/ve-geology',
+      '/addons/geohazardwatch',
       express.static(path.join(__dirname, 'public'))
     );
 
@@ -100,14 +100,14 @@ module.exports = {
     const addonsManager = engine.getManager('AddonsManager');
     if (addonsManager) {
       addonsManager.registerStylesheet(
-        '/addons/ve-geology/css/ve-geology.css',
-        've-geology'
+        '/addons/geohazardwatch/css/geohazardwatch.css',
+        'geohazardwatch'
       );
     }
 
     // ── 5. Mount API routes ──────────────────────────────────────────────────
     const apiRouter = require('./routes/api')(engine, config);
-    engine.app.use('/api/ve-geology', apiRouter);
+    engine.app.use('/api/geohazardwatch', apiRouter);
 
     // ── 5b. Register addon-local views directory ─────────────────────────────
     const existingViews = engine.app.get('views') ?? [];
@@ -115,13 +115,13 @@ module.exports = {
 
     // ── 5c. Mount admin routes ───────────────────────────────────────────────
     const adminRouter = require('./routes/admin')(engine);
-    engine.app.use('/addons/ve-geology', adminRouter);
+    engine.app.use('/addons/geohazardwatch', adminRouter);
 
     // ── 6. Register background refresh jobs ─────────────────────────────────
     const jobManager = engine.getManager('BackgroundJobManager');
     if (jobManager) {
       jobManager.registerJob({
-        id: 've-geology.import-hans',
+        id: 'geohazardwatch.import-hans',
         displayName: 'Refresh HANS volcano alerts',
         run: async (reportProgress) => {
           reportProgress('Fetching USGS HANS API…');
@@ -135,7 +135,7 @@ module.exports = {
       });
 
       jobManager.registerJob({
-        id: 've-geology.import-earthquakes',
+        id: 'geohazardwatch.import-earthquakes',
         displayName: 'Refresh earthquake data',
         run: async (reportProgress) => {
           reportProgress('Fetching USGS earthquake feed…');
@@ -154,12 +154,12 @@ module.exports = {
 
       if (hansIntervalMs > 0) {
         _intervals.push(
-          setInterval(() => jobManager.enqueue('ve-geology.import-hans'), hansIntervalMs)
+          setInterval(() => jobManager.enqueue('geohazardwatch.import-hans'), hansIntervalMs)
         );
       }
       if (eqIntervalMs > 0) {
         _intervals.push(
-          setInterval(() => jobManager.enqueue('ve-geology.import-earthquakes'), eqIntervalMs)
+          setInterval(() => jobManager.enqueue('geohazardwatch.import-earthquakes'), eqIntervalMs)
         );
       }
     }
@@ -167,15 +167,15 @@ module.exports = {
     // ── 7. Dashboard card ────────────────────────────────────────────────────
     if (addonsManager) {
       addonsManager.registerDashboardCard({
-        addonName: 've-geology',
-        title: 'VE Geology',
+        addonName: 'geohazardwatch',
+        title: 'GeoHazardWatch',
         icon: 'fas fa-mountain',
-        adminUrl: '/addons/ve-geology'
+        adminUrl: '/addons/geohazardwatch'
       });
     }
 
     // ── 8. Announce optional capability ─────────────────────────────────────
-    engine.setCapability('ve-geology', true);
+    engine.setCapability('geohazardwatch', true);
   },
 
   async status() {

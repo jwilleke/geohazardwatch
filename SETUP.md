@@ -1,6 +1,6 @@
 # Setup Guide
 
-Step-by-step instructions to set up ve-geology locally for development.
+Step-by-step instructions to set up geohazardwatch locally for development.
 
 **First:** Read [GLOBAL-CODE-PREFERENCES.md](GLOBAL-CODE-PREFERENCES.md) and [AGENTS.md](AGENTS.md).
 
@@ -14,8 +14,8 @@ Step-by-step instructions to set up ve-geology locally for development.
 ## Step 1 — Clone and install
 
 ```bash
-git clone https://github.com/jwilleke/ve-geology.git
-cd ve-geology
+git clone https://github.com/jwilleke/geohazardwatch.git
+cd geohazardwatch
 npm install
 ```
 
@@ -29,8 +29,8 @@ npm run import:earthquakes  # USGS M4.5+ earthquakes (past 7 days)
 npm run import:hans         # USGS HANS US volcano alert levels
 ```
 
-Data is written to `addons/ve-geology/data/` (gitignored). Re-run any time to refresh.
-For all import options (custom feeds, data directories) see [addons/ve-geology/README.md](./addons/ve-geology/README.md#import-scripts).
+Data is written to `addons/geohazardwatch/data/` (gitignored). Re-run any time to refresh.
+For all import options (custom feeds, data directories) see [addons/geohazardwatch/README.md](./addons/geohazardwatch/README.md#import-scripts).
 
 ## Step 3 — Wire to ngdpbase
 
@@ -38,9 +38,9 @@ Add to `$FAST_STORAGE/config/app-custom-config.json` on your ngdpbase instance:
 
 ```json
 {
-  "ngdpbase.managers.addons-manager.addons-path": "/absolute/path/to/ve-geology/addons",
-  "ngdpbase.addons.ve-geology.enabled": true,
-  "ngdpbase.addons.ve-geology.dataPath": "./data/ve-geology"
+  "ngdpbase.managers.addons-manager.addons-path": "/absolute/path/to/geohazardwatch/addons",
+  "ngdpbase.addons.geohazardwatch.enabled": true,
+  "ngdpbase.addons.geohazardwatch.dataPath": "./data/geohazardwatch"
 }
 ```
 
@@ -58,10 +58,10 @@ On startup the addon seeds four demo pages into the ngdpbase instance
 ## Step 5 — Verify
 
 ```bash
-curl http://localhost:3333/api/ve-geology/search?limit=1
+curl http://localhost:3333/api/geohazardwatch/search?limit=1
 # Should return { volcanoes: [...], total: 1400+ }
 
-curl http://localhost:3333/api/ve-geology/hans/status
+curl http://localhost:3333/api/geohazardwatch/hans/status
 # Should return { elevatedCount, monitoredCount, fetchedUtc }
 ```
 
@@ -80,7 +80,7 @@ Commits are rejected if lint fails.
 ## Troubleshooting
 
 **Addon not loading:** Check `pm2 logs` — common causes are missing `node_modules`
-in the ve-geology directory or incorrect `addons-path` config.
+in the geohazardwatch directory or incorrect `addons-path` config.
 
 **Empty API responses `{ volcanoes: [], total: 0 }`:** Data files are missing —
 run `npm run import:all`.

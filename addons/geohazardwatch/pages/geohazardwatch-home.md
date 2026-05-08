@@ -3,7 +3,7 @@ title: Volcanoes and Earthquakes
 uuid: 4bf246b9-ebcc-4774-8175-427c275d407c
 slug: volcanoes-and-earthquakes
 system-category: addon
-description: Home page for the ve-geology volcano and earthquake data platform
+description: Home page for the geohazardwatch volcano and earthquake data platform
 tags: [geology, volcanoes, earthquakes, home]
 author: system
 ---
@@ -43,7 +43,7 @@ within 50 km of a known volcano — a relationship that can signal volcanic unre
 
 ## About this site
 
-This site is powered by **ve-geology**, an open-source add-on for the
+This site is powered by **geohazardwatch**, an open-source add-on for the
 [ngdpbase](https://github.com/jwilleke/ngdpbase) wiki platform.
 
 | Data source | Provider | Coverage |

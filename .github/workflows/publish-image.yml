@@ -44,7 +44,7 @@ jobs:
             type=raw,value=${{ inputs.tag }},enable=${{ inputs.tag != '' }}
           labels: |
             org.opencontainers.image.title=geohazardwatch
-            org.opencontainers.image.description=Volcano and geology platform built on ngdpbase with the ve-geology addon
+            org.opencontainers.image.description=Volcano and geology platform built on ngdpbase with the geohazardwatch addon
             org.opencontainers.image.vendor=jwilleke
 
       - name: Log in to ghcr.io

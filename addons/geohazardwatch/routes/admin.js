@@ -3,8 +3,8 @@
 const express = require('express');
 
 /**
- * Admin routes for the ve-geology add-on.
- * Mounted at /addons/ve-geology in register().
+ * Admin routes for the geohazardwatch add-on.
+ * Mounted at /addons/geohazardwatch in register().
  *
  * GET  /                 — status dashboard (authenticated)
  * POST /jobs/hans        — trigger HANS import (admin only)
@@ -56,7 +56,7 @@ module.exports = function adminRoutes(engine) {
     const hansStatus      = hm  ? hm.status()                   : { fetchedUtc: null, monitoredCount: 0, elevatedCount: 0 };
     const elevatedAlerts  = hm  ? hm.getElevated().slice(0, 10) : [];
 
-    res.render('admin-ve-geology', {
+    res.render('admin-geohazardwatch', {
       currentUser: req.userContext,
       isAdmin,
       volcanoCount,
@@ -74,8 +74,8 @@ module.exports = function adminRoutes(engine) {
     if (!requireAdmin(req, res)) return;
     const jm = engine.getManager('BackgroundJobManager');
     if (!jm) { res.status(503).send('BackgroundJobManager not available'); return; }
-    jm.enqueue('ve-geology.import-hans');
-    res.redirect('/addons/ve-geology?flash=hans-queued');
+    jm.enqueue('geohazardwatch.import-hans');
+    res.redirect('/addons/geohazardwatch?flash=hans-queued');
   });
 
   // ── POST /jobs/earthquakes — trigger earthquake refresh ──────────────────
@@ -83,8 +83,8 @@ module.exports = function adminRoutes(engine) {
     if (!requireAdmin(req, res)) return;
     const jm = engine.getManager('BackgroundJobManager');
     if (!jm) { res.status(503).send('BackgroundJobManager not available'); return; }
-    jm.enqueue('ve-geology.import-earthquakes');
-    res.redirect('/addons/ve-geology?flash=eq-queued');
+    jm.enqueue('geohazardwatch.import-earthquakes');
+    res.redirect('/addons/geohazardwatch?flash=eq-queued');
   });
 
   return router;

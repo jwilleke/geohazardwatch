@@ -1,13 +1,15 @@
 # Check TODOs Command
 
-Review current TODOs and priorities in the AGENTS.md file.
+Review current docs/TODO.md and priorities AGENTS.md file.
 
-This command helps you focus on high-priority work by showing:
+This command helps you focus on high-priority and current work by showing:
 
+- GitHub Dependabot alerts or other vulnerabilties
 - High priority tasks
 - Medium priority tasks
 - Known blockers
-- Current issues
+- GitHub [BUGS]
+- GitHub [FEATURES] Current issues
 
 ## Usage
 

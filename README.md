@@ -1,4 +1,4 @@
-# ve-geology
+# geohazardwatch
 
 Volcano and geology data platform built as an [ngdpbase](https://github.com/jwilleke/ngdpbase) add-on.
 Powered by [Global Volcanism Program (GVP)](https://volcano.si.edu/) volcano data,
@@ -12,13 +12,13 @@ Powered by [Global Volcanism Program (GVP)](https://volcano.si.edu/) volcano dat
 - Imports real-time US volcano alert levels from USGS HANS
 - Registers seven wiki markup plugins (infoboxes, tables, search widgets, Leaflet maps, alert tables)
 - Seeds demo wiki pages into your ngdpbase instance automatically on first load
-- Exposes a REST API at `/api/ve-geology/*`
+- Exposes a REST API at `/api/geohazardwatch/*`
 
 ## Quick start
 
 ```sh
-git clone https://github.com/jwilleke/ve-geology.git
-cd ve-geology
+git clone https://github.com/jwilleke/geohazardwatch.git
+cd geohazardwatch
 npm install
 npm run import:all && npm run import:earthquakes && npm run import:hans
 ```
@@ -30,7 +30,7 @@ Then wire to ngdpbase and restart — see [SETUP.md](./SETUP.md) for full instru
 | Doc | Owns |
 |-----|------|
 | [SETUP.md](./SETUP.md) | Full install, config, verification, troubleshooting |
-| [addons/ve-geology/README.md](./addons/ve-geology/README.md) | Plugin syntax, API endpoints, import options |
+| [addons/geohazardwatch/README.md](./addons/geohazardwatch/README.md) | Plugin syntax, API endpoints, import options |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | Repo structure, data pipeline, tech stack, adding new sources |
 | [AGENTS.md](./AGENTS.md) | Agent guidance, commands, key decisions, open issues |
 | [CODE_STANDARDS.md](./CODE_STANDARDS.md) | Linting, formatting, commit conventions |

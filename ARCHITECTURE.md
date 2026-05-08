@@ -1,29 +1,29 @@
 # Architecture
 
-Architectural decisions and structure for ve-geology. Follows principles in [GLOBAL-CODE-PREFERENCES.md](GLOBAL-CODE-PREFERENCES.md).
+Architectural decisions and structure for geohazardwatch. Follows principles in [GLOBAL-CODE-PREFERENCES.md](GLOBAL-CODE-PREFERENCES.md).
 
-Related: [CODE_STANDARDS.md](./CODE_STANDARDS.md) · [AGENTS.md](./AGENTS.md) · [addons/ve-geology/README.md](./addons/ve-geology/README.md)
+Related: [CODE_STANDARDS.md](./CODE_STANDARDS.md) · [AGENTS.md](./AGENTS.md) · [addons/geohazardwatch/README.md](./addons/geohazardwatch/README.md)
 
 ## Overview
 
-ve-geology is a **ngdpbase add-on** — it has no server of its own. It extends the
+geohazardwatch is a **ngdpbase add-on** — it has no server of its own. It extends the
 [ngdpbase](https://github.com/jwilleke/ngdpbase) wiki platform at runtime by registering
 data managers, wiki plugins, Express routes, and static assets through the engine API.
 
 ## Project Structure
 
 ```text
-ve-geology/
+geohazardwatch/
 ├── addons/
-│   └── ve-geology/           ← ngdpbase AddonModule root
+│   └── geohazardwatch/           ← ngdpbase AddonModule root
 │       ├── index.js          ← Entry point: register(), status(), shutdown()
 │       ├── managers/         ← In-memory data stores loaded from JSON snapshots
 │       ├── plugins/          ← Wiki markup plugins [{PluginName param='val'}]
 │       ├── routes/
-│       │   └── api.js        ← REST API mounted at /api/ve-geology/*
+│       │   └── api.js        ← REST API mounted at /api/geohazardwatch/*
 │       ├── import/           ← CLI scripts that fetch external APIs → JSON files
 │       ├── pages/            ← Wiki .md files seeded into ngdpbase on first load
-│       ├── public/           ← Static assets (CSS) served at /addons/ve-geology/
+│       ├── public/           ← Static assets (CSS) served at /addons/geohazardwatch/
 │       └── data/             ← Gitignored JSON snapshots written by import scripts
 ├── docs/
 │   └── project_log.md
@@ -55,7 +55,7 @@ shutdown()                 ← cleanup: null out manager references
 ```
 
 `config` is the flat dot-notation config from `app-custom-config.json` scoped to
-`ngdpbase.addons.ve-geology.*` and resolved by `AddonsManager.getAddonConfig()`.
+`ngdpbase.addons.geohazardwatch.*` and resolved by `AddonsManager.getAddonConfig()`.
 
 ## Data Pipeline
 

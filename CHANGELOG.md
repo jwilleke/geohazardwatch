@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **BREAKING — Full rebadge from `ve-geology` to `geohazardwatch`** across runtime
+  identity, not just the repo name. Affects npm package name, addon directory
+  (`addons/ve-geology/` → `addons/geohazardwatch/`), REST API mount
+  (`/api/ve-geology/*` → `/api/geohazardwatch/*`), admin mount, config keys
+  (`ngdpbase.addons.ve-geology.*` → `ngdpbase.addons.geohazardwatch.*`), background
+  job IDs, capability flag, default `dataPath`, stylesheet path, dashboard title
+  (`VE Geology` → `GeoHazardWatch`), and seed-page slugs.
+- Existing ngdpbase deployments must update `app-custom-config.json` for the new
+  `ngdpbase.addons.geohazardwatch.*` keys; the old keys are no longer read.
+- Existing wiki instances retain pages at the old slug URLs (`/wiki/ve-geology-about`,
+  etc.) since `seedAddonPages` only seeds on first install — fresh installs get the
+  new slugs.
+
 ## [1.1.6] - 2026-05-08
 
 ### Added

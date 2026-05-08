@@ -3,7 +3,7 @@
 /**
  * VolcanoSearchPlugin
  *
- * Renders an interactive faceted search widget that calls the ve-geology API.
+ * Renders an interactive faceted search widget that calls the geohazardwatch API.
  * Embed on any wiki page to get a live filterable volcano table.
  *
  * Usage:
@@ -90,7 +90,7 @@ module.exports = {
     document.getElementById('vs-status').textContent = 'Searching…';
     document.getElementById('vs-results').innerHTML = '';
 
-    fetch('/api/ve-geology/search?' + params.toString())
+    fetch('/api/geohazardwatch/search?' + params.toString())
       .then(function (r) { return r.json(); })
       .then(function (data) {
         document.getElementById('vs-status').textContent =

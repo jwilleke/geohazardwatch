@@ -3,19 +3,19 @@
 const express = require('express');
 
 /**
- * API routes for the ve-geology add-on.
- * Mounted at /api/ve-geology in register().
+ * API routes for the geohazardwatch add-on.
+ * Mounted at /api/geohazardwatch in register().
  *
  * Endpoints:
- *   GET /api/ve-geology/search                  Search/filter volcanoes
- *   GET /api/ve-geology/distinct/:field          Distinct values for a field
- *   GET /api/ve-geology/volcano/:number          Single volcano by GVP number
- *   GET /api/ve-geology/eruptions/:number        Eruptions for a volcano
- *   GET /api/ve-geology/earthquakes/search       Search/filter earthquakes
- *   GET /api/ve-geology/earthquakes/near/:number Earthquakes near a volcano
- *   GET /api/ve-geology/hans/elevated            Currently elevated US volcanoes
- *   GET /api/ve-geology/hans/volcano/:number     HANS alert for a single volcano
- *   GET /api/ve-geology/hans/status              HANS snapshot metadata
+ *   GET /api/geohazardwatch/search                  Search/filter volcanoes
+ *   GET /api/geohazardwatch/distinct/:field          Distinct values for a field
+ *   GET /api/geohazardwatch/volcano/:number          Single volcano by GVP number
+ *   GET /api/geohazardwatch/eruptions/:number        Eruptions for a volcano
+ *   GET /api/geohazardwatch/earthquakes/search       Search/filter earthquakes
+ *   GET /api/geohazardwatch/earthquakes/near/:number Earthquakes near a volcano
+ *   GET /api/geohazardwatch/hans/elevated            Currently elevated US volcanoes
+ *   GET /api/geohazardwatch/hans/volcano/:number     HANS alert for a single volcano
+ *   GET /api/geohazardwatch/hans/status              HANS snapshot metadata
  *
  * @param {import('../../../src/types/WikiEngine').WikiEngine} engine
  * @param {Record<string, unknown>} _config
@@ -24,7 +24,7 @@ const express = require('express');
 module.exports = function apiRoutes(engine, _config) {
   const router = express.Router();
 
-  // GET /api/ve-geology/search?q=&country=&region=&volcanoType=&rockType=
+  // GET /api/geohazardwatch/search?q=&country=&region=&volcanoType=&rockType=
   //   &tectonicSetting=&epoch=&minElevation=&maxElevation=
   //   &minLatitude=&maxLatitude=&minLongitude=&maxLongitude=
   //   &limit=100&offset=0
@@ -41,7 +41,7 @@ module.exports = function apiRoutes(engine, _config) {
     }
   });
 
-  // GET /api/ve-geology/distinct/:field
+  // GET /api/geohazardwatch/distinct/:field
   router.get('/distinct/:field', (req, res) => {
     try {
       const mgr = engine.getManager('VolcanoDataManager');
@@ -54,7 +54,7 @@ module.exports = function apiRoutes(engine, _config) {
     }
   });
 
-  // GET /api/ve-geology/volcano/:number
+  // GET /api/geohazardwatch/volcano/:number
   router.get('/volcano/:number', (req, res) => {
     const mgr = engine.getManager('VolcanoDataManager');
     if (!mgr) return res.status(503).json({ error: 'VolcanoDataManager not available' });
@@ -64,7 +64,7 @@ module.exports = function apiRoutes(engine, _config) {
     res.json(volcano);
   });
 
-  // GET /api/ve-geology/eruptions/:number
+  // GET /api/geohazardwatch/eruptions/:number
   router.get('/eruptions/:number', (req, res) => {
     const mgr = engine.getManager('VolcanoDataManager');
     if (!mgr) return res.status(503).json({ error: 'VolcanoDataManager not available' });
@@ -73,7 +73,7 @@ module.exports = function apiRoutes(engine, _config) {
     res.json({ volcanoNumber: Number(req.params.number), eruptions });
   });
 
-  // GET /api/ve-geology/earthquakes/search?minMagnitude=&maxMagnitude=
+  // GET /api/geohazardwatch/earthquakes/search?minMagnitude=&maxMagnitude=
   //   &minDepth=&maxDepth=&nearVolcano=true&tsunamiOnly=true
   //   &alert=&volcanoNumber=&limit=100&offset=0
   router.get('/earthquakes/search', (req, res) => {
@@ -89,7 +89,7 @@ module.exports = function apiRoutes(engine, _config) {
     }
   });
 
-  // GET /api/ve-geology/earthquakes/near/:number
+  // GET /api/geohazardwatch/earthquakes/near/:number
   router.get('/earthquakes/near/:number', (req, res) => {
     const mgr = engine.getManager('EarthquakeDataManager');
     if (!mgr) return res.status(503).json({ error: 'EarthquakeDataManager not available' });
@@ -98,7 +98,7 @@ module.exports = function apiRoutes(engine, _config) {
     res.json({ volcanoNumber: Number(req.params.number), earthquakes });
   });
 
-  // GET /api/ve-geology/earthquakes/status
+  // GET /api/geohazardwatch/earthquakes/status
   router.get('/earthquakes/status', (req, res) => {
     const mgr = engine.getManager('EarthquakeDataManager');
     if (!mgr) return res.status(503).json({ error: 'EarthquakeDataManager not available' });
@@ -113,7 +113,7 @@ module.exports = function apiRoutes(engine, _config) {
 
   // ── HANS alert routes ──────────────────────────────────────────────────────
 
-  // GET /api/ve-geology/hans/elevated?alertLevel=&colorCode=&observatory=
+  // GET /api/geohazardwatch/hans/elevated?alertLevel=&colorCode=&observatory=
   router.get('/hans/elevated', (req, res) => {
     const mgr = engine.getManager('HansDataManager');
     if (!mgr) return res.status(503).json({ error: 'HansDataManager not available — run npm run import:hans' });
@@ -127,7 +127,7 @@ module.exports = function apiRoutes(engine, _config) {
     res.json({ elevated: alerts, total: alerts.length });
   });
 
-  // GET /api/ve-geology/hans/volcano/:number
+  // GET /api/geohazardwatch/hans/volcano/:number
   router.get('/hans/volcano/:number', (req, res) => {
     const mgr = engine.getManager('HansDataManager');
     if (!mgr) return res.status(503).json({ error: 'HansDataManager not available' });
@@ -137,7 +137,7 @@ module.exports = function apiRoutes(engine, _config) {
     res.json({ volcanoNumber: req.params.number, alert, elevated: true });
   });
 
-  // GET /api/ve-geology/hans/status
+  // GET /api/geohazardwatch/hans/status
   router.get('/hans/status', (req, res) => {
     const mgr = engine.getManager('HansDataManager');
     if (!mgr) return res.status(503).json({ error: 'HansDataManager not available' });

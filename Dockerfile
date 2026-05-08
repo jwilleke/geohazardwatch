@@ -1,6 +1,6 @@
-# geohazardwatch — ngdpbase + ve-geology addon
+# geohazardwatch — ngdpbase + geohazardwatch addon
 #
-# Layered on top of the upstream ngdpbase image. The ve-geology addon code
+# Layered on top of the upstream ngdpbase image. The geohazardwatch addon code
 # is copied into /opt/geohazardwatch/ and registered with ngdpbase via the
 # addons-path config setting (set in the runtime ConfigMap, not here).
 #
@@ -12,7 +12,7 @@ ARG NGDPBASE_VERSION=3.10.3
 FROM ghcr.io/jwilleke/ngdpbase:${NGDPBASE_VERSION}
 
 LABEL org.opencontainers.image.title="geohazardwatch"
-LABEL org.opencontainers.image.description="Volcano and geology platform built on ngdpbase with the ve-geology addon"
+LABEL org.opencontainers.image.description="Volcano and geology platform built on ngdpbase with the geohazardwatch addon"
 LABEL org.opencontainers.image.source="https://github.com/jwilleke/geohazardwatch"
 LABEL org.opencontainers.image.licenses="MIT"
 

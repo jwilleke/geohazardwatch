@@ -22,8 +22,8 @@ This document tracks ongoing work and session history for the ve-geology project
 
 - **Phase:** Active development — core addon complete, data sources expanding
 - **Build Status:** No build step (CommonJS JS). Lint passing (`npm run lint`)
-- **Last Updated:** 2026-03-31
-- **Overall Health:** Stable. ngdpbase running on port 3333. 4 data sources integrated. Domain home page live at `/`. v1.0.1 released.
+- **Last Updated:** 2026-05-08
+- **Overall Health:** Stable. v1.1.6 released; `[Unreleased]` carries the full rebadge from `ve-geology` to `geohazardwatch` (runtime identity, not just repo name). Lint clean.
 
 ## Next Steps
 
@@ -38,6 +38,16 @@ This document tracks ongoing work and session history for the ve-geology project
 ---
 
 ## Session Logs
+
+### 2026-05-08-02
+
+- **Agent:** Claude Opus 4.7
+- **Subject:** Full rebadge from `ve-geology` to `geohazardwatch` (runtime identity, not just repo name)
+- **Work Done:**
+  - Renamed npm package name, addon directory, REST API and admin mount paths, config keys (`ngdpbase.addons.geohazardwatch.*`), background job IDs, capability flag, default `dataPath`, stylesheet path, and dashboard title.
+  - Updated all 5 plugin files, both routes files, import scripts, EJS admin view, CSS banner comment, `default-config.json`, `Dockerfile`, `publish-image.yml`, `version.ts`, and `.gitignore`/`.dockerignore` paths and workspace pattern.
+  - Swept top-level `README.md`, `AGENTS.md`, `ARCHITECTURE.md`, `SETUP.md`, addon `README.md`, and all 7 seed pages.
+  - CHANGELOG and this project_log left as historical record; new `[Unreleased]` CHANGELOG section and this session entry added describing the rename.
 
 ### 2026-05-08-01
 
