@@ -49,3 +49,8 @@ ve-geology.code-workspace
 
 # Private notes (never commit)
 private/
+
+# Claude Code per-machine artifacts
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+.claude/scheduled_tasks/
