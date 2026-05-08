@@ -39,6 +39,30 @@ This document tracks ongoing work and session history for the ve-geology project
 
 ## Session Logs
 
+### 2026-05-08-01
+
+- **Agent:** Claude Opus 4.7
+- **Subject:** v1.1.6 — bump ngdpbase base image to 3.10.3 + seed `request-access` page
+- **Current Issue:** PR #28 (merged)
+- **Tests:** lint clean (`npm run lint`)
+- **Work Done:**
+  - Bumped `Dockerfile` `ARG NGDPBASE_VERSION` from `3.10.2` to `3.10.3` to pick up `jwilleke/ngdpbase#654` — adds the `ngdpbase.application.registration` config flag.
+  - Added new seed page `addons/ve-geology/pages/ve-geology-request-access.md`
+    (slug `request-access`, UUID v4 `2731a6b1-1ef6-465b-80b3-2f8ed148476b`).
+    Destination for the **Request access** button shown when
+    `ngdpbase.application.registration: false`. Page contains a starter
+    contact instruction; operator edits in the wiki UI.
+  - `npm run version:bump -- patch` → 1.1.5 → 1.1.6. Filled in CHANGELOG `[1.1.6]` under Added (new seed page) and Changed (base image bump).
+  - Tagged and published `v1.1.6` to `ghcr.io/jwilleke/geohazardwatch:1.1.6` (publish workflow run `25547558465` green).
+- **Commits:** `088e786` (squash-merged)
+- **Files Modified:**
+  - `Dockerfile`
+  - `addons/ve-geology/pages/ve-geology-request-access.md` (new)
+  - `package.json`
+  - `addons/ve-geology/index.js`
+  - `CHANGELOG.md`
+  - `docs/project_log.md` (this file)
+
 ### 2026-05-07-06
 
 - **Agent:** Claude Opus 4.7
