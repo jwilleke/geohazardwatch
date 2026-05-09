@@ -136,7 +136,9 @@ Key open issues:
 | #12 | geohazardwatch | [BUG] VolcanoInfobox placement on page |
 | #13 | geohazardwatch | Tsunami and landslide feeds *(good first issue)* |
 | #14 | geohazardwatch | [EPIC] Cloudflare Tunnel Setup for geohazardwatch.com |
-| #29 | geohazardwatch | Deterministic container deployment builds |
+| #32 | geohazardwatch | [BUG] Turn off registration |
+| #33 | geohazardwatch | Delete dead `deploy.yml` workflow (Gap 4 from #31) |
+| #64 | mj-infra-flux | [BUG] ImageRepository missing GHCR `secretRef` — blocks geohazardwatch auto-deploy |
 
 ## Agent Priority Matrix
 
