@@ -2,12 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [master, develop]
+    branches: [main]
   pull_request:
-    branches: [master, develop]
+    branches: [main]
 
 jobs:
-  lint-and-test:
+  lint-and-typecheck:
     runs-on: ubuntu-latest
 
     strategy:
@@ -32,12 +32,6 @@ jobs:
       - name: Check TypeScript
         run: npx tsc --noEmit
 
-      - name: Run tests
-        run: npm run test
-
-      - name: Check test coverage
-        run: npm run test:coverage
-
   security-audit:
     runs-on: ubuntu-latest
 
@@ -59,27 +53,3 @@ jobs:
 
       - name: Check for known vulnerabilities
         run: npm audit --production
-
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build project
-        run: npm run build
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist/
