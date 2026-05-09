@@ -1,0 +1,56 @@
+name: Auto-tag patch release on main
+
+# Cuts a patch release tag (vX.Y.Z+1) whenever a commit lands on main
+# that changes runtime-relevant files. The tag push is signed by
+# RELEASE_PAT so it triggers publish-image.yml, which builds and pushes
+# the new image to GHCR; Flux then rolls the cluster.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'addons/**'
+      - 'Dockerfile'
+      - 'package.json'
+      - 'package-lock.json'
+  workflow_dispatch:
+
+# Serialize tag operations so back-to-back pushes don't race each other.
+concurrency:
+  group: auto-tag
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    # Skip the commit this workflow itself produces. version.ts emits the
+    # canonical "chore: release v..." message, so this is a tight match.
+    if: ${{ !contains(github.event.head_commit.message, 'chore: release') }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.RELEASE_PAT }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump patch, commit, tag, push
+        run: |
+          npm run version:bump -- patch
+          VERSION=$(node -p "require('./package.json').version")
+          git add -A
+          git commit -m "chore: release v${VERSION}"
+          git tag -a "v${VERSION}" -m "geohazardwatch v${VERSION}"
+          git push --follow-tags origin main
