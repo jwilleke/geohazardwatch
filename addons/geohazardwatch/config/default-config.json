@@ -2,5 +2,6 @@
   "_comment": "Default configuration for the geohazardwatch addon. Override any key in app-custom-config.json.",
   "ngdpbase.addons.geohazardwatch.dataPath": "",
   "ngdpbase.addons.geohazardwatch.hansIntervalMs": 600000,
-  "ngdpbase.addons.geohazardwatch.eqIntervalMs": 1200000
+  "ngdpbase.addons.geohazardwatch.eqIntervalMs": 1200000,
+  "ngdpbase.application.registration": false
 }
