@@ -40,6 +40,51 @@ This document tracks ongoing work and session history for the ve-geology project
 
 ## Session Logs
 
+### 2026-05-10-01
+
+- **Agent:** Claude Opus 4.7
+- **Subject:** Implemented `jwilleke/geohazardwatch#35` — addon-rename
+  downstream-config checklist (CONTRIBUTING.md) + `addon-rename-detector.yml`
+  CI workflow. Closes #35.
+- **Current Issue:** #35 (closed by this commit). Triggered by today's
+  `geohazardwatch.com` outage (`jwilleke/ngdpbase#671`); companion runtime
+  safety net shipped same day in `ngdpbase` v3.13.1
+  (`assertConfiguredAddonsExist`, `jwilleke/ngdpbase#672`).
+- **Work Done:**
+  - Added a "Renaming the addon ID" subsection under *Making Changes* in
+    `CONTRIBUTING.md`. Two-stage checklist: (1) pre-merge — update the
+    `name:` field in `index.js` + `package.json`, run
+    `gh search code "ngdpbase.addons.<old-id>" --owner jwilleke` to find
+    downstream references, mention impact in the PR description, bump
+    major semver; (2) post-merge — open companion `mj-infra-flux` PR with
+    the matching configmap rename, coordinate merge order so the
+    configmap reaches the cluster before the new image rolls out.
+  - TOC at the top of `CONTRIBUTING.md` updated to surface the new
+    subsection.
+  - New `.github/workflows/addon-rename-detector.yml` workflow. Runs on
+    push and PR. Diffs the addon's `name:` field against the previous
+    tag; if a rename is detected, runs `gh search code` and fails the
+    workflow if downstream matches are found, posting a check-run
+    failure with the offending paths and a link back to the
+    CONTRIBUTING.md section. Also posts a PR comment when triggered by
+    `pull_request` events. Caveat documented: the default
+    `GITHUB_TOKEN` may have limited access to private repos.
+  - Lint-fixed long-line markdown in `CONTRIBUTING.md` for this repo's
+    `MD013.line_length: 300` (different from `ngdpbase`'s 900). Wrapped
+    long prose paragraphs at sentence boundaries.
+  - Origin context: today's `geohazardwatch.com` outage was caused by
+    exactly this failure mode — `jwilleke/geohazardwatch@fe8c4d3`
+    renamed the addon from `ve-geology` → `geohazardwatch` (shipped in
+    v1.2.0), but `mj-infra-flux/apps/production/geohazardwatch/configmap.yaml`
+    still had `ngdpbase.addons.ve-geology.enabled: true`. AddonsManager
+    silently disabled the addon. The runtime invariant in `ngdpbase`
+    v3.13.1 catches this on next boot; this PR catches it at PR-author
+    time.
+- **Commits:** `e721636`
+- **Files Modified:**
+  - `CONTRIBUTING.md` (new "Renaming the addon ID" subsection + TOC update)
+  - `.github/workflows/addon-rename-detector.yml` (new)
+
 ### 2026-05-09-03
 
 - **Agent:** Claude Opus 4.7
