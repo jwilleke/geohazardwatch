@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Bumped `NGDPBASE_VERSION` 3.13.1 → 3.13.2** in `Dockerfile`. Pulls in two upstream patch fixes shipped in ngdpbase v3.13.2:
+  - **`POST /contact` returns HTTP 200 (not 400) on `EmailManager.sendTo` failure** ([jwilleke/ngdpbase#677](https://github.com/jwilleke/ngdpbase/issues/677)). Aligns the response with the documented state matrix; mail-send failure is server-side, not a client validation error.
+  - **Seeded `request-access` page now uses `system-category: system` and links to `/contact`** via JSPWiki link-with-target syntax. Affects fresh deployments only; existing instances retain whatever copy is on their persistent volume.
+- Bump filed manually pending [jwilleke/ngdpbase#680](https://github.com/jwilleke/ngdpbase/issues/680) (auto-rebuild on upstream Release events). Once #680 lands, satellite rebuild will fire automatically on any future ngdpbase minor/major or any `/release` invocation.
+
 ## [1.2.5] - 2026-05-10
 
 ### Added
