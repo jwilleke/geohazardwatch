@@ -134,9 +134,6 @@ Key open issues:
 | #6 | geohazardwatch | MIROVA/MODVOLC satellite monitoring |
 | #7 | geohazardwatch | VolcanoDiscovery RSS (licensing TBD) |
 | #13 | geohazardwatch | Tsunami and landslide feeds *(good first issue)* |
-| #14 | geohazardwatch | [EPIC] Cloudflare Tunnel Setup for geohazardwatch.com |
-| #33 | geohazardwatch | Delete dead `deploy.yml` workflow (Gap 4 from #31) |
-| #64 | mj-infra-flux | [BUG] ImageRepository missing GHCR `secretRef` — blocks geohazardwatch auto-deploy |
 
 ## Agent Priority Matrix
 

@@ -1,6 +1,6 @@
 # Project Log
 
-This document tracks ongoing work and session history for the ve-geology project.
+This document tracks ongoing work and session history for the geohazardwatch project.
 
 ## Format
 
@@ -20,25 +20,58 @@ This document tracks ongoing work and session history for the ve-geology project
 
 ## Current Status
 
-- **Phase:** Active development — core addon complete, data sources expanding
+- **Phase:** Active development — core addon complete and deployed, data sources expanding
 - **Build Status:** No build step (CommonJS JS). Lint passing (`npm run lint`)
-- **Last Updated:** 2026-05-09
-- **Overall Health:** Stable. v1.2.0 released — first release on the post-rename name, includes ngdpbase 3.11.3 base-image bump (CVEs), VolcanoInfobox `placement` param, and the Renovate annotation that wires the upstream-bump auto-PR loop. Lint clean.
+- **Last Updated:** 2026-05-11
+- **Overall Health:** Stable. Latest release v1.2.6. Auto-deploy loop closed end-to-end (Renovate → tag → image → Flux). Cloudflare Tunnel operational; `geohazardwatch.com` serving public traffic. Renovate workflow green after v40→v46 action pin fix.
 
 ## Next Steps
 
-- **Close auto-deploy loop end-to-end (#31)** — fix dead `ci.yml`, drop missing `npm run test` step, add `auto-tag.yml` so Renovate auto-merges trigger image rebuild + Flux reconcile without intervention. Filed today as a result of finishing the Renovate plumbing in v1.2.0.
-- Implement `system-category: addon` in ngdpbase seedAddonPages (ngdpbase#414)
-- Implement Domain vs Additive addon type distinction (ngdpbase#415) — note: this addon does NOT yet declare `ngdpbase: { type: 'domain' }` in any `package.json`; flagged on ngdpbase#668 as a follow-up
-- Admin panel Add-ons section (ngdpbase#412)
-- New data sources (ve-geology#4 FIRMS, #5 VAACs, #6 MIROVA, #7 VolcanoDiscovery) — require licensing/API key review
-- ~~Add pagination to VolcanoList and EarthquakeList (ve-geology#1)~~ ✓ done
-- ~~Add end-user plugin documentation wiki pages (ve-geology#9)~~ ✓ done
-- ~~Implement periodic data refresh via BackgroundJobManager (ve-geology#8)~~ ✓ done
+- New data sources — require licensing/API key review:
+  - [#4](https://github.com/jwilleke/geohazardwatch/issues/4) NASA FIRMS satellite thermal
+  - [#5](https://github.com/jwilleke/geohazardwatch/issues/5) VAAC ash advisories
+  - [#6](https://github.com/jwilleke/geohazardwatch/issues/6) MIROVA / MODVOLC / MOUNTS
+  - [#7](https://github.com/jwilleke/geohazardwatch/issues/7) VolcanoDiscovery RSS
+- [#13](https://github.com/jwilleke/geohazardwatch/issues/13) Tsunami and landslide feeds *(good first issue)*
 
 ---
 
 ## Session Logs
+
+### 2026-05-11-02
+
+- **Agent:** Claude Opus 4.7
+- **Subject:** Issue-tracker triage and stale-doc cleanup.
+- **Current Issue:** none directly; closed #14 EPIC + sub-issues #15, #16, #17, #18 as operator-confirmed working.
+- **Tests:** Pre-commit lint passed.
+- **Work Done:**
+  - Audited the AGENTS.md "Key open issues" table against actual GitHub
+    state. #33 (closed today) and `mj-infra-flux#64` (closed 2026-05-09)
+    were stale — dropped both.
+  - Audited the `docs/project_log.md` "Next Steps" section. Every
+    actionable line was stale: #31 closed 2026-05-09; `ngdpbase` #412,
+    #414, #415 all closed in late March; #668 closed 2026-05-09. Rewrote
+    Next Steps to track only the live data-source and feature work
+    (#4, #5, #6, #7, #13).
+  - Cloudflare Tunnel EPIC #14: prerequisite PRs (`geohazardwatch#19`,
+    `mj-infra-flux#48`) merged 2026-05-07; operator confirmed
+    `geohazardwatch.com` is serving public traffic via the tunnel.
+    Closed #14, #15, #16, #17, #18 as completed.
+  - Dropped #14 from the AGENTS.md table.
+  - Fixed the project_log header ("ve-geology project" → "geohazardwatch
+    project") and refreshed Overall Health to reflect v1.2.6 + working
+    auto-deploy loop + green Renovate.
+  - Verified Renovate workflow is green on `main@5fe6f62` (last 3 runs
+    succeeded) after the v40→v46 action pin fix and autodiscover toggle
+    landed in commits `09383cb` / `e46b65d` / `360735c` / `5fe6f62`.
+  - Rebased local docs commits onto origin/main and pushed
+    (`5fe6f62..63f6f12`).
+- **Commits:** `5848d80`, `63f6f12` (pushed earlier this session);
+  plus this bundle (hash on commit).
+- **Files Modified:**
+  - `AGENTS.md` (dropped #33, #64, #14 from open-issues table)
+  - `docs/project_log.md` (header, Overall Health, Next Steps rewrite,
+    this session entry)
 
 ### 2026-05-11-01
 
