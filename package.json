@@ -27,7 +27,7 @@
     "leaflet": "^1.9.4"
   },
   "devDependencies": {
-    "@types/node": "^25.6.2",
+    "@types/node": "^25.7.0",
     "@typescript-eslint/eslint-plugin": "^8.57.2",
     "@typescript-eslint/parser": "^8.57.2",
     "eslint": "^8.0.0",
