@@ -10,6 +10,12 @@
   "rangeStrategy": "bump",
   "packageRules": [
     {
+      "description": "Defer eslint major bumps until flat-config migration lands (jwilleke/geohazardwatch#43). Eslint 9+ requires eslint.config.js; the repo currently uses legacy .eslintrc.json. Remove this rule when the migration is done.",
+      "matchPackageNames": ["eslint"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
       "description": "Auto-merge minor and patch updates for the ngdpbase base image",
       "matchManagers": ["dockerfile"],
       "matchPackageNames": ["ghcr.io/jwilleke/ngdpbase"],
