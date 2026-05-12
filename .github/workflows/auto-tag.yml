@@ -53,4 +53,22 @@ jobs:
           git add -A
           git commit -m "chore: release v${VERSION}"
           git tag -a "v${VERSION}" -m "geohazardwatch v${VERSION}"
-          git push --follow-tags origin main
+
+          # Race-safe push: if another commit landed on main between checkout
+          # and push, rebase the release commit on top of origin/main and retry.
+          # The annotated tag points at a specific SHA, so it must be dropped
+          # before rebase and re-created after, otherwise --follow-tags would
+          # push a tag pointing at an orphan commit.
+          for attempt in 1 2; do
+            if git push --follow-tags origin main; then
+              exit 0
+            fi
+            echo "Push rejected; rebasing on origin/main and retrying (attempt ${attempt})"
+            git fetch origin main
+            git tag -d "v${VERSION}"
+            git rebase origin/main
+            git tag -a "v${VERSION}" -m "geohazardwatch v${VERSION}"
+          done
+
+          echo "Push still rejected after rebase + retry; failing." >&2
+          exit 1
