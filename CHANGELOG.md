@@ -35,6 +35,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Bumped `NGDPBASE_VERSION` 3.13.2 → 3.14.5** in `Dockerfile`. Spans the
+  ngdpbase v3.14.0 minor plus patches v3.14.1–v3.14.5 (within the
+  auto-merge minor+patch policy; filed manually because self-hosted
+  Renovate has not been opening the PR — see note below). Operator-facing
+  fixes pulled in:
+  - **`POST /contact` no longer rejects every submission with "Forbidden —
+    invalid CSRF token"** ([jwilleke/ngdpbase#690](https://github.com/jwilleke/ngdpbase/issues/690)).
+    `views/contact.ejs` emitted `_csrfToken` while the CSRF middleware
+    reads `_csrf`. Directly affects the geohazardwatch.com contact form.
+  - **High-severity dependency bump: `systeminformation` 5.31.1 → 5.31.6**
+    (Dependabot alert #114 — Linux command injection via NetworkManager
+    profile names). Shipped in ngdpbase v3.14.2.
+  - **Authenticated user dropdown is opaque again** ([jwilleke/ngdpbase#717](https://github.com/jwilleke/ngdpbase/issues/717)).
+    Root cause was `backdrop-filter: blur()` on `.jspwiki-header`
+    creating a stacking context that made the dropdown render transparent;
+    removed. (Supersedes the partial #687 fix in v3.13.3.)
+  - **`.mov` videos play inline in Chrome instead of force-downloading**
+    ([jwilleke/ngdpbase#719](https://github.com/jwilleke/ngdpbase/issues/719)).
+    `video/quicktime` is relabeled `video/mp4` on the attachment and
+    media-serving routes (identical H.264/AAC bitstream).
+  - **Calendar addon manage page reads nested config correctly**
+    ([jwilleke/ngdpbase#718](https://github.com/jwilleke/ngdpbase/issues/718)).
+    `AddonsManager.getAddonConfig()` now deep-nests dotted config keys, so
+    `ngdpbase.addons.<name>.<group>.<id>.<field>` resolves as a structured
+    object instead of flat keys.
+  - **Audience picker accepts individual usernames, not just roles**
+    ([jwilleke/ngdpbase#710](https://github.com/jwilleke/ngdpbase/issues/710)),
+    and **profile-page rename demotes the old page to `general` instead of
+    hard-deleting it** ([jwilleke/ngdpbase#662](https://github.com/jwilleke/ngdpbase/issues/662)).
 - **Bumped `NGDPBASE_VERSION` 3.13.1 → 3.13.2** in `Dockerfile`. Pulls in
   two upstream patch fixes shipped in ngdpbase v3.13.2:
   - **`POST /contact` returns HTTP 200 (not 400) on `EmailManager.sendTo`
