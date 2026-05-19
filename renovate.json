@@ -16,8 +16,7 @@
       "enabled": false
     },
     {
-      "description": "Auto-merge minor and patch updates for the ngdpbase base image",
-      "matchManagers": ["dockerfile"],
+      "description": "Auto-merge minor and patch updates for the ngdpbase base image (manager-agnostic: it is detected by the customManager regex below, not the dockerfile manager)",
       "matchPackageNames": ["ghcr.io/jwilleke/ngdpbase"],
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true,
@@ -26,7 +25,6 @@
     },
     {
       "description": "Major bumps of the ngdpbase base image require manual review",
-      "matchManagers": ["dockerfile"],
       "matchPackageNames": ["ghcr.io/jwilleke/ngdpbase"],
       "matchUpdateTypes": ["major"],
       "automerge": false,
@@ -46,6 +44,18 @@
       "matchUpdateTypes": ["major"],
       "automerge": false,
       "labels": ["dependencies", "major-bump", "needs-review"]
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Track the ngdpbase base image pinned via the annotated `ARG NGDPBASE_VERSION`. Renovate's built-in dockerfile manager cannot follow a `FROM` whose tag is an ARG variable, so without this the pin silently froze (it was stuck at 3.14.5 while ngdpbase shipped 3.24.x — jwilleke/ngdpbase#751).",
+      "fileMatch": ["(^|/)Dockerfile$"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+) depName=(?<depName>\\S+)\\s+ARG NGDPBASE_VERSION=(?<currentValue>\\S+)"
+      ],
+      "datasourceTemplate": "{{{datasource}}}",
+      "versioningTemplate": "semver"
     }
   ],
   "vulnerabilityAlerts": {
