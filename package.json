@@ -23,7 +23,7 @@
     "version:bump": "tsx src/utils/version.ts"
   },
   "dependencies": {
-    "express": "^4.22.2",
+    "express": "^5.2.1",
     "leaflet": "^1.9.4"
   },
   "devDependencies": {
