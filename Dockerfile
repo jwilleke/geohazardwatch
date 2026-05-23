@@ -8,7 +8,6 @@
 # /app/data — NOT baked into the image — so a CronJob can refresh it
 # without rebuilding.
 
-# renovate: datasource=docker depName=ghcr.io/jwilleke/ngdpbase
 ARG NGDPBASE_VERSION=3.24.4
 FROM ghcr.io/jwilleke/ngdpbase:${NGDPBASE_VERSION}
 
