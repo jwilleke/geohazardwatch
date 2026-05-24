@@ -22,8 +22,12 @@ This document tracks ongoing work and session history for the geohazardwatch pro
 
 - **Phase:** Active development — core addon complete and deployed, data sources expanding
 - **Build Status:** No build step (CommonJS JS). Lint passing (`npm run lint`)
-- **Last Updated:** 2026-05-11
-- **Overall Health:** Stable. Latest release v1.2.6. Auto-deploy loop closed end-to-end (Renovate → tag → image → Flux). Cloudflare Tunnel operational; `geohazardwatch.com` serving public traffic. Renovate workflow green after v40→v46 action pin fix.
+- **Last Updated:** 2026-05-24
+- **Overall Health:** Stable on the deployed image (v1.2.26 / ngdpbase v3.39.3).
+  Auto-deploy loop is functional end-to-end *except* hop 3 (Renovate auto-bumping
+  `NGDPBASE_VERSION`) — see #66. Manual one-line PRs work as a fallback until
+  that's resolved. Cloudflare Tunnel operational; `geohazardwatch.com` serving
+  public traffic.
 
 ## Next Steps
 
@@ -37,6 +41,26 @@ This document tracks ongoing work and session history for the geohazardwatch pro
 ---
 
 ## Session Logs
+
+### 2026-05-24-01
+
+- **Agent:** Claude Opus 4.7
+- **Subject:** Live-site footer showed `GeoHazardWatch v3.24.4` (Renovate had silently stopped auto-bumping the ngdpbase base image). Manual unblock + follow-up tracking + deployment doc.
+- **Current Issue:** #61 (closed, commented), #66 (filed), #65 (PR opened+merged), #64 (PR merged)
+- **Tests:** Pre-commit lint passed on `ef75fed`. CI green on PRs #64 and #65. Smoke test + Trivy scan green on v1.2.25 and v1.2.26 image publishes.
+- **Work Done:**
+  - Merged the open Renovate PR #64 (npm engine bump to >=11.15.0); pulled main and resolved a stale `package-lock.json` stash conflict against the merged change.
+  - Watched v1.2.25 container publish complete (2m, all stages green).
+  - Diagnosed the version drift visible at <https://geohazardwatch.com/view/SystemInfo>: `Dockerfile:11` pinned `NGDPBASE_VERSION=3.24.4` while upstream had shipped `v3.39.3`. The footer renders the *ngdpbase host* version, not this repo's version.
+  - Opened, merged, and verified PR #65 (`NGDPBASE_VERSION` 3.24.4 → 3.39.3). Auto-tag cut `v1.2.26`; publish-image succeeded; live footer now reads `v3.39.3`.
+  - Filed #66 to track the underlying Renovate failure (dockerfile manager extracts the dep but never opens a PR, even after #62's customManager removal). Carried forward the unresolved GHCR-auth and multi-tag-confusion hypotheses from #61 and proposed running Renovate at `LOG_LEVEL=debug`.
+  - Commented on closed #61 pointing to the unblock (#65) and the follow-up (#66).
+  - Created `docs/deployment-architecture.md` — five-hop walkthrough (ngdpbase release → base image → ARG bump → geohazardwatch image → Flux), observed end-to-end timing from #65 (~5 min), and a failure-mode-to-hop table.
+- **Note on /semver:** skipped — `docs/deployment-architecture.md` is a docs-only change, and `.github/workflows/auto-tag.yml` only triggers on `addons/**`, `Dockerfile`, `package.json`, `package-lock.json`. No release needed.
+- **Commits:** `ef75fed` (docs), plus `c5d2af8` squashed into main as part of PR #65.
+- **Files Modified:**
+  - `Dockerfile` (via PR #65)
+  - `docs/deployment-architecture.md` (new)
 
 ### 2026-05-11-03
 
