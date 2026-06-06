@@ -52,7 +52,7 @@ const _intervals = [];
 
 module.exports = {
   name: 'geohazardwatch',
-  version: '1.2.37',
+  version: '1.2.38',
   description: 'Volcano & geology data platform — GVP structured records, search, infoboxes, maps',
   author: 'jwilleke',
   dependencies: [],
