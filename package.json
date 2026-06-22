@@ -1,6 +1,6 @@
 {
   "name": "geohazardwatch",
-  "version": "1.2.50",
+  "version": "1.2.51",
   "description": "Volcano & geology add-on for ngdpbase",
   "private": true,
   "scripts": {
