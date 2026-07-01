@@ -40,7 +40,7 @@
     "typescript": "^6.0.3"
   },
   "engines": {
-    "node": ">=24.16.0",
+    "node": ">=24.18.0",
     "npm": ">=11.18.0"
   },
   "author": "jwilleke",
