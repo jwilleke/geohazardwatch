@@ -77,24 +77,30 @@ Renovate is configured in `renovate.json` to:
 
 When working, the operator sees nothing — PRs open, CI passes, they
 auto-merge, and the next hop fires. When **not** working, the base image
-drifts silently. See **Known gap** below.
+drifts silently. See the resolved-gap history below.
 
-### Known gap — Renovate is not currently auto-firing this hop
+### Resolved gap — Renovate now auto-fires this hop (#66 closed 2026-07-16)
 
-`#66` tracks the active bug: the dockerfile manager extracts the dep but
-never opens a bump PR. The two leading hypotheses are:
+`#66` tracked a period where the dockerfile manager extracted the dep but
+never opened a bump PR. It self-resolved (most likely a
+`renovatebot/github-action` version bump fixing GHCR tag lookup): Renovate
+opened and handled #69 (3.45.0), #72 (3.46.1), #76 (3.48.1),
+and #81 (3.49.0) unaided.
 
-1. GHCR tag lookup needs auth via a `hostRules` entry in `renovate.json`
-2. Multi-tag publishing confuses semver picking (without explicit `versioning`,
-   Renovate may grab the shortest tag, e.g. `3`, and decide the pin is current)
+A second, quieter defeat was found 2026-07-16: the repo's GitHub
+**"Allow auto-merge" setting was off**, so `platformAutomerge: true` in
+`renovate.json` could never take effect and green PRs piled up unmerged.
+The setting is now enabled — minor/patch bumps (including base-image tags)
+merge themselves once CI passes; majors still open a needs-review PR.
 
-Until #66 lands, **manual PRs are the operator's responsibility** when an
-ngdpbase release matters (e.g., a footer-visible version bump, a security
-fix, a feature this repo needs).
+Manual PRs remain the escape hatch when an ngdpbase release can't wait for
+the 6-hour Renovate cycle (e.g. a security fix — see #117, which bumped to
+3.49.1 minutes after the upstream tag).
 
 History: #54 bumped 3.14.5 → 3.24.4 manually (with the now-removed
 customManager). #62 dropped that customManager. #65 bumped 3.24.4 → 3.39.3
-manually after the drift was noticed via the live footer.
+manually after the drift was noticed via the live footer. #69–#81 were
+Renovate-authored. #117 was a same-day manual security bump to 3.49.1.
 
 ## Hop 4 — Building and publishing the geohazardwatch image
 
