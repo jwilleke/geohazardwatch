@@ -5,7 +5,7 @@ name: Renovate
 #
 # What it does:
 #   - Polls dependency sources (GHCR for the ngdpbase base image, npm for
-#     deps) every 6 hours.
+#     deps) every hour.
 #   - Opens PRs for available updates.
 #   - Auto-merges minor + patch updates per the rules in renovate.json
 #     (ngdpbase base image and npm deps, both with platformAutomerge: true).
@@ -28,7 +28,7 @@ name: Renovate
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # every 6 hours
+    - cron: '0 * * * *'  # every hour
   workflow_dispatch:
 
 permissions:
