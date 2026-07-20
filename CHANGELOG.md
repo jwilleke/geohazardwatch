@@ -82,6 +82,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   windows to act on. Per-rule schedules (e.g. `lockFileMaintenance.schedule`)
   remain — only the global gate was lifted.
 
+## [1.2.73] - 2026-07-20
+
+### Added
+
+### Changed
+
+### Fixed
+
 ## [1.2.72] - 2026-07-19
 
 ### Added
@@ -915,4 +923,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.2.70]: https://github.com/jwilleke/geohazardwatch/compare/v1.2.69...v1.2.70
 [1.2.71]: https://github.com/jwilleke/geohazardwatch/compare/v1.2.70...v1.2.71
 [1.2.72]: https://github.com/jwilleke/geohazardwatch/compare/v1.2.71...v1.2.72
+[1.2.73]: https://github.com/jwilleke/geohazardwatch/compare/v1.2.72...v1.2.73
 [1.0.0]: https://github.com/jwilleke/geohazardwatch/releases/tag/v1.0.0
