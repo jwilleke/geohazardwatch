@@ -54,7 +54,7 @@ jobs:
         # renovatebot/github-action doesn't publish a moving major tag (no @v46);
         # only specific patches like v46.1.14 exist. Pin to a specific patch and
         # let Renovate itself bump this line in future runs.
-        uses: renovatebot/github-action@v46.1.19
+        uses: renovatebot/github-action@v46.1.20
         env:
           # Tell Renovate exactly which repo to scan. Earlier attempt used
           # RENOVATE_AUTODISCOVER=true assuming the PAT was scoped narrowly
