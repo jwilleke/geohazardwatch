@@ -15,7 +15,7 @@
       "matchPackageNames": ["ghcr.io/jwilleke/ngdpbase"],
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true,
-      "automergeType": "branch",
+      "automergeType": "pr",
       "platformAutomerge": true
     },
     {
@@ -31,7 +31,7 @@
       "matchManagers": ["npm"],
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true,
-      "automergeType": "branch",
+      "automergeType": "pr",
       "platformAutomerge": true
     },
     {

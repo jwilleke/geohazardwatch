@@ -8,7 +8,16 @@ name: Renovate
 #     deps) every hour.
 #   - Opens PRs for available updates.
 #   - Auto-merges minor + patch updates per the rules in renovate.json
-#     (ngdpbase base image and npm deps, both with platformAutomerge: true).
+#     (ngdpbase base image and npm deps): opens a PR (automergeType: "pr"),
+#     which triggers ci.yml's normal pull_request-scoped checks, then
+#     GitHub's native automerge (platformAutomerge: true) merges it once
+#     green. Do NOT switch this to automergeType: "branch" — that skips
+#     opening a PR until the bare branch itself shows a green status, but
+#     ci.yml only triggers on pull_request/push-to-main, so a bare branch
+#     never gets any check runs and sits "pending" forever. This silently
+#     deadlocked the ngdpbase auto-bump for ~15h (2026-07-20 20:40 through
+#     2026-07-21 11:26, discovered when v3.54.0/v3.55.0 both failed to land
+#     despite the cron running hourly the whole time) before being caught.
 #   - Auto-merged Dockerfile bumps trigger auto-tag.yml → publish-image.yml,
 #     which is the whole point — keeps this satellite current with upstream
 #     ngdpbase patches and minors without operator action.
@@ -54,10 +63,6 @@ jobs:
           # ESP32-tests, etc.) and Renovate tried to act on them. Explicit
           # single-repo pin is the safe form.
           RENOVATE_REPOSITORIES: "jwilleke/geohazardwatch"
-          # TEMP DIAGNOSTIC (remove after use): ngdpbase bumps stopped
-          # landing despite images existing on GHCR; INFO level doesn't show
-          # per-dependency lookup detail.
-          LOG_LEVEL: debug
         with:
           token: ${{ secrets.RENOVATE_TOKEN }}
           configurationFile: renovate.json
