@@ -54,6 +54,10 @@ jobs:
           # ESP32-tests, etc.) and Renovate tried to act on them. Explicit
           # single-repo pin is the safe form.
           RENOVATE_REPOSITORIES: "jwilleke/geohazardwatch"
+          # TEMP DIAGNOSTIC (remove after use): ngdpbase bumps stopped
+          # landing despite images existing on GHCR; INFO level doesn't show
+          # per-dependency lookup detail.
+          LOG_LEVEL: debug
         with:
           token: ${{ secrets.RENOVATE_TOKEN }}
           configurationFile: renovate.json
