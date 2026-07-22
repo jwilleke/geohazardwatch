@@ -19,6 +19,7 @@ see the guide seeded at `/view/geohazardwatch-plugins`.
 | `[{EarthquakeMap}]` | Leaflet map of recent earthquakes |
 | `[{HansAlerts}]` | US volcano alert level table (USGS HANS) |
 | `[{VaacAdvisories}]` | Active volcanic ash advisory table (Washington VAAC) |
+| `[{FirmsHotspots}]` | Volcanoes with a NASA FIRMS thermal anomaly (via ngdpbase's `feeds` addon) |
 
 ---
 
@@ -208,6 +209,31 @@ that volcano and was issued within the last 48 hours.
 **Common use:** `[{VaacAdvisories}]` on a global hazard summary page. Covers only the
 Washington VAAC's region (Americas, E. Pacific, Caribbean) — see geohazardwatch#5 for
 the other 8 ICAO VAACs, not yet integrated.
+
+---
+
+### FirmsHotspots
+
+Renders volcanoes currently showing a NASA FIRMS thermal anomaly within 5 km of the
+summit. Unlike every other plugin above, **this addon has no import script, manager, or
+scheduler for FIRMS** — ngdpbase's generic `feeds` addon fetches/schedules/stores the raw
+CSV data (`adapter: 'csv'`, see [Data sources](#data-sources) below for the config).
+This plugin only reads already-ingested records via `FeedManager.getRecords()` and joins
+them against the volcano catalog at render time (cached until the feed's next poll —
+see geohazardwatch#4, ngdpbase#911).
+
+```
+[{FirmsHotspots}]
+[{FirmsHotspots source='firms-viirs' limit='10'}]
+```
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `source` | `firms-viirs` | The configured `ngdpbase.addons.feeds.sources.<id>` to read |
+| `limit` | all | Max volcanoes to show, strongest thermal signal (FRP) first |
+
+**Common use:** `[{FirmsHotspots}]` on a global hazard summary page alongside HansAlerts
+and VaacAdvisories. Satellite-detected heat, not a confirmed eruption.
 
 ---
 

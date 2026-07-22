@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **NASA FIRMS thermal hotspot detection** (`[{FirmsHotspots}]` plugin). Closes #4.
+  Deliberately has **no import script or data manager** in this repo — FIRMS is
+  CSV-only, and ngdpbase's `feeds` addon didn't have a `csv` adapter until
+  [ngdpbase#911](https://github.com/jwilleke/ngdpbase/issues/911) shipped it
+  (v3.60.0). The plugin reads `FeedManager.getRecords()` and does the
+  volcano-proximity join (Haversine, 5 km, ~1° grid-bucketed for speed — 46ms
+  measured for ~59k global hotspots × ~2,600 volcanoes) at render time, cached
+  until the feed's `fetchedAt` advances. Requires
+  `ngdpbase.addons.feeds.sources.firms-viirs.*` configured with a FIRMS
+  MAP_KEY (a separate credential from Earthdata Login — see
+  <https://firms.modaps.eosdis.nasa.gov/api/map_key/>).
 - **Washington VAAC ash advisory import** (`import-vaac.js`, `VaacDataManager`,
   `[{VaacAdvisories}]` plugin). Closes #5. No formal API — parses the archive
   index HTML for the most recent advisory per volcano, then fetches and parses

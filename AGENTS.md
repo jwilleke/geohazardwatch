@@ -68,7 +68,7 @@ The addon:
 
 - Imports GVP volcano/eruption data and USGS earthquake/HANS alert data into local JSON snapshots
 - Registers data managers with the ngdpbase engine so plugins can access them
-- Registers seven markup plugins (`[{PluginName param='value'}]` syntax)
+- Registers nine markup plugins (`[{PluginName param='value'}]` syntax)
 - Mounts REST API routes at `/api/geohazardwatch/*`
 - Mounts an admin panel (`/addons/geohazardwatch`) with manual HANS/earthquake refresh buttons
 - Registers background jobs that poll USGS HANS and earthquake feeds on a timer

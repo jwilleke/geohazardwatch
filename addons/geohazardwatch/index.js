@@ -40,6 +40,7 @@ const EarthquakeListPlugin   = require('./plugins/EarthquakeListPlugin');
 const EarthquakeMapPlugin    = require('./plugins/EarthquakeMapPlugin');
 const HansAlertPlugin        = require('./plugins/HansAlertPlugin');
 const VaacAdvisoriesPlugin   = require('./plugins/VaacAdvisoriesPlugin');
+const FirmsHotspotsPlugin    = require('./plugins/FirmsHotspotsPlugin');
 const { runImport: runHansImport }       = require('./import/import-hans');
 const { runImport: runEarthquakeImport } = require('./import/import-earthquakes');
 const { runImport: runVaacImport }       = require('./import/import-vaac');
@@ -100,6 +101,10 @@ module.exports = {
       await pluginManager.registerPlugin('EarthquakeMap',    EarthquakeMapPlugin);
       await pluginManager.registerPlugin('HansAlerts',       HansAlertPlugin);
       await pluginManager.registerPlugin('VaacAdvisories',   VaacAdvisoriesPlugin);
+      // FIRMS: no manager/import-script here — ngdpbase's feeds addon fetches/
+      // schedules/stores it (adapter: 'csv', see geohazardwatch#4, ngdpbase#911).
+      // This plugin only reads FeedManager.getRecords() + joins to volcanoes.
+      await pluginManager.registerPlugin('FirmsHotspots',    FirmsHotspotsPlugin);
     }
 
     // ── 3. Serve static assets ───────────────────────────────────────────────

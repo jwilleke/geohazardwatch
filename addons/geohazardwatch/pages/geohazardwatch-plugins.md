@@ -357,6 +357,43 @@ For live advisories visit the
 
 ---
 
+## FirmsHotspots
+
+**What it renders:** Volcanoes currently showing a NASA FIRMS thermal anomaly within
+5 km of the summit — columns for volcano name, distance, radiative power (MW),
+satellite confidence, and detection time.
+
+**Unlike every other plugin above, this one has no import script or data manager in
+this repo.** FIRMS data is ingested by ngdpbase's generic `feeds` addon
+(`adapter: 'csv'`) — this plugin only reads already-fetched records and joins them
+against the volcano catalog at render time, cached until the feed's next poll (default
+hourly). See [geohazardwatch#4](https://github.com/jwilleke/geohazardwatch/issues/4) and
+[ngdpbase#911](https://github.com/jwilleke/ngdpbase/issues/911).
+
+**When to use it:** On a global hazard summary page alongside HansAlerts and
+VaacAdvisories.
+
+**Limitation:** Satellite-detected heat, not a confirmed eruption — wildfires and other
+heat sources near a volcano's coordinates can produce a false positive. Cross-check
+against VolcanoInfobox/HansAlerts before treating a hit as eruption activity.
+
+### All active hotspots
+
+```
+[{FirmsHotspots}]
+```
+
+### Limited to the top 10 by radiative power
+
+```
+[{FirmsHotspots limit='10'}]
+```
+
+**Data:** Live, via the `feeds` addon's own poll schedule — no manual refresh command.
+For the raw feed visit [firms.modaps.eosdis.nasa.gov](https://firms.modaps.eosdis.nasa.gov/).
+
+---
+
 ## Combining plugins
 
 Some plugins work especially well together on the same page:
