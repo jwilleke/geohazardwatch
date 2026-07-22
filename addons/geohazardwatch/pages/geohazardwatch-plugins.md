@@ -325,19 +325,11 @@ For live HANS data visit [volcanoes.usgs.gov](https://volcanoes.usgs.gov/).
 
 ## VaacAdvisories
 
-**What it renders:** A table of active Volcanic Ash Advisories from the Washington VAAC
-(Volcano Observatory Notification for Aviation Advisory Center) — columns for volcano
-name, region, ash cloud top altitude, cloud motion, issue time, and a link to the source
-advisory. An advisory counts as active if it's the most recent one for that volcano and
-was issued within the last 48 hours (Washington reissues roughly every 6 hours while ash
-is still being tracked).
+**What it renders:** A table of active Volcanic Ash Advisories from the Washington VAAC (Volcano Observatory Notification for Aviation Advisory Center) — columns for volcano name, region, ash cloud top altitude, cloud motion, issue time, and a link to the source advisory. An advisory counts as active if it's the most recent one for that volcano and was issued within the last 48 hours (Washington reissues roughly every 6 hours while ash is still being tracked).
 
-**When to use it:** On a global hazard summary page alongside HansAlerts and
-EarthquakeList.
+**When to use it:** On a global hazard summary page alongside HansAlerts and EarthquakeList.
 
-**Limitation:** Covers only the Washington VAAC's region (Americas, E. Pacific,
-Caribbean) — one of nine ICAO-mandated regional VAACs. The other eight are not yet
-integrated (see [geohazardwatch#5](https://github.com/jwilleke/geohazardwatch/issues/5)).
+**Limitation:** Covers only the Washington VAAC's region (Americas, E. Pacific, Caribbean) — one of nine ICAO-mandated regional VAACs. The other eight are not yet integrated (see [geohazardwatch#5](https://github.com/jwilleke/geohazardwatch/issues/5)).
 
 ### All active advisories
 
@@ -351,31 +343,19 @@ integrated (see [geohazardwatch#5](https://github.com/jwilleke/geohazardwatch/is
 [{VaacAdvisories region='GUATEMALA'}]
 ```
 
-**Data:** Reflects the most recent import snapshot. Run `npm run import:vaac` to refresh.
-For live advisories visit the
-[Washington VAAC archive](https://www.ospo.noaa.gov/products/atmosphere/vaac/archive.html).
+**Data:** Reflects the most recent import snapshot. Run `npm run import:vaac` to refresh. For live advisories visit the [Washington VAAC archive](https://www.ospo.noaa.gov/products/atmosphere/vaac/archive.html).
 
 ---
 
 ## FirmsHotspots
 
-**What it renders:** Volcanoes currently showing a NASA FIRMS thermal anomaly within
-5 km of the summit — columns for volcano name, distance, radiative power (MW),
-satellite confidence, and detection time.
+**What it renders:** Volcanoes currently showing a NASA FIRMS thermal anomaly within 5 km of the summit — columns for volcano name, distance, radiative power (MW), satellite confidence, and detection time.
 
-**Unlike every other plugin above, this one has no import script or data manager in
-this repo.** FIRMS data is ingested by ngdpbase's generic `feeds` addon
-(`adapter: 'csv'`) — this plugin only reads already-fetched records and joins them
-against the volcano catalog at render time, cached until the feed's next poll (default
-hourly). See [geohazardwatch#4](https://github.com/jwilleke/geohazardwatch/issues/4) and
-[ngdpbase#911](https://github.com/jwilleke/ngdpbase/issues/911).
+**Unlike every other plugin above, this one has no import script or data manager in this repo.** FIRMS data is ingested by ngdpbase's generic `feeds` addon (`adapter: 'csv'`) — this plugin only reads already-fetched records and joins them against the volcano catalog at render time, cached until the feed's next poll (default hourly). See [geohazardwatch#4](https://github.com/jwilleke/geohazardwatch/issues/4) and [ngdpbase#911](https://github.com/jwilleke/ngdpbase/issues/911).
 
-**When to use it:** On a global hazard summary page alongside HansAlerts and
-VaacAdvisories.
+**When to use it:** On a global hazard summary page alongside HansAlerts and VaacAdvisories.
 
-**Limitation:** Satellite-detected heat, not a confirmed eruption — wildfires and other
-heat sources near a volcano's coordinates can produce a false positive. Cross-check
-against VolcanoInfobox/HansAlerts before treating a hit as eruption activity.
+**Limitation:** Satellite-detected heat, not a confirmed eruption — wildfires and other heat sources near a volcano's coordinates can produce a false positive. Cross-check against VolcanoInfobox/HansAlerts before treating a hit as eruption activity.
 
 ### All active hotspots
 
@@ -389,8 +369,7 @@ against VolcanoInfobox/HansAlerts before treating a hit as eruption activity.
 [{FirmsHotspots limit='10'}]
 ```
 
-**Data:** Live, via the `feeds` addon's own poll schedule — no manual refresh command.
-For the raw feed visit [firms.modaps.eosdis.nasa.gov](https://firms.modaps.eosdis.nasa.gov/).
+**Data:** Live, via the `feeds` addon's own poll schedule — no manual refresh command. For the raw feed visit [firms.modaps.eosdis.nasa.gov](https://firms.modaps.eosdis.nasa.gov/).
 
 ---
 

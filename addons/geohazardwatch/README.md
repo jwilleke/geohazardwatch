@@ -192,9 +192,7 @@ on an Alaska-specific page. Covers US volcanoes only.
 
 ### VaacAdvisories
 
-Renders a table of active Volcanic Ash Advisories from the Washington VAAC (Americas,
-E. Pacific, Caribbean). An advisory counts as "active" if it's the most recent one for
-that volcano and was issued within the last 48 hours.
+Renders a table of active Volcanic Ash Advisories from the Washington VAAC (Americas, E. Pacific, Caribbean). An advisory counts as "active" if it's the most recent one for that volcano and was issued within the last 48 hours.
 
 ```
 [{VaacAdvisories}]
@@ -206,21 +204,13 @@ that volcano and was issued within the last 48 hours.
 | `region` | | Filter by state/region (e.g. `GUATEMALA`, `ECUADOR`) |
 | `vaac` | | Filter by issuing VAAC (currently only `WASHINGTON`) |
 
-**Common use:** `[{VaacAdvisories}]` on a global hazard summary page. Covers only the
-Washington VAAC's region (Americas, E. Pacific, Caribbean) — see geohazardwatch#5 for
-the other 8 ICAO VAACs, not yet integrated.
+**Common use:** `[{VaacAdvisories}]` on a global hazard summary page. Covers only the Washington VAAC's region (Americas, E. Pacific, Caribbean) — see geohazardwatch#5 for the other 8 ICAO VAACs, not yet integrated.
 
 ---
 
 ### FirmsHotspots
 
-Renders volcanoes currently showing a NASA FIRMS thermal anomaly within 5 km of the
-summit. Unlike every other plugin above, **this addon has no import script, manager, or
-scheduler for FIRMS** — ngdpbase's generic `feeds` addon fetches/schedules/stores the raw
-CSV data (`adapter: 'csv'`, see [Data sources](#data-sources) below for the config).
-This plugin only reads already-ingested records via `FeedManager.getRecords()` and joins
-them against the volcano catalog at render time (cached until the feed's next poll —
-see geohazardwatch#4, ngdpbase#911).
+Renders volcanoes currently showing a NASA FIRMS thermal anomaly within 5 km of the summit. Unlike every other plugin above, **this addon has no import script, manager, or scheduler for FIRMS** — ngdpbase's generic `feeds` addon fetches/schedules/stores the raw CSV data (`adapter: 'csv'`, see [Data sources](#data-sources) below for the config). This plugin only reads already-ingested records via `FeedManager.getRecords()` and joins them against the volcano catalog at render time (cached until the feed's next poll — see geohazardwatch#4, ngdpbase#911).
 
 ```
 [{FirmsHotspots}]
@@ -232,16 +222,13 @@ see geohazardwatch#4, ngdpbase#911).
 | `source` | `firms-viirs` | The configured `ngdpbase.addons.feeds.sources.<id>` to read |
 | `limit` | all | Max volcanoes to show, strongest thermal signal (FRP) first |
 
-**Common use:** `[{FirmsHotspots}]` on a global hazard summary page alongside HansAlerts
-and VaacAdvisories. Satellite-detected heat, not a confirmed eruption.
+**Common use:** `[{FirmsHotspots}]` on a global hazard summary page alongside HansAlerts and VaacAdvisories. Satellite-detected heat, not a confirmed eruption.
 
 ---
 
 ## Admin panel
 
-`/addons/geohazardwatch` — status dashboard (record counts, HANS elevated alerts, active
-VAAC advisories). Requires an authenticated session; the refresh buttons require the
-`admin` role.
+`/addons/geohazardwatch` — status dashboard (record counts, HANS elevated alerts, active VAAC advisories). Requires an authenticated session; the refresh buttons require the `admin` role.
 
 | Method | Path | Description |
 |--------|------|-------------|
@@ -250,8 +237,7 @@ VAAC advisories). Requires an authenticated session; the refresh buttons require
 | POST | `/addons/geohazardwatch/jobs/earthquakes` | Enqueue an earthquake refresh job (admin) |
 | POST | `/addons/geohazardwatch/jobs/vaac` | Enqueue a VAAC advisory refresh job (admin) |
 
-All three jobs also run automatically on a timer via ngdpbase's `BackgroundJobManager` —
-see `hansIntervalMs` / `eqIntervalMs` / `vaacIntervalMs` in Configuration keys.
+All three jobs also run automatically on a timer via ngdpbase's `BackgroundJobManager` — see `hansIntervalMs` / `eqIntervalMs` / `vaacIntervalMs` in Configuration keys.
 
 ---
 
@@ -354,14 +340,7 @@ node addons/geohazardwatch/import/import-hans.js --data-dir /path/to/data
 node addons/geohazardwatch/import/import-vaac.js --data-dir /path/to/data
 ```
 
-Earthquake import requires `volcanoes.json` to already exist (for proximity matching).
-HANS import needs no auth and covers US volcanoes only (~65 monitored); it writes
-`activity.json`, which `HansDataManager` treats as optional — the addon starts cleanly
-without it. VAAC import needs no auth either, covers only the Washington VAAC's region
-(Americas, E. Pacific, Caribbean), and writes `vaac.json` (also optional — cross-references
-`volcanoes.json` by GVP number when present, but works without it). All three refresh
-automatically on a timer once the addon is registered (see `hansIntervalMs` /
-`eqIntervalMs` / `vaacIntervalMs` below), or on demand from the Admin panel.
+Earthquake import requires `volcanoes.json` to already exist (for proximity matching). HANS import needs no auth and covers US volcanoes only (~65 monitored); it writes `activity.json`, which `HansDataManager` treats as optional — the addon starts cleanly without it. VAAC import needs no auth either, covers only the Washington VAAC's region (Americas, E. Pacific, Caribbean), and writes `vaac.json` (also optional — cross-references `volcanoes.json` by GVP number when present, but works without it). All three refresh automatically on a timer once the addon is registered (see `hansIntervalMs` / `eqIntervalMs` / `vaacIntervalMs` below), or on demand from the Admin panel.
 
 ---
 
