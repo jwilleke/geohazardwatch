@@ -2,15 +2,15 @@
 title: Plugin Guide
 uuid: 93595dc0-1ba1-422a-9fd4-c2f6bf056b27
 slug: geohazardwatch-plugins
-description: End-user guide to all geohazardwatch wiki plugins — what they render, how to use them, and common combinations
+description: End-user guide to all geohazardwatch plugins — what they render, how to use them, and common combinations
 tags: [geology, plugins, guide, volcanoes, earthquakes]
 author: system
 ---
 
 ## geohazardwatch Plugin Guide
 
-This page is for **wiki editors**. It explains each plugin tag provided by the geohazardwatch addon,
-shows you what it renders, and gives copy-paste markup you can use on any wiki page.
+This page is for **content editors**. It explains each plugin tag provided by the geohazardwatch addon,
+shows you what it renders, and gives copy-paste markup you can use on any page.
 
 For developer reference (config keys, API endpoints, import scripts) see the
 [addon README](https://github.com/jwilleke/geohazardwatch/blob/main/addons/geohazardwatch/README.md).
@@ -22,7 +22,7 @@ For developer reference (config keys, API endpoints, import scripts) see the
 **What it renders:** A sidebar card for a single volcano — name, GVP number, country, type,
 elevation, tectonic setting, and a link to the Smithsonian volcano page.
 
-**When to use it:** On any wiki page dedicated to a specific volcano, or as a quick fact
+**When to use it:** On any page dedicated to a specific volcano, or as a quick fact
 panel alongside longer text.
 
 **You need:** The GVP volcano number (4–6 digits, found on
@@ -58,7 +58,7 @@ name, country, type, rock type, tectonic setting, and elevation. GVP numbers lin
 Smithsonian page.
 
 **When to use it:** When you want a static table of volcanoes matching a specific filter
-embedded in a wiki page.
+embedded in a page.
 
 **Tip:** For an interactive search experience, use **VolcanoSearch** instead.
 
@@ -379,4 +379,4 @@ it reflects the state at the time of the last import.
 | Earthquake data | USGS (M4.5+, past 7 days) | `npm run import:earthquakes` |
 | US volcano alerts | USGS HANS | `npm run import:hans` |
 
-For live data visit the source portals directly — links on the [About geohazardwatch](/wiki/geohazardwatch-about) page.
+For live data visit the source portals directly — links on the [About geohazardwatch](/view/geohazardwatch-about) page.

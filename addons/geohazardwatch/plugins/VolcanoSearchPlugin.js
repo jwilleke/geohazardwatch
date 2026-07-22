@@ -4,7 +4,7 @@
  * VolcanoSearchPlugin
  *
  * Renders an interactive faceted search widget that calls the geohazardwatch API.
- * Embed on any wiki page to get a live filterable volcano table.
+ * Embed on any page to get a live filterable volcano table.
  *
  * Usage:
  *   [{VolcanoSearch}]

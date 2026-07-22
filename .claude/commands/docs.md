@@ -14,7 +14,7 @@ Review what was built or changed in this session and ask:
 
 - Is this a new plugin, feature, or configuration property that a user would need to look up?
 - Does an existing documentation page need to be updated to reflect changes?
-- Is there a `required-pages/` entry (or a live wiki page) that should document this?
+- Is there a `required-pages/` entry (or a live page) that should document this?
 
 If the answer to any of the above is **yes**, proceed to Step 2. If not, state that no end-user documentation is needed and stop.
 

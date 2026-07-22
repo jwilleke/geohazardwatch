@@ -5,7 +5,7 @@
  *
  * Volcano & geology data platform built on ngdpbase.
  * Loads GVP volcano and eruption data, exposes search/filter API routes,
- * and registers wiki markup plugins for infoboxes, lists, and maps.
+ * and registers markup plugins for infoboxes, lists, and maps.
  *
  * Wire into your ngdpbase instance config:
  *   "ngdpbase.managers.addons-manager.addons-path": "/path/to/geohazardwatch/addons",

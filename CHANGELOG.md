@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **`docker-compose.yml`** at the repo root for one-command deploy
   (`git clone && docker compose up -d`). Pulls the published GHCR image,
-  uses a named volume `ghw-data` for persistent storage, exposes the wiki
+  uses a named volume `ghw-data` for persistent storage, exposes the site
   on `http://localhost:3000` (override with `HOST_PORT`). Addresses
   [jwilleke/ngdpbase#682](https://github.com/jwilleke/ngdpbase/issues/682)
   Lever 1.
@@ -768,7 +768,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`VE Geology` → `GeoHazardWatch`), and seed-page slugs.
 - Existing ngdpbase deployments must update `app-custom-config.json` for the new
   `ngdpbase.addons.geohazardwatch.*` keys; the old keys are no longer read.
-- Existing wiki instances retain pages at the old slug URLs (`/wiki/ve-geology-about`,
+- Existing instances retain pages at the old slug URLs (`/view/ve-geology-about`,
   etc.) since `seedAddonPages` only seeds on first install — fresh installs get
   the new slugs.
 - Bumped `Dockerfile` base image from `ghcr.io/jwilleke/ngdpbase:3.10.3` to
@@ -791,7 +791,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New seed page `addons/ve-geology/pages/ve-geology-request-access.md`
   (slug `request-access`). Destination for the **Request access** button
   shown when ngdpbase's `ngdpbase.application.registration` flag is `false`.
-  Operator edits the page in the wiki UI to customize contact instructions
+  Operator edits the page in the admin UI to customize contact instructions
   or drop in a `[{Form …}]` plugin invocation.
 
 ### Changed
@@ -832,7 +832,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `ve-geology-plugins`, `ve-geology-volcanoes`) with real UUID v4 values.
   The placeholders contained non-hex characters (`v`, `g`, `l`, `o`, `y`)
   and were rejected by `AddonsManager`'s validator (`/^[0-9a-f]{8}-…$/`),
-  so none of the pages were being seeded into the wiki on startup. See
+  so none of the pages were being seeded into the site on startup. See
   the upstream [addon development guide](https://github.com/jwilleke/ngdpbase/blob/master/docs/platform/addon-development-guide.md#uuid-requirements)
   for the rules.
 
@@ -878,14 +878,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `src/utils/version.ts` — SEMVER bump utility; updates `package.json`, `addons/ve-geology/index.js`, and `CHANGELOG.md` atomically (`npm run version:bump -- <major|minor|patch|x.y.z>`)
-- End-user plugin guide seeded at `/wiki/ve-geology-plugins`
-- Addon context/about page seeded at `/wiki/ve-geology-about`
+- End-user plugin guide seeded at `/view/ve-geology-plugins`
+- Addon context/about page seeded at `/view/ve-geology-about`
 - Periodic data refresh via ngdpbase `BackgroundJobManager` — `ve-geology.import-hans` and `ve-geology.import-earthquakes` jobs with configurable polling intervals
 
 ### Changed
 
 - All import scripts now export `runImport()` for programmatic use; CLI entry gated behind `require.main === module`
-- `addons/ve-geology/README.md` — added `HansAlerts` to plugin table, realistic examples per plugin, link to in-wiki guide
+- `addons/ve-geology/README.md` — added `HansAlerts` to plugin table, realistic examples per plugin, link to in-app guide
 
 ### Fixed
 
@@ -916,11 +916,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BackgroundJobManager integration** — registers `ve-geology.import-hans` and `ve-geology.import-earthquakes` jobs; polls on configurable intervals (default 10 min / 20 min); hot-reloads in-memory managers after each run; intervals cleared in `shutdown()`
 - Config keys: `dataPath`, `hansIntervalMs`, `eqIntervalMs`
 - Addon CSS served at `/addons/ve-geology/css/ve-geology.css`; registered with ngdpbase `AddonsManager`
-- Seeded wiki pages: home, volcanoes, earthquakes, HANS alerts, Japan demo, geology demo, plugin guide, about
+- Seeded pages: home, volcanoes, earthquakes, HANS alerts, Japan demo, geology demo, plugin guide, about
 - Leaflet served locally (no external CDN dependency)
 - Domain front page set as ngdpbase home page
-- End-user plugin guide at `/wiki/ve-geology-plugins`
-- Addon context page at `/wiki/ve-geology-about`
+- End-user plugin guide at `/view/ve-geology-plugins`
+- Addon context page at `/view/ve-geology-about`
 - ESLint + markdownlint + Prettier + Husky pre-commit hook
 
 [1.0.1]: https://github.com/jwilleke/geohazardwatch/compare/v1.0.0...v1.0.1

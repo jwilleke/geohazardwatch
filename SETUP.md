@@ -53,7 +53,7 @@ npm run build        # Required if any ngdpbase .ts files were changed
 ```
 
 On startup the addon seeds four demo pages into the ngdpbase instance
-(`/wiki/volcanoes`, `/wiki/earthquakes`, `/wiki/geology-demo`, `/wiki/volcano-alerts`).
+(`/view/volcanoes`, `/view/earthquakes`, `/view/geology-demo`, `/view/volcano-alerts`).
 
 ## Step 5 — Verify
 

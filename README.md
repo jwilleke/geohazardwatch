@@ -10,8 +10,8 @@ Powered by [Global Volcanism Program (GVP)](https://volcano.si.edu/) volcano dat
 - Imports 2,600+ GVP volcano and eruption records into a local JSON snapshot
 - Imports USGS earthquake data matched to the nearest volcano within 50 km
 - Imports real-time US volcano alert levels from USGS HANS, refreshed on a background timer
-- Registers seven wiki markup plugins (infoboxes, tables, search widgets, Leaflet maps, alert tables)
-- Seeds demo wiki pages into your ngdpbase instance automatically on first load, including
+- Registers seven markup plugins (infoboxes, tables, search widgets, Leaflet maps, alert tables)
+- Seeds demo pages into your ngdpbase instance automatically on first load, including
   Tsunami and Landslide pages that render live NOAA/NASA feeds when ngdpbase's `feeds` addon is configured
 - Exposes a REST API at `/api/geohazardwatch/*` and an admin panel for manual data refreshes
 
@@ -23,7 +23,7 @@ Want to see what GeoHazardWatch looks like running locally? One command:
 docker run --rm -p 3000:3000 ghcr.io/jwilleke/geohazardwatch:latest
 ```
 
-Open `http://localhost:3000` — you'll see the wiki running with the volcano and earthquake addons active. Ctrl-C to stop. No data persists; for a real instance see *Deploy your own* below.
+Open `http://localhost:3000` — you'll see the site running with the volcano and earthquake addons active. Ctrl-C to stop. No data persists; for a real instance see *Deploy your own* below.
 
 ## Deploy your own
 
@@ -36,7 +36,7 @@ docker compose up -d
 ```
 
 The bundled `docker-compose.yml` pulls the published image, mounts a named
-volume for persistent storage, and exposes the wiki on `http://localhost:3000`.
+volume for persistent storage, and exposes the site on `http://localhost:3000`.
 Override the host port with `HOST_PORT=8080 docker compose up -d`. For HTTPS,
 put a reverse proxy in front (Caddy, nginx, Cloudflare Tunnel) or pin to a
 specific image tag.

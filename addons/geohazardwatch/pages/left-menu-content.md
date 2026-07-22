@@ -6,7 +6,7 @@ system-category: addon
 addon: geohazardwatch
 author: geohazardwatch
 ---
-<!-- markdownlint-disable MD033 -- wiki fragment renders inline HTML -->
+<!-- markdownlint-disable MD033 -- page fragment renders inline HTML -->
 - <a href="/"><i class="fas fa-home"></i> Home</a>
 - <a href="/search"><i class="fas fa-search"></i> Search</a>
 - [Volcanoes]
@@ -18,4 +18,5 @@ author: geohazardwatch
 - [Demo|Geology Demo]
 - [About|About geohazardwatch]
 - [Plugin Guide]
+- [Attribution]
 - [Recent Changes]

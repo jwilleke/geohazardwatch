@@ -152,7 +152,7 @@ pod is recreated with the new image.
 
 **Public surface:** `https://geohazardwatch.com` is fronted by Cloudflare
 (see closed epic #14 — Cloudflare Tunnel). The Cloudflare layer is
-caching for static assets but `cf-cache-status: DYNAMIC` for the wiki
+caching for static assets but `cf-cache-status: DYNAMIC` for the site
 pages, so the version footer reflects the running pod with no
 intermediate cache to bust.
 

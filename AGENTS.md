@@ -62,17 +62,17 @@ Read [GLOBAL-CODE-PREFERENCES.md](./GLOBAL-CODE-PREFERENCES.md) first — overar
 
 ## What This Project Is
 
-**geohazardwatch** is an [ngdpbase](https://github.com/jwilleke/ngdpbase) add-on that provides volcano and geology data to a wiki platform. It is **not a standalone app** — it runs inside an ngdpbase instance as an external addon loaded via `AddonsManager`.
+**geohazardwatch** is an [ngdpbase](https://github.com/jwilleke/ngdpbase) add-on that provides volcano and geology data to an ngdpbase-based platform. It is **not a standalone app** — it runs inside an ngdpbase instance as an external addon loaded via `AddonsManager`.
 
 The addon:
 
 - Imports GVP volcano/eruption data and USGS earthquake/HANS alert data into local JSON snapshots
 - Registers data managers with the ngdpbase engine so plugins can access them
-- Registers seven wiki markup plugins (`[{PluginName param='value'}]` syntax)
+- Registers seven markup plugins (`[{PluginName param='value'}]` syntax)
 - Mounts REST API routes at `/api/geohazardwatch/*`
 - Mounts an admin panel (`/addons/geohazardwatch`) with manual HANS/earthquake refresh buttons
 - Registers background jobs that poll USGS HANS and earthquake feeds on a timer
-- Seeds demo wiki pages into the ngdpbase instance on first load, including Tsunami and
+- Seeds demo pages into the ngdpbase instance on first load, including Tsunami and
   Landslide pages that render live via the separate ngdpbase `feeds` addon (see Key Decisions)
 
 ## Commands
@@ -117,7 +117,7 @@ npm run build          # Compile TypeScript (required after any .ts change)
 pm2 logs ngdpbase-ngdpbase --lines 50   # Tail logs
 ```
 
-ngdpbase runs on port 3333. Admin panel at `/admin`, wiki at `/wiki/<slug>`.
+ngdpbase runs on port 3333. Admin panel at `/admin`, pages at `/view/<slug>`.
 
 ## Architecture
 
@@ -150,7 +150,7 @@ External API (GVP WFS / USGS / HANS)
   → routes/api.js                (REST endpoints for client-side widgets)
 ```
 
-The Tsunami and Landslide wiki pages (`pages/Tsunamis.md`, `pages/Landslides.md`) are a
+The Tsunami and Landslide pages (`pages/Tsunamis.md`, `pages/Landslides.md`) are a
 separate, content-only path: they carry no import script or data manager in this repo.
 They render live data via `[{DataFeed source='...'}]` markup, a plugin provided by
 ngdpbase's own `feeds` addon ([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)),
@@ -160,7 +160,7 @@ configured independently in the instance's `app-custom-config.json`. See
 ### Plugin system
 
 Plugins are plain objects `{ name, execute(context, params) }` registered with
-ngdpbase's `PluginManager`. The wiki markup `[{PluginName key='val'}]` is resolved
+ngdpbase's `PluginManager`. The markup `[{PluginName key='val'}]` is resolved
 at page render time. `context.engine.getManager('XxxDataManager')` gives plugin
 access to in-memory data.
 
@@ -204,7 +204,7 @@ Key open issues:
 - Bug fixes and lint/format issues
 - Documentation updates
 - Adding API routes to `routes/api.js`
-- Updating wiki page seeds in `pages/`
+- Updating page seeds in `pages/`
 - Dependency updates (patch/minor)
 
 ### Agents MUST request human review for

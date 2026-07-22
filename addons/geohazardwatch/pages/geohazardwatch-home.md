@@ -25,7 +25,7 @@ back thousands of years.
 
 [{VolcanoMap height='400' epoch='Holocene'}]
 
-[Explore volcanoes](/wiki/volcanoes) · [US volcano alerts](/wiki/volcano-alerts)
+[Explore volcanoes](/view/volcanoes) · [US volcano alerts](/view/volcano-alerts)
 
 ## Earthquakes
 
@@ -35,7 +35,7 @@ within 50 km of a known volcano — a relationship that can signal volcanic unre
 
 [{EarthquakeList nearVolcano='true' minMagnitude='4.5' limit='10'}]
 
-[Explore earthquakes](/wiki/earthquakes)
+[Explore earthquakes](/view/earthquakes)
 
 ## Currently Elevated US Volcanoes
 
@@ -44,7 +44,7 @@ within 50 km of a known volcano — a relationship that can signal volcanic unre
 ## About this site
 
 This site is powered by **geohazardwatch**, an open-source add-on for the
-[ngdpbase](https://github.com/jwilleke/ngdpbase) wiki platform.
+[ngdpbase](https://github.com/jwilleke/ngdpbase) platform.
 
 | Data source | Provider | Coverage |
 |-------------|----------|---------|

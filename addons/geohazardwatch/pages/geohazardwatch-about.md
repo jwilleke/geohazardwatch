@@ -10,10 +10,10 @@ author: system
 ## About geohazardwatch
 
 **geohazardwatch** is an open-source add-on for the [ngdpbase](https://github.com/jwilleke/ngdpbase)
-wiki platform that brings volcano and earthquake data into wiki pages via simple markup tags.
+platform that brings volcano and earthquake data into pages via simple markup tags.
 
 It is not a live data feed — it works by importing snapshots from public scientific APIs and
-making that data available to wiki plugins. This keeps the site fast and resilient to upstream
+making that data available to plugins. This keeps the site fast and resilient to upstream
 outages, at the cost of some data freshness.
 
 ---
@@ -94,7 +94,7 @@ If you need live data, visit the source portals directly (links above).
 
 ## Plugin reference
 
-Seven wiki markup plugins are available:
+Seven markup plugins are available:
 
 | Plugin | What it renders |
 |--------|----------------|
@@ -106,11 +106,11 @@ Seven wiki markup plugins are available:
 | `[{EarthquakeMap}]` | Interactive Leaflet map of earthquake events |
 | `[{HansAlerts}]` | US volcano alert level table |
 
-Full usage guide with examples: [Plugin Guide](/wiki/geohazardwatch-plugins)
+Full usage guide with examples: [Plugin Guide](/view/geohazardwatch-plugins)
 
 ---
 
 ## Open source
 
 geohazardwatch is open source and available at [github.com/jwilleke/geohazardwatch](https://github.com/jwilleke/geohazardwatch).
-The ngdpbase platform that powers this wiki is at [github.com/jwilleke/ngdpbase](https://github.com/jwilleke/ngdpbase).
+The ngdpbase platform that powers this site is at [github.com/jwilleke/ngdpbase](https://github.com/jwilleke/ngdpbase).

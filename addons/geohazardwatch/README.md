@@ -5,7 +5,7 @@ Volcano & geology data platform for [ngdpbase](https://github.com/jwilleke/ngdpb
 [USGS Earthquake Hazards Program](https://earthquake.usgs.gov/) data.
 
 For end-user documentation (what renders, when to use each plugin, example combinations),
-see the in-wiki guide seeded at `/wiki/geohazardwatch-plugins`.
+see the guide seeded at `/view/geohazardwatch-plugins`.
 
 ## Plugins
 
@@ -21,7 +21,7 @@ see the in-wiki guide seeded at `/wiki/geohazardwatch-plugins`.
 
 ---
 
-## Wiki Markup Reference
+## Markup Reference
 
 ### VolcanoInfobox
 
@@ -37,7 +37,7 @@ Renders a full infobox for a single volcano with GVP link, coordinates, type, ro
 | `number` | *(required)* | GVP volcano number |
 | `style` | `default` | `default` (full infobox) or `compact` (inline name span) |
 
-**Common use:** Add a `default` infobox at the top of a volcano-specific wiki page, or use
+**Common use:** Add a `default` infobox at the top of a volcano-specific page, or use
 `compact` inline within body text — e.g. "…near [{VolcanoInfobox number='332010' style='compact'}]…"
 
 ---
@@ -307,7 +307,7 @@ Set in your ngdpbase `app-custom-config.json`:
 | `ngdpbase.addons.geohazardwatch.hansIntervalMs` | `600000` (10 min) | HANS background refresh interval; `0` disables polling |
 | `ngdpbase.addons.geohazardwatch.eqIntervalMs` | `1200000` (20 min) | Earthquake background refresh interval; `0` disables polling |
 
-The Tsunami and Landslide wiki pages render live data through a separate ngdpbase
+The Tsunami and Landslide pages render live data through a separate ngdpbase
 `feeds` addon, configured independently — see [Tsunami & Landslide pages](#tsunami--landslide-pages) below.
 
 ---

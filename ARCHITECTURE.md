@@ -7,8 +7,8 @@ Related: [CODE_STANDARDS.md](./CODE_STANDARDS.md) · [AGENTS.md](./AGENTS.md) ·
 ## Overview
 
 geohazardwatch is a **ngdpbase add-on** — it has no server of its own. It extends the
-[ngdpbase](https://github.com/jwilleke/ngdpbase) wiki platform at runtime by registering
-data managers, wiki plugins, Express routes, and static assets through the engine API.
+[ngdpbase](https://github.com/jwilleke/ngdpbase) content platform at runtime by registering
+data managers, plugins, Express routes, and static assets through the engine API.
 
 ## Project Structure
 
@@ -18,11 +18,11 @@ geohazardwatch/
 │   └── geohazardwatch/           ← ngdpbase AddonModule root
 │       ├── index.js          ← Entry point: register(), status(), shutdown()
 │       ├── managers/         ← In-memory data stores loaded from JSON snapshots
-│       ├── plugins/          ← Wiki markup plugins [{PluginName param='val'}]
+│       ├── plugins/          ← Markup plugins [{PluginName param='val'}]
 │       ├── routes/
 │       │   └── api.js        ← REST API mounted at /api/geohazardwatch/*
 │       ├── import/           ← CLI scripts that fetch external APIs → JSON files
-│       ├── pages/            ← Wiki .md files seeded into ngdpbase on first load
+│       ├── pages/            ← Page .md files seeded into ngdpbase on first load
 │       ├── public/           ← Static assets (CSS) served at /addons/geohazardwatch/
 │       └── data/             ← Gitignored JSON snapshots written by import scripts
 ├── docs/
@@ -79,7 +79,7 @@ No live API calls happen during request handling — all data is pre-imported.
 - **Step 4 — Plugin (optional):** `plugins/<Source>Plugin.js` — render HTML from manager
 - **Step 5 — API route (optional):** add to `routes/api.js`
 - **Step 6 — npm script:** add `import:<source>` to `package.json`
-- **Step 7 — Wiki page (optional):** add `.md` to `pages/` for auto-seeding
+- **Step 7 — Page (optional):** add `.md` to `pages/` for auto-seeding
 
 Follow the HANS integration (`import-hans.js` → `HansDataManager.js` → `HansAlertPlugin.js`) as the reference implementation.
 

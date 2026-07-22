@@ -5,7 +5,7 @@
  *
  * Renders a structured infobox for a single volcano by GVP volcano number.
  *
- * Usage in wiki markup:
+ * Usage in markup:
  *   [{VolcanoInfobox number='211060'}]
  *   [{VolcanoInfobox number='211060' style='compact'}]
  *   [{VolcanoInfobox number='211060' placement='block'}]

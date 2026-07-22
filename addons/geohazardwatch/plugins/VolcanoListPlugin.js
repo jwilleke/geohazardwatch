@@ -3,7 +3,7 @@
 /**
  * VolcanoListPlugin
  *
- * Renders a paginated table of volcanoes inline in a wiki page.
+ * Renders a paginated table of volcanoes inline in a page.
  *
  * Usage:
  *   [{VolcanoList country='United States'}]
