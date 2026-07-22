@@ -11,6 +11,8 @@ author: geohazardwatch
 - <a href="/search"><i class="fas fa-search"></i> Search</a>
 - [Volcanoes]
 - [Earthquakes]
+- [Tsunamis]
+- [Landslides]
 - [Japan Volcanoes|Japan Volcanoes]
 - [Volcano Alerts|US Volcano Alerts (USGS HANS)]
 - [Demo|Geology Demo]
