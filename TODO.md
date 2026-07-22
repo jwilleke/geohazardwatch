@@ -21,11 +21,13 @@ kit_version: "3aa1bb4"
 - [#5](https://github.com/jwilleke/geohazardwatch/issues/5) — Import: Volcanic Ash Advisory Centers (VAACs) — global ash cloud advisories
 - [#6](https://github.com/jwilleke/geohazardwatch/issues/6) — Import: satellite thermal monitoring — MIROVA / MODVOLC / MOUNTS
 - [#7](https://github.com/jwilleke/geohazardwatch/issues/7) — Import: VolcanoDiscovery RSS — aggregated global activity feed
-- [#13](https://github.com/jwilleke/geohazardwatch/issues/13) — [FEATURE] Add Tsunami and landslide feeds to site
+- [#130](https://github.com/jwilleke/geohazardwatch/issues/130) — [FEATURE] Attribution page
+- [#133](https://github.com/jwilleke/geohazardwatch/issues/133) — [bug] landslide-events feed source missing from production app-custom-config.json
 
 ## 🟡 P2
 
 - [#36](https://github.com/jwilleke/geohazardwatch/issues/36) — [FEATURE] Best sources for
+- [#134](https://github.com/jwilleke/geohazardwatch/issues/134) — [blocked] NASA COOLR (maps.nccs.nasa.gov) is IPv6-only — no route from prod cluster
 
 ## 🔵 In review
 
