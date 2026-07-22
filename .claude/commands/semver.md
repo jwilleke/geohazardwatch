@@ -59,7 +59,7 @@ Run sequentially:
 
 After the version bump (so the new `<VERSION>` is reflected in the filename) and before the release commit, capture a baseline snapshot **and** diff it against the most recent prior baseline in one shot:
 
-- `npm run test:baseline:compare` — runs `scripts/baseline-profile.sh --compare`. Writes `docs/performance/baseline-v<VERSION>-<DATE>.md` (or `-r2.md` etc. if a same-day same-version baseline already exists), then appends a "## Drift vs <previous>" section to it and prints the same table to stdout.
+- `npm run test:baseline:compare` — runs `scripts/baseline-profile.sh --compare`. Writes `docs/performance/baseline-v<VERSION>-<DATE>.md` (or `-r2.md` etc. if a same-day same-version baseline already exists), then appends a `## Drift vs <previous>` section to it and prints the same table to stdout.
 - Stage the new file: `git add docs/performance/baseline-v<VERSION>-*.md`.
 
 The plain `npm run test:baseline` is still available for non-release captures (just measure, no diff). Use `npm run test:baseline:cold` to also stop/start the server first (slower; only do this when a restart is already part of the plan).
