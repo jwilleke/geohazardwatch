@@ -10,6 +10,12 @@
   "rangeStrategy": "bump",
   "packageRules": [
     {
+      "description": "Pin TypeScript to v6 — typescript-eslint (stable peer <6.1.0) and typedoc (peer <=6.0.x) do not support TS 7 yet; revisit when both ship TS7-compatible releases",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<7"
+    },
+    {
       "description": "Auto-merge minor and patch updates for the ngdpbase base image",
       "matchManagers": ["dockerfile"],
       "matchPackageNames": ["ghcr.io/jwilleke/ngdpbase"],
