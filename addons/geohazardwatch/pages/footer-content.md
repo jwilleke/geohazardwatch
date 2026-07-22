@@ -6,4 +6,5 @@ system-category: addon
 addon: geohazardwatch
 author: geohazardwatch
 ---
+<!-- markdownlint-disable MD033 -- wiki fragment renders inline HTML -->
 <small>**[{$applicationname}]** v[{$version}] | Volcano & earthquake data from Smithsonian GVP and USGS</small>
