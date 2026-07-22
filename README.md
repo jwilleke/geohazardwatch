@@ -9,10 +9,11 @@ Powered by [Global Volcanism Program (GVP)](https://volcano.si.edu/) volcano dat
 
 - Imports 2,600+ GVP volcano and eruption records into a local JSON snapshot
 - Imports USGS earthquake data matched to the nearest volcano within 50 km
-- Imports real-time US volcano alert levels from USGS HANS
+- Imports real-time US volcano alert levels from USGS HANS, refreshed on a background timer
 - Registers seven wiki markup plugins (infoboxes, tables, search widgets, Leaflet maps, alert tables)
-- Seeds demo wiki pages into your ngdpbase instance automatically on first load
-- Exposes a REST API at `/api/geohazardwatch/*`
+- Seeds demo wiki pages into your ngdpbase instance automatically on first load, including
+  Tsunami and Landslide pages that render live NOAA/NASA feeds when ngdpbase's `feeds` addon is configured
+- Exposes a REST API at `/api/geohazardwatch/*` and an admin panel for manual data refreshes
 
 ## Quick try (30 seconds)
 

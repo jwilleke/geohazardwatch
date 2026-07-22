@@ -188,6 +188,22 @@ on an Alaska-specific page. Covers US volcanoes only.
 
 ---
 
+## Admin panel
+
+`/addons/geohazardwatch` — status dashboard (record counts, HANS elevated alerts).
+Requires an authenticated session; the two refresh buttons require the `admin` role.
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/addons/geohazardwatch` | Status dashboard (authenticated) |
+| POST | `/addons/geohazardwatch/jobs/hans` | Enqueue a HANS refresh job (admin) |
+| POST | `/addons/geohazardwatch/jobs/earthquakes` | Enqueue an earthquake refresh job (admin) |
+
+Both jobs also run automatically on a timer via ngdpbase's `BackgroundJobManager` —
+see `hansIntervalMs` / `eqIntervalMs` in Configuration keys.
+
+---
+
 ## API Endpoints
 
 All endpoints are mounted at `/api/geohazardwatch`.
@@ -217,6 +233,17 @@ All endpoints are mounted at `/api/geohazardwatch`.
 `nearVolcano` (true/false), `tsunamiOnly` (true/false), `alert`,
 `limit` (default 50), `offset` (default 0).
 
+### HANS alert endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/hans/elevated` | List volcanoes at ADVISORY level or above |
+| GET | `/hans/volcano/:number` | Alert status for a single GVP volcano number |
+| GET | `/hans/status` | Feed metadata (last fetch time, monitored/elevated counts) |
+
+**`/hans/elevated` query parameters:** `alertLevel`, `colorCode`, `observatory`
+(`avo`, `hvo`, `cvo`, `yvo`, `uvo`).
+
 ---
 
 ## Import scripts
@@ -238,6 +265,12 @@ npm run import:earthquakes
 
 # Earthquake data (M4.5+ past 30 days)
 npm run import:earthquakes:month
+
+# Global activity snapshot
+npm run import:activity
+
+# USGS HANS real-time US volcano alert levels
+npm run import:hans
 ```
 
 Custom options (run directly):
@@ -249,9 +282,17 @@ node addons/geohazardwatch/import/import-volcanoes.js --data-dir /path/to/data
 # Specific earthquake feed
 node addons/geohazardwatch/import/import-earthquakes.js --feed=significant-week
 # Available feeds: significant-week, 4.5-week, 2.5-week, 4.5-month, significant-month
+
+# HANS import to a custom data directory
+node addons/geohazardwatch/import/import-hans.js --data-dir /path/to/data
 ```
 
 Earthquake import requires `volcanoes.json` to already exist (for proximity matching).
+HANS import needs no auth and covers US volcanoes only (~65 monitored); it writes
+`activity.json`, which `HansDataManager` treats as optional — the addon starts cleanly
+without it. Both HANS and earthquake data also refresh automatically on a timer once the
+addon is registered (see `hansIntervalMs` / `eqIntervalMs` below), or on demand from the
+Admin panel.
 
 ---
 
@@ -263,6 +304,11 @@ Set in your ngdpbase `app-custom-config.json`:
 |-----|---------|-------------|
 | `ngdpbase.addons.geohazardwatch.enabled` | `false` | Enable the add-on |
 | `ngdpbase.addons.geohazardwatch.dataPath` | `./data/geohazardwatch` | Path to data directory |
+| `ngdpbase.addons.geohazardwatch.hansIntervalMs` | `600000` (10 min) | HANS background refresh interval; `0` disables polling |
+| `ngdpbase.addons.geohazardwatch.eqIntervalMs` | `1200000` (20 min) | Earthquake background refresh interval; `0` disables polling |
+
+The Tsunami and Landslide wiki pages render live data through a separate ngdpbase
+`feeds` addon, configured independently — see [Tsunami & Landslide pages](#tsunami--landslide-pages) below.
 
 ---
 
@@ -270,31 +316,78 @@ Set in your ngdpbase `app-custom-config.json`:
 
 ```
 addons/geohazardwatch/
-├── index.js                        ← AddonModule entry point
+├── index.js                        ← AddonModule entry point (register/status/shutdown)
+├── config/
+│   └── default-config.json        ← Default config values, overridable in app-custom-config.json
 ├── managers/
 │   ├── VolcanoDataManager.js       ← Loads volcanoes.json + eruptions.json
-│   └── EarthquakeDataManager.js    ← Loads earthquakes.json snapshot
+│   ├── EarthquakeDataManager.js    ← Loads earthquakes.json snapshot
+│   └── HansDataManager.js          ← Loads activity.json (optional — no-ops if absent)
 ├── plugins/
 │   ├── VolcanoInfoboxPlugin.js
 │   ├── VolcanoListPlugin.js
 │   ├── VolcanoSearchPlugin.js
 │   ├── VolcanoMapPlugin.js
 │   ├── EarthquakeListPlugin.js
-│   └── EarthquakeMapPlugin.js
+│   ├── EarthquakeMapPlugin.js
+│   └── HansAlertPlugin.js
 ├── routes/
-│   └── api.js                      ← /api/geohazardwatch/* endpoints
+│   ├── api.js                      ← /api/geohazardwatch/* endpoints
+│   └── admin.js                    ← /addons/geohazardwatch admin panel + refresh jobs
+├── views/
+│   └── admin-geohazardwatch.ejs    ← Admin panel template
 ├── import/
-│   ├── import-volcanoes.js         ← GVP WFS API importer
-│   └── import-earthquakes.js       ← USGS feed importer + proximity matching
-├── pages/                          ← Seeded into ngdpbase on first load
+│   ├── import-volcanoes.js         ← GVP WFS API importer (volcanoes, eruptions, activity)
+│   ├── import-earthquakes.js       ← USGS feed importer + proximity matching
+│   └── import-hans.js              ← USGS HANS alert importer
+├── pages/                          ← Seeded into ngdpbase on first load, never overwritten
+│   ├── geohazardwatch-home.md
+│   ├── geohazardwatch-about.md
 │   ├── geohazardwatch-volcanoes.md
 │   ├── geohazardwatch-earthquakes.md
+│   ├── geohazardwatch-hans.md
 │   ├── geohazardwatch-demo.md
-│   └── geohazardwatch-japan.md
+│   ├── geohazardwatch-japan.md
+│   ├── geohazardwatch-plugins.md
+│   ├── geohazardwatch-request-access.md
+│   ├── Tsunamis.md                ← Content-only; live via ngdpbase `feeds` addon
+│   ├── Landslides.md               ← Content-only; live via ngdpbase `feeds` addon
+│   ├── left-menu-content.md
+│   └── footer-content.md
 ├── public/
-│   └── css/geohazardwatch.css          ← Served at /addons/geohazardwatch/css/
-└── data/                           ← volcanoes.json, eruptions.json, earthquakes.json (gitignored)
+│   ├── css/geohazardwatch.css      ← Served at /addons/geohazardwatch/css/
+│   └── vendor/leaflet/             ← Vendored Leaflet.js assets for map plugins
+└── data/                           ← volcanoes.json, eruptions.json, earthquakes.json, activity.json (gitignored)
 ```
+
+---
+
+## Tsunami & Landslide pages
+
+`pages/Tsunamis.md` and `pages/Landslides.md` are seeded like any other page, but they
+carry no import script or data manager in this repo. They render live data with
+`[{DataFeed source='...'}]` markup — a plugin supplied by ngdpbase's own `feeds` addon
+([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)), not by geohazardwatch.
+
+To make the feeds render, enable the `feeds` addon and declare its sources in the
+instance's `app-custom-config.json`:
+
+| Page | Feed source | Upstream |
+|------|-------------|----------|
+| Tsunamis | `tsunami-alerts` | NOAA/NWS `api.weather.gov` active tsunami alerts |
+| Landslides | `landslide-events` | NASA COOLR Global Landslide Catalog (ArcGIS FeatureServer) |
+
+See the `Configuration` section inside each page file for the exact source block to
+paste (adapter, field mappings, poll interval). If the `feeds` addon is absent or a
+source isn't configured, the page falls back to static informational content — no error,
+no missing data files to import.
+
+`schemaType` on both sources stays `Article` until ngdpbase implements the
+`WarningAlert`/`Event` schema.org union types
+([ngdpbase#762](https://github.com/jwilleke/ngdpbase/issues/762)); `type` carries the
+intended domain label in the meantime. The COOLR field names in the Landslides source
+block should be re-verified against the live FeatureServer schema before relying on them
+in production — ArcGIS field casing can drift between service revisions.
 
 ---
 
@@ -305,4 +398,7 @@ addons/geohazardwatch/
 | GVP Holocene volcanoes | <https://volcano.si.edu/> |
 | GVP WFS API | <https://webservices.volcano.si.edu/geoserver/GVP-VOTW/ows> |
 | USGS Earthquake feeds | <https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary> |
+| USGS HANS API | <https://volcanoes.usgs.gov/hans-public/api> |
 | Volcano detail page | `https://volcano.si.edu/volcano.cfm?vn={number}` |
+| NOAA/NWS tsunami alerts *(via ngdpbase `feeds` addon)* | <https://api.weather.gov/alerts/active> |
+| NASA COOLR landslide catalog *(via ngdpbase `feeds` addon)* | <https://maps.nccs.nasa.gov/mapping/rest/services/COOLR/COOLR_Events_Point/FeatureServer> |

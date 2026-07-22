@@ -1,6 +1,6 @@
 ---
 project_state: "active"
-last_updated: "2026-05-11"
+last_updated: "2026-07-22"
 agent_priority_level: "medium"
 blockers: []
 requires_human_review: ["major architectural changes", "security policy modifications", "deployment to production"]
@@ -70,7 +70,10 @@ The addon:
 - Registers data managers with the ngdpbase engine so plugins can access them
 - Registers seven wiki markup plugins (`[{PluginName param='value'}]` syntax)
 - Mounts REST API routes at `/api/geohazardwatch/*`
-- Seeds demo wiki pages into the ngdpbase instance on first load
+- Mounts an admin panel (`/addons/geohazardwatch`) with manual HANS/earthquake refresh buttons
+- Registers background jobs that poll USGS HANS and earthquake feeds on a timer
+- Seeds demo wiki pages into the ngdpbase instance on first load, including Tsunami and
+  Landslide pages that render live via the separate ngdpbase `feeds` addon (see Key Decisions)
 
 ## Commands
 
@@ -79,6 +82,7 @@ The addon:
 ```bash
 npm run import                   # Volcanoes only
 npm run import:eruptions         # + eruption records
+npm run import:activity          # + global activity snapshot
 npm run import:all               # + eruptions + global activity
 npm run import:earthquakes       # USGS M4.5+ past 7 days
 npm run import:earthquakes:month # USGS M4.5+ past 30 days
@@ -129,7 +133,9 @@ ngdpbase/src/managers/AddonsManager.ts
   → calls register(engine, config)
     → initialises VolcanoDataManager, EarthquakeDataManager, HansDataManager
     → registers 7 plugins with PluginManager
-    → mounts Express static + API routes
+    → mounts Express static + API routes + admin routes (routes/admin.js)
+    → registers BackgroundJobManager jobs (HANS + earthquake refresh, timer-driven)
+    → registers an AddonsManager dashboard card
     → seeds pages/ into ngdpbase data dir (first load only)
 ```
 
@@ -137,12 +143,19 @@ ngdpbase/src/managers/AddonsManager.ts
 
 ```
 External API (GVP WFS / USGS / HANS)
-  → import/*.js scripts          (run manually or via npm run import:*)
+  → import/*.js scripts          (run manually, or on a timer via BackgroundJobManager)
   → addons/geohazardwatch/data/*.json  (gitignored snapshots)
   → managers/*DataManager.js     (load on addon start, serve from memory)
   → plugins/*Plugin.js           (render HTML from manager data)
   → routes/api.js                (REST endpoints for client-side widgets)
 ```
+
+The Tsunami and Landslide wiki pages (`pages/Tsunamis.md`, `pages/Landslides.md`) are a
+separate, content-only path: they carry no import script or data manager in this repo.
+They render live data via `[{DataFeed source='...'}]` markup, a plugin provided by
+ngdpbase's own `feeds` addon ([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)),
+configured independently in the instance's `app-custom-config.json`. See
+[Key Decisions](#key-decisions) and the page files themselves for the feed source config.
 
 ### Plugin system
 
@@ -161,6 +174,8 @@ See [addons/geohazardwatch/README.md](./addons/geohazardwatch/README.md) for con
 - **Pages seeded, never overwritten** — `seedAddonPages()` in ngdpbase copies `.md` files from `pages/` on first load only. User edits are preserved.
 - **HansDataManager loads silently if `activity.json` is absent** — HANS data is optional; the addon starts cleanly without it.
 - **ESLint config targets TS but addon code is JS** — `.eslintrc.json` is from the project template and is wired for future TS work. Current `lint:code` targets `addons/**/*.js` with plain JS linting rules only.
+- **Tsunami/Landslide pages depend on an addon this repo does not own** — `pages/Tsunamis.md` and `pages/Landslides.md` render live data through `[{DataFeed}]` markup from ngdpbase's `feeds` addon ([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)). If that addon is absent or its `tsunami-alerts` / `landslide-events` sources aren't configured, the pages fall back to static informational content — geohazardwatch never fetches or stores this data itself. Field mappings (esp. NASA COOLR) should be re-verified against the live upstream schema before relying on them.
+- **`type` vs `schemaType` on DataFeed sources** — `schemaType` stays `Article` for these two feeds until ngdpbase implements the `WarningAlert`/`Event` schema.org union types ([ngdpbase#762](https://github.com/jwilleke/ngdpbase/issues/762)); `type` carries the intended domain label in the meantime.
 
 ## Open Issues
 
@@ -177,7 +192,8 @@ Key open issues:
 | #5 | geohazardwatch | VAAC ash advisories |
 | #6 | geohazardwatch | MIROVA/MODVOLC satellite monitoring |
 | #7 | geohazardwatch | VolcanoDiscovery RSS (licensing TBD) |
-| #13 | geohazardwatch | Tsunami and landslide feeds *(good first issue)* |
+| #36 | geohazardwatch | Best sources for (P2) |
+| #130 | geohazardwatch | Attribution page |
 
 ## Agent Priority Matrix
 
