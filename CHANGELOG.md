@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Washington VAAC ash advisory import** (`import-vaac.js`, `VaacDataManager`,
+  `[{VaacAdvisories}]` plugin). Closes #5. No formal API — parses the archive
+  index HTML for the most recent advisory per volcano, then fetches and parses
+  the ICAO IWXXM 3.0 advisory XML directly (no XML parser dependency; the
+  schema is fixed enough for targeted regex extraction). Treats an advisory as
+  active if issued within the last 48h. Cross-references volcanoes.json by GVP
+  number, which the advisory XML embeds directly in the volcano name field
+  (e.g. `FUEGO 342090`). Covers only the Washington VAAC's region (Americas,
+  E. Pacific, Caribbean) — the other 8 ICAO VAACs are not yet integrated.
+  Refreshes on a background timer (`vaacIntervalMs`, default 30 min) and from
+  the admin panel.
 - **`docker-compose.yml`** at the repo root for one-command deploy
   (`git clone && docker compose up -d`). Pulls the published GHCR image,
   uses a named volume `ghw-data` for persistent storage, exposes the site

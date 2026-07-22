@@ -11,6 +11,7 @@
     "import:earthquakes": "node addons/geohazardwatch/import/import-earthquakes.js",
     "import:earthquakes:month": "node addons/geohazardwatch/import/import-earthquakes.js --feed=4.5-month",
     "import:hans": "node addons/geohazardwatch/import/import-hans.js",
+    "import:vaac": "node addons/geohazardwatch/import/import-vaac.js",
     "lint": "npm run lint:code && npm run lint:md",
     "lint:code": "eslint addons/**/*.js",
     "lint:code:fix": "eslint addons/**/*.js --fix",

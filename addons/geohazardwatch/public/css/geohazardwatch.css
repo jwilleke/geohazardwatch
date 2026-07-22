@@ -357,6 +357,55 @@
   margin-top: 0.5rem;
 }
 
+/* ── VAAC advisories ──────────────────────────────────────────────────────── */
+
+.vaac-advisories {
+  margin: 1rem 0;
+}
+
+.vaac-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+
+.vaac-table th,
+.vaac-table td {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  vertical-align: top;
+}
+
+.vaac-table thead th {
+  background: var(--bs-secondary-bg, #f8f9fa);
+  font-weight: 600;
+}
+
+.vaac-fl {
+  font-weight: 700;
+  color: #c0392b;
+}
+
+.vaac-remarks-row td {
+  padding: 0.25rem 0.6rem 0.5rem;
+  background: var(--bs-body-bg, #fff);
+  border-top: none;
+  font-size: 0.85em;
+  color: var(--bs-secondary, #6c757d);
+  font-style: italic;
+}
+
+.vaac-all-clear {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.vaac-meta {
+  font-size: 0.8em;
+  color: var(--bs-secondary, #6c757d);
+  margin-top: 0.5rem;
+}
+
 /* ── Shared ───────────────────────────────────────────────────────────────── */
 
 .plugin-error {

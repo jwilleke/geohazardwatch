@@ -9,6 +9,7 @@ const express = require('express');
  * GET  /                 — status dashboard (authenticated)
  * POST /jobs/hans        — trigger HANS import (admin only)
  * POST /jobs/earthquakes — trigger earthquake import (admin only)
+ * POST /jobs/vaac        — trigger VAAC advisory import (admin only)
  *
  * @param {import('../../../src/types/WikiEngine').WikiEngine} engine
  * @returns {express.Router}
@@ -48,6 +49,7 @@ module.exports = function adminRoutes(engine) {
     const dm  = engine.getManager('VolcanoDataManager');
     const em  = engine.getManager('EarthquakeDataManager');
     const hm  = engine.getManager('HansDataManager');
+    const vm  = engine.getManager('VaacDataManager');
 
     const volcanoCount    = dm  ? dm.volcanoCount()             : 0;
     const eruptionCount   = dm  ? dm.eruptionCount()            : 0;
@@ -55,6 +57,8 @@ module.exports = function adminRoutes(engine) {
     const nearVolcanoCount = em ? em.nearVolcanoCount()         : 0;
     const hansStatus      = hm  ? hm.status()                   : { fetchedUtc: null, monitoredCount: 0, elevatedCount: 0 };
     const elevatedAlerts  = hm  ? hm.getElevated().slice(0, 10) : [];
+    const vaacStatus      = vm  ? vm.status()                    : { fetchedUtc: null, totalCount: 0 };
+    const activeAdvisories = vm ? vm.getActive().slice(0, 10)   : [];
 
     res.render('admin-geohazardwatch', {
       currentUser: req.userContext,
@@ -65,6 +69,8 @@ module.exports = function adminRoutes(engine) {
       nearVolcanoCount,
       hansStatus,
       elevatedAlerts,
+      vaacStatus,
+      activeAdvisories,
       flash: typeof req.query.flash === 'string' ? req.query.flash : null
     });
   });
@@ -85,6 +91,15 @@ module.exports = function adminRoutes(engine) {
     if (!jm) { res.status(503).send('BackgroundJobManager not available'); return; }
     jm.enqueue('geohazardwatch.import-earthquakes');
     res.redirect('/addons/geohazardwatch?flash=eq-queued');
+  });
+
+  // ── POST /jobs/vaac — trigger VAAC advisory refresh ───────────────────────
+  router.post('/jobs/vaac', (req, res) => {
+    if (!requireAdmin(req, res)) return;
+    const jm = engine.getManager('BackgroundJobManager');
+    if (!jm) { res.status(503).send('BackgroundJobManager not available'); return; }
+    jm.enqueue('geohazardwatch.import-vaac');
+    res.redirect('/addons/geohazardwatch?flash=vaac-queued');
   });
 
   return router;

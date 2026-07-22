@@ -87,6 +87,7 @@ npm run import:all               # + eruptions + global activity
 npm run import:earthquakes       # USGS M4.5+ past 7 days
 npm run import:earthquakes:month # USGS M4.5+ past 30 days
 npm run import:hans              # USGS HANS real-time US volcano alerts
+npm run import:vaac              # Washington VAAC active ash advisories
 ```
 
 Earthquake import requires `volcanoes.json` to exist first (proximity matching).
@@ -189,11 +190,9 @@ Key open issues:
 | Issue | Repo | Summary |
 |-------|------|---------|
 | #4 | geohazardwatch | NASA FIRMS satellite thermal data |
-| #5 | geohazardwatch | VAAC ash advisories |
 | #6 | geohazardwatch | MIROVA/MODVOLC satellite monitoring |
 | #7 | geohazardwatch | VolcanoDiscovery RSS (licensing TBD) |
 | #36 | geohazardwatch | Best sources for (P2) |
-| #130 | geohazardwatch | Attribution page |
 
 ## Agent Priority Matrix
 

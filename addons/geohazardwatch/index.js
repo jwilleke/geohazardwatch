@@ -15,6 +15,7 @@
  * Optional polling config (set to 0 to disable):
  *   "ngdpbase.addons.geohazardwatch.hansIntervalMs": 600000   (default 10 min)
  *   "ngdpbase.addons.geohazardwatch.eqIntervalMs":  1200000  (default 20 min)
+ *   "ngdpbase.addons.geohazardwatch.vaacIntervalMs": 1800000 (default 30 min)
  *
  * Import data first:
  *   node addons/geohazardwatch/import/import-volcanoes.js
@@ -30,6 +31,7 @@ const express = require('express');
 const VolcanoDataManager    = require('./managers/VolcanoDataManager');
 const EarthquakeDataManager = require('./managers/EarthquakeDataManager');
 const HansDataManager       = require('./managers/HansDataManager');
+const VaacDataManager        = require('./managers/VaacDataManager');
 const VolcanoInfoboxPlugin   = require('./plugins/VolcanoInfoboxPlugin');
 const VolcanoListPlugin      = require('./plugins/VolcanoListPlugin');
 const VolcanoSearchPlugin    = require('./plugins/VolcanoSearchPlugin');
@@ -37,8 +39,10 @@ const VolcanoMapPlugin       = require('./plugins/VolcanoMapPlugin');
 const EarthquakeListPlugin   = require('./plugins/EarthquakeListPlugin');
 const EarthquakeMapPlugin    = require('./plugins/EarthquakeMapPlugin');
 const HansAlertPlugin        = require('./plugins/HansAlertPlugin');
+const VaacAdvisoriesPlugin   = require('./plugins/VaacAdvisoriesPlugin');
 const { runImport: runHansImport }       = require('./import/import-hans');
 const { runImport: runEarthquakeImport } = require('./import/import-earthquakes');
+const { runImport: runVaacImport }       = require('./import/import-vaac');
 
 /** @type {VolcanoDataManager | null} */
 let dataManager = null;
@@ -46,6 +50,8 @@ let dataManager = null;
 let earthquakeManager = null;
 /** @type {HansDataManager | null} */
 let hansManager = null;
+/** @type {VaacDataManager | null} */
+let vaacManager = null;
 
 /** @type {ReturnType<typeof setInterval>[]} */
 const _intervals = [];
@@ -78,6 +84,11 @@ module.exports = {
     await hansManager.load();
     engine.registerManager('HansDataManager', hansManager);
 
+    // ── 1d. Initialize VAAC manager (optional — loads if vaac.json exists)
+    vaacManager = new VaacDataManager(dataPath);
+    await vaacManager.load();
+    engine.registerManager('VaacDataManager', vaacManager);
+
     // ── 2. Register markup plugins ───────────────────────────────────────────
     const pluginManager = engine.getManager('PluginManager');
     if (pluginManager) {
@@ -88,6 +99,7 @@ module.exports = {
       await pluginManager.registerPlugin('EarthquakeList',   EarthquakeListPlugin);
       await pluginManager.registerPlugin('EarthquakeMap',    EarthquakeMapPlugin);
       await pluginManager.registerPlugin('HansAlerts',       HansAlertPlugin);
+      await pluginManager.registerPlugin('VaacAdvisories',   VaacAdvisoriesPlugin);
     }
 
     // ── 3. Serve static assets ───────────────────────────────────────────────
@@ -148,9 +160,24 @@ module.exports = {
         }
       });
 
+      jobManager.registerJob({
+        id: 'geohazardwatch.import-vaac',
+        displayName: 'Refresh VAAC ash advisories',
+        run: async (reportProgress) => {
+          reportProgress('Fetching Washington VAAC archive…');
+          const result = await runVaacImport(dataPath);
+          await vaacManager.load();
+          return {
+            success: true,
+            summary: `${result.total} active advisories`
+          };
+        }
+      });
+
       // Schedule polling intervals (0 = disabled)
       const hansIntervalMs = Number(config.hansIntervalMs ?? 10 * 60 * 1000);
       const eqIntervalMs   = Number(config.eqIntervalMs   ?? 20 * 60 * 1000);
+      const vaacIntervalMs = Number(config.vaacIntervalMs ?? 30 * 60 * 1000);
 
       if (hansIntervalMs > 0) {
         _intervals.push(
@@ -160,6 +187,11 @@ module.exports = {
       if (eqIntervalMs > 0) {
         _intervals.push(
           setInterval(() => jobManager.enqueue('geohazardwatch.import-earthquakes'), eqIntervalMs)
+        );
+      }
+      if (vaacIntervalMs > 0) {
+        _intervals.push(
+          setInterval(() => jobManager.enqueue('geohazardwatch.import-vaac'), vaacIntervalMs)
         );
       }
     }
@@ -184,10 +216,11 @@ module.exports = {
     const earthquakeCount = earthquakeManager ? earthquakeManager.count()           : 0;
     const nearVolcano     = earthquakeManager ? earthquakeManager.nearVolcanoCount() : 0;
     const hansElevated    = hansManager       ? hansManager.count()                 : 0;
+    const vaacActive      = vaacManager       ? vaacManager.count()                 : 0;
     return {
       healthy: true,
       records: volcanoCount,
-      message: `${volcanoCount} volcanoes, ${eruptionCount} eruptions, ${earthquakeCount} earthquakes (${nearVolcano} near volcanoes), ${hansElevated} HANS elevated`
+      message: `${volcanoCount} volcanoes, ${eruptionCount} eruptions, ${earthquakeCount} earthquakes (${nearVolcano} near volcanoes), ${hansElevated} HANS elevated, ${vaacActive} VAAC advisories`
     };
   },
 
@@ -197,5 +230,6 @@ module.exports = {
     dataManager       = null;
     earthquakeManager = null;
     hansManager       = null;
+    vaacManager       = null;
   }
 };

@@ -22,6 +22,11 @@
       <i class="fas fa-check-circle"></i> Earthquake refresh job queued.
       <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
+  <% } else if (flash === 'vaac-queued') { %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="fas fa-check-circle"></i> VAAC advisory refresh job queued.
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
   <% } %>
 
   <%# ── Stats cards ────────────────────────────────────────────────────────── %>
@@ -67,6 +72,19 @@
           </div>
           <div class="text-muted small mt-1">
             <i class="fas fa-bell"></i> HANS Elevated
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="card text-center h-100 <%= vaacStatus.totalCount > 0 ? 'border-danger' : '' %>">
+        <div class="card-body">
+          <div class="display-6 fw-bold <%= vaacStatus.totalCount > 0 ? 'text-danger' : 'text-success' %>">
+            <%= vaacStatus.totalCount %>
+          </div>
+          <div class="text-muted small mt-1">
+            <i class="fas fa-cloud"></i> VAAC Advisories
           </div>
         </div>
       </div>
@@ -165,6 +183,74 @@
   </div>
   <% } %>
 
+  <%# ── VAAC status ────────────────────────────────────────────────────────── %>
+  <div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span><i class="fas fa-cloud"></i> VAAC Status (Washington)</span>
+      <% if (isAdmin) { %>
+        <form method="POST" action="/addons/geohazardwatch/jobs/vaac" class="d-inline">
+          <button type="submit" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-sync-alt"></i> Refresh VAAC
+          </button>
+        </form>
+      <% } %>
+    </div>
+    <div class="card-body">
+      <dl class="row mb-0">
+        <dt class="col-sm-3">Last fetched</dt>
+        <dd class="col-sm-9">
+          <% if (vaacStatus.fetchedUtc) { %>
+            <%= vaacStatus.fetchedUtc %>
+          <% } else { %>
+            <span class="text-muted">Not yet fetched</span>
+          <% } %>
+        </dd>
+        <dt class="col-sm-3">Active advisories</dt>
+        <dd class="col-sm-9">
+          <% if (vaacStatus.totalCount > 0) { %>
+            <span class="badge bg-danger"><%= vaacStatus.totalCount %></span>
+          <% } else { %>
+            <span class="badge bg-success">0</span>
+          <% } %>
+        </dd>
+      </dl>
+    </div>
+  </div>
+
+  <%# ── Active ash advisories ──────────────────────────────────────────────── %>
+  <% if (activeAdvisories.length > 0) { %>
+  <div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-cloud text-danger"></i> Active Ash Advisories
+      <% if (vaacStatus.totalCount > 10) { %>
+        <span class="badge bg-secondary ms-2">showing 10 of <%= vaacStatus.totalCount %></span>
+      <% } %>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-sm table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Volcano</th>
+            <th>Region</th>
+            <th style="width:100px">Ash Top</th>
+            <th>Issued (UTC)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% activeAdvisories.forEach(function(a) { %>
+          <tr>
+            <td><strong><%= a.volcanoName %></strong></td>
+            <td><small><%= a.region || '—' %></small></td>
+            <td><span class="badge bg-danger">FL<%= a.ashCloudTopFl ?? '?' %></span></td>
+            <td><small><%= a.issueTimeUtc || '—' %></small></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <% } %>
+
   <%# ── Import actions ────────────────────────────────────────────────────── %>
   <% if (isAdmin) { %>
   <div class="card mb-4">
@@ -178,6 +264,11 @@
       <form method="POST" action="/addons/geohazardwatch/jobs/earthquakes">
         <button type="submit" class="btn btn-outline-primary">
           <i class="fas fa-wave-square"></i> Refresh Earthquakes
+        </button>
+      </form>
+      <form method="POST" action="/addons/geohazardwatch/jobs/vaac">
+        <button type="submit" class="btn btn-outline-primary">
+          <i class="fas fa-cloud"></i> Refresh VAAC
         </button>
       </form>
     </div>

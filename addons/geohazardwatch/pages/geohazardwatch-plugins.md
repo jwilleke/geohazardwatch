@@ -323,6 +323,40 @@ For live HANS data visit [volcanoes.usgs.gov](https://volcanoes.usgs.gov/).
 
 ---
 
+## VaacAdvisories
+
+**What it renders:** A table of active Volcanic Ash Advisories from the Washington VAAC
+(Volcano Observatory Notification for Aviation Advisory Center) — columns for volcano
+name, region, ash cloud top altitude, cloud motion, issue time, and a link to the source
+advisory. An advisory counts as active if it's the most recent one for that volcano and
+was issued within the last 48 hours (Washington reissues roughly every 6 hours while ash
+is still being tracked).
+
+**When to use it:** On a global hazard summary page alongside HansAlerts and
+EarthquakeList.
+
+**Limitation:** Covers only the Washington VAAC's region (Americas, E. Pacific,
+Caribbean) — one of nine ICAO-mandated regional VAACs. The other eight are not yet
+integrated (see [geohazardwatch#5](https://github.com/jwilleke/geohazardwatch/issues/5)).
+
+### All active advisories
+
+```
+[{VaacAdvisories}]
+```
+
+### Filtered by region
+
+```
+[{VaacAdvisories region='GUATEMALA'}]
+```
+
+**Data:** Reflects the most recent import snapshot. Run `npm run import:vaac` to refresh.
+For live advisories visit the
+[Washington VAAC archive](https://www.ospo.noaa.gov/products/atmosphere/vaac/archive.html).
+
+---
+
 ## Combining plugins
 
 Some plugins work especially well together on the same page:

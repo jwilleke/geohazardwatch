@@ -16,6 +16,9 @@ const express = require('express');
  *   GET /api/geohazardwatch/hans/elevated            Currently elevated US volcanoes
  *   GET /api/geohazardwatch/hans/volcano/:number     HANS alert for a single volcano
  *   GET /api/geohazardwatch/hans/status              HANS snapshot metadata
+ *   GET /api/geohazardwatch/vaac/active              Active Washington VAAC ash advisories
+ *   GET /api/geohazardwatch/vaac/volcano/:number     VAAC advisory for a single volcano
+ *   GET /api/geohazardwatch/vaac/status              VAAC snapshot metadata
  *
  * @param {import('../../../src/types/WikiEngine').WikiEngine} engine
  * @param {Record<string, unknown>} _config
@@ -141,6 +144,39 @@ module.exports = function apiRoutes(engine, _config) {
   router.get('/hans/status', (req, res) => {
     const mgr = engine.getManager('HansDataManager');
     if (!mgr) return res.status(503).json({ error: 'HansDataManager not available' });
+
+    res.json(mgr.status());
+  });
+
+  // ── VAAC advisory routes ───────────────────────────────────────────────────
+
+  // GET /api/geohazardwatch/vaac/active?region=&vaac=
+  router.get('/vaac/active', (req, res) => {
+    const mgr = engine.getManager('VaacDataManager');
+    if (!mgr) return res.status(503).json({ error: 'VaacDataManager not available — run npm run import:vaac' });
+
+    const filters = {};
+    if (req.query.region) filters.region = String(req.query.region);
+    if (req.query.vaac)   filters.vaac   = String(req.query.vaac);
+
+    const advisories = mgr.getActive(filters);
+    res.json({ active: advisories, total: advisories.length });
+  });
+
+  // GET /api/geohazardwatch/vaac/volcano/:number
+  router.get('/vaac/volcano/:number', (req, res) => {
+    const mgr = engine.getManager('VaacDataManager');
+    if (!mgr) return res.status(503).json({ error: 'VaacDataManager not available' });
+
+    const advisory = mgr.getAdvisory(req.params.number);
+    if (!advisory) return res.json({ volcanoNumber: req.params.number, advisory: null, active: false });
+    res.json({ volcanoNumber: req.params.number, advisory, active: true });
+  });
+
+  // GET /api/geohazardwatch/vaac/status
+  router.get('/vaac/status', (req, res) => {
+    const mgr = engine.getManager('VaacDataManager');
+    if (!mgr) return res.status(503).json({ error: 'VaacDataManager not available' });
 
     res.json(mgr.status());
   });
