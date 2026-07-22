@@ -9,24 +9,19 @@ author: system
 
 ## geohazardwatch Plugin Guide
 
-This page is for **content editors**. It explains each plugin tag provided by the geohazardwatch addon,
-shows you what it renders, and gives copy-paste markup you can use on any page.
+This page is for **content editors**. It explains each plugin tag provided by the geohazardwatch addon, shows you what it renders, and gives copy-paste markup you can use on any page.
 
-For developer reference (config keys, API endpoints, import scripts) see the
-[addon README](https://github.com/jwilleke/geohazardwatch/blob/main/addons/geohazardwatch/README.md).
+For developer reference (config keys, API endpoints, import scripts) see the [addon README](https://github.com/jwilleke/geohazardwatch/blob/main/addons/geohazardwatch/README.md).
 
 ---
 
 ## VolcanoInfobox
 
-**What it renders:** A sidebar card for a single volcano — name, GVP number, country, type,
-elevation, tectonic setting, and a link to the Smithsonian volcano page.
+**What it renders:** A sidebar card for a single volcano — name, GVP number, country, type, elevation, tectonic setting, and a link to the Smithsonian volcano page.
 
-**When to use it:** On any page dedicated to a specific volcano, or as a quick fact
-panel alongside longer text.
+**When to use it:** On any page dedicated to a specific volcano, or as a quick fact panel alongside longer text.
 
-**You need:** The GVP volcano number (4–6 digits, found on
-[volcano.si.edu](https://volcano.si.edu/)).
+**You need:** The GVP volcano number (4–6 digits, found on [volcano.si.edu](https://volcano.si.edu/)).
 
 ### Standard infobox
 
@@ -53,12 +48,9 @@ Renders just the volcano name as a styled inline span — useful mid-sentence.
 
 ## VolcanoList
 
-**What it renders:** A paginated, filterable table of volcanoes — columns for GVP number,
-name, country, type, rock type, tectonic setting, and elevation. GVP numbers link to the
-Smithsonian page.
+**What it renders:** A paginated, filterable table of volcanoes — columns for GVP number, name, country, type, rock type, tectonic setting, and elevation. GVP numbers link to the Smithsonian page.
 
-**When to use it:** When you want a static table of volcanoes matching a specific filter
-embedded in a page.
+**When to use it:** When you want a static table of volcanoes matching a specific filter embedded in a page.
 
 **Tip:** For an interactive search experience, use **VolcanoSearch** instead.
 
@@ -98,15 +90,11 @@ embedded in a page.
 
 ## VolcanoSearch
 
-**What it renders:** An interactive search widget with a text box and dropdowns for
-country, region, volcano type, and epoch. Results update as you type or change filters.
-Each result links to the Smithsonian GVP volcano page.
+**What it renders:** An interactive search widget with a text box and dropdowns for country, region, volcano type, and epoch. Results update as you type or change filters. Each result links to the Smithsonian GVP volcano page.
 
-**When to use it:** On a dedicated search or browse page where visitors want to explore
-the full volcano catalog interactively.
+**When to use it:** On a dedicated search or browse page where visitors want to explore the full volcano catalog interactively.
 
-**Combines well with:** VolcanoMap on the same page — editors can put the search above
-the map for a complete browsing experience.
+**Combines well with:** VolcanoMap on the same page — editors can put the search above the map for a complete browsing experience.
 
 ### Basic (no pre-selection)
 
@@ -136,15 +124,11 @@ the map for a complete browsing experience.
 
 ## VolcanoMap
 
-**What it renders:** An interactive Leaflet map with clickable volcano markers.
-Red markers = Holocene volcanoes; blue markers = Pleistocene volcanoes.
-Clicking a marker shows the volcano name and GVP number.
+**What it renders:** An interactive Leaflet map with clickable volcano markers. Red markers = Holocene volcanoes; blue markers = Pleistocene volcanoes. Clicking a marker shows the volcano name and GVP number.
 
-**When to use it:** Any page where geographic context matters — country pages, region
-summaries, or alongside VolcanoSearch.
+**When to use it:** Any page where geographic context matters — country pages, region summaries, or alongside VolcanoSearch.
 
-**Combines well with:** VolcanoSearch above the map gives a full explore-and-locate
-experience.
+**Combines well with:** VolcanoSearch above the map gives a full explore-and-locate experience.
 
 ### World map of all Holocene volcanoes
 
@@ -176,22 +160,17 @@ experience.
 | `lat` / `lon` | `20` / `0` | Initial map centre (latitude / longitude) |
 | `zoom` | `2` | Initial zoom level (2 = world; 5–6 = country; 8–10 = regional) |
 
-**Performance note:** The default `limit='5000'` covers most filtered sets. For unfiltered
-global maps the full dataset (~2,600 volcanoes) loads quickly via the local API.
+**Performance note:** The default `limit='5000'` covers most filtered sets. For unfiltered global maps the full dataset (~2,600 volcanoes) loads quickly via the local API.
 
 ---
 
 ## EarthquakeList
 
-**What it renders:** A paginated table of recent earthquakes — columns for date/time,
-magnitude, location, depth, distance to nearest volcano (if within 50 km), PAGER alert
-badge, and tsunami flag.
+**What it renders:** A paginated table of recent earthquakes — columns for date/time, magnitude, location, depth, distance to nearest volcano (if within 50 km), PAGER alert badge, and tsunami flag.
 
-**When to use it:** On earthquake or hazard monitoring pages, or on volcano pages to show
-local seismic activity.
+**When to use it:** On earthquake or hazard monitoring pages, or on volcano pages to show local seismic activity.
 
-**Data:** Reflects the most recent import snapshot. Run `npm run import:earthquakes` to
-refresh. Default feed covers M4.5+ earthquakes from the past 7 days.
+**Data:** Reflects the most recent import snapshot. Run `npm run import:earthquakes` to refresh. Default feed covers M4.5+ earthquakes from the past 7 days.
 
 ### All recent M4.5+ earthquakes
 
@@ -228,8 +207,7 @@ refresh. Default feed covers M4.5+ earthquakes from the past 7 days.
 | `limit` | `50` | Rows per page |
 | `offset` | `0` | Skip this many rows (for manual pagination) |
 
-**PAGER alert levels:** green = low impact, yellow = some impact, orange = significant
-impact, red = major impact. Not all earthquakes receive PAGER assessments.
+**PAGER alert levels:** green = low impact, yellow = some impact, orange = significant impact, red = major impact. Not all earthquakes receive PAGER assessments.
 
 **Pagination:** Previous / Next buttons appear automatically when results exceed `limit`.
 
@@ -237,15 +215,11 @@ impact, red = major impact. Not all earthquakes receive PAGER assessments.
 
 ## EarthquakeMap
 
-**What it renders:** An interactive Leaflet map of earthquakes, coloured by PAGER alert
-level (green / yellow / orange / red). Optionally overlays volcano markers. Clicking a
-marker shows magnitude, location, and depth.
+**What it renders:** An interactive Leaflet map of earthquakes, coloured by PAGER alert level (green / yellow / orange / red). Optionally overlays volcano markers. Clicking a marker shows magnitude, location, and depth.
 
-**When to use it:** On seismic monitoring or hazard pages, and alongside EarthquakeList
-for a map + table view.
+**When to use it:** On seismic monitoring or hazard pages, and alongside EarthquakeList for a map + table view.
 
-**Combines well with:** Place EarthquakeList above or below EarthquakeMap for a complete
-view of recent seismic activity.
+**Combines well with:** Place EarthquakeList above or below EarthquakeMap for a complete view of recent seismic activity.
 
 ### Basic map of all recent earthquakes
 
@@ -278,16 +252,11 @@ view of recent seismic activity.
 
 ## HansAlerts
 
-**What it renders:** A table of US volcano alert levels from the USGS Hazard Alert
-Notification System (HANS) — columns for volcano name, observatory, current alert level,
-aviation colour code, and last update time. Only volcanoes with elevated alerts
-(ADVISORY or above) appear by default.
+**What it renders:** A table of US volcano alert levels from the USGS Hazard Alert Notification System (HANS) — columns for volcano name, observatory, current alert level, aviation colour code, and last update time. Only volcanoes with elevated alerts (ADVISORY or above) appear by default.
 
-**When to use it:** On US volcano monitoring or hazard pages. Covers 65 USGS-monitored
-volcanoes in Alaska, Hawaii, the Cascades, and other US volcanic regions.
+**When to use it:** On US volcano monitoring or hazard pages. Covers 65 USGS-monitored volcanoes in Alaska, Hawaii, the Cascades, and other US volcanic regions.
 
-**Limitation:** Covers US volcanoes only. For global volcanic activity, use VolcanoList
-or VolcanoMap.
+**Limitation:** Covers US volcanoes only. For global volcanic activity, use VolcanoList or VolcanoMap.
 
 ### All currently elevated US volcanoes
 
@@ -318,8 +287,7 @@ or VolcanoMap.
 | WATCH | ORANGE | Heightened unrest, increased eruption potential |
 | WARNING | RED | Eruption imminent or underway |
 
-**Data:** Reflects the most recent import snapshot. Run `npm run import:hans` to refresh.
-For live HANS data visit [volcanoes.usgs.gov](https://volcanoes.usgs.gov/).
+**Data:** Reflects the most recent import snapshot. Run `npm run import:hans` to refresh. For live HANS data visit [volcanoes.usgs.gov](https://volcanoes.usgs.gov/).
 
 ---
 
@@ -419,8 +387,7 @@ Some plugins work especially well together on the same page:
 
 ## Data freshness
 
-All plugins read from local data snapshots imported from public APIs. Data is **not live** —
-it reflects the state at the time of the last import.
+All plugins read from local data snapshots imported from public APIs. Data is **not live** — it reflects the state at the time of the last import.
 
 | Data | Source | Import command |
 |------|--------|---------------|

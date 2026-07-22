@@ -1,8 +1,6 @@
 # /pstatus — ranked briefing & next step
 
-A read-and-reconcile command. Run it **often** — ideally right before `/session-commit`.
-It surfaces security first, ranks open work by priority, regenerates `TODO.md`, and
-recommends what to do next. It does not start work.
+A read-and-reconcile command. Run it **often** — ideally right before `/session-commit`. It surfaces security first, ranks open work by priority, regenerates `TODO.md`, and recommends what to do next. It does not start work.
 
 ## Scope
 
@@ -25,8 +23,7 @@ recommends what to do next. It does not start work.
 
 For each open Dependabot / code-scanning / GitGuardian alert:
 
-- Look for an existing tracking issue (search issue bodies for the marker
-  `scanner-alert:<source>:<id>`).
+- Look for an existing tracking issue (search issue bodies for the marker `scanner-alert:<source>:<id>`).
 - If none exists, create one:
   - Title: `[security] <package or rule> — <short summary>`
   - Body: the alert detail plus the marker line `scanner-alert:<source>:<id>`
@@ -35,34 +32,26 @@ For each open Dependabot / code-scanning / GitGuardian alert:
 
 ### Step 3: Triage gate
 
-- Any open issue with **no** placement label (`P0` / `P1` / `P2` / `deferred` / `in-review`) gets
-  `needs-triage` so it shows up as awaiting a decision rather than being silently mis-ranked. An
-  `in-review` issue is already placed (it lands in the In review band) and is never flagged.
+- Any open issue with **no** placement label (`P0` / `P1` / `P2` / `deferred` / `in-review`) gets `needs-triage` so it shows up as awaiting a decision rather than being silently mis-ranked. An `in-review` issue is already placed (it lands in the In review band) and is never flagged.
 
 ### Step 4: Rank and regenerate `TODO.md`
 
-Overwrite `TODO.md` with the open issues grouped into bands. The `▶ Resume here` pointer is owned by
-`/wrap` (written at session end) — `/pstatus` does not write or preserve it; once you've resumed it
-has served its purpose, so regenerating a bands-only `TODO.md` here is expected:
+Overwrite `TODO.md` with the open issues grouped into bands. The `▶ Resume here` pointer is owned by `/wrap` (written at session end) — `/pstatus` does not write or preserve it; once you've resumed it has served its purpose, so regenerating a bands-only `TODO.md` here is expected:
 
 - `🔴 P0 — Security & Critical` (list `security` / vulnerability issues first)
 - `🟠 P1`
 - `🟡 P2`
-- `🔵 In review` (issues labeled `in-review` — work complete and pushed, awaiting the operator's
-  decision to close; takes precedence over an issue's priority band so it surfaces as "ready for your call")
+- `🔵 In review` (issues labeled `in-review` — work complete and pushed, awaiting the operator's decision to close; takes precedence over an issue's priority band so it surfaces as "ready for your call")
 - `⏸ Deferred`
 - `❓ Needs triage` (count + titles)
 
-**One issue per line — never bundle.** Each issue gets its OWN bullet, starting with a full clickable
-GitHub link. No grouping headers that pack several refs onto one bullet, no comma-separated runs of
-issues, no bare `#<num>`. Each line:
+**One issue per line — never bundle.** Each issue gets its OWN bullet, starting with a full clickable GitHub link. No grouping headers that pack several refs onto one bullet, no comma-separated runs of issues, no bare `#<num>`. Each line:
 
 `- [#<num>](https://github.com/{owner}/{repo}/issues/<num>) — <title>`
 
 ### Step 5: Brief the user
 
-Print the ranked bands, then a single **"Do this next"** recommendation — the highest-value
-P0 (else the top P1, and so on) with one line of why. Stop. Do not begin the work.
+Print the ranked bands, then a single **"Do this next"** recommendation — the highest-value P0 (else the top P1, and so on) with one line of why. Stop. Do not begin the work.
 
 ## `/pstatus --all` (portfolio sweep — read-only, no writes)
 

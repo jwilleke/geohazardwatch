@@ -1,8 +1,6 @@
 # /wrap — close the session safely
 
-End-of-session ritual. Run it **last**, before shutting down VS Code. It makes sure every change is
-committed, refreshes the "Resume here" pointer at the top of the log, and reports whether it is safe
-to close.
+End-of-session ritual. Run it **last**, before shutting down VS Code. It makes sure every change is committed, refreshes the "Resume here" pointer at the top of the log, and reports whether it is safe to close.
 
 ## Steps
 
@@ -24,15 +22,11 @@ In-flight work that a shutdown would orphan (note status of each, anything of si
 
 ### Step 2: Commit outstanding work
 
-- If the working tree has changes other than intentionally-local files
-  (`.claude/settings.local.json`, anything under `private/`), run the `/session-commit` flow to
-  commit them (code + `TODO.md` + a journal entry). Otherwise note "nothing to commit".
+- If the working tree has changes other than intentionally-local files (`.claude/settings.local.json`, anything under `private/`), run the `/session-commit` flow to commit them (code + `TODO.md` + a journal entry). Otherwise note "nothing to commit".
 
 ### Step 3: Refresh the "Resume here" pointer
 
-Overwrite the marker-delimited block at the **top** of `TODO.md` (above the generated priority
-bands) so the next session — on any machine, since `TODO.md` is committed — knows exactly where to
-pick up:
+Overwrite the marker-delimited block at the **top** of `TODO.md` (above the generated priority bands) so the next session — on any machine, since `TODO.md` is committed — knows exactly where to pick up:
 
 ```text
 <!-- RESUME:START -->
@@ -48,10 +42,7 @@ pick up:
 <!-- RESUME:END -->
 ```
 
-Insert the block right after the `# TODO` title (the markers will usually be absent, since `/pstatus`
-regenerated a bands-only `TODO.md` during the session; replace the block if it is present). This
-reflects only the latest handoff — `/context` reads it next session, then the first `/pstatus` clears
-it again.
+Insert the block right after the `# TODO` title (the markers will usually be absent, since `/pstatus` regenerated a bands-only `TODO.md` during the session; replace the block if it is present). This reflects only the latest handoff — `/context` reads it next session, then the first `/pstatus` clears it again.
 
 ### Step 4: Commit the refreshed pointer & push (ask)
 
@@ -62,14 +53,10 @@ it again.
 
 Report one clear verdict:
 
-- ✅ **Safe to close** — working tree clean (or only intentional local files), commits pushed
-  (or explicitly held), nothing running, resume pointer written.
-- ⚠️ **Attention** — list anything a shutdown would interrupt or that would be forgotten:
-  still-running workflows / background agents / dev servers, in-progress CI, untracked files
-  not committed, stashes, unpushed commits held locally by choice.
+- ✅ **Safe to close** — working tree clean (or only intentional local files), commits pushed (or explicitly held), nothing running, resume pointer written.
+- ⚠️ **Attention** — list anything a shutdown would interrupt or that would be forgotten: still-running workflows / background agents / dev servers, in-progress CI, untracked files not committed, stashes, unpushed commits held locally by choice.
 
 ## Notes
 
 - `/wrap` is the close bookend to `/context` (open) and complements `/session-commit` (per-chunk).
-- `/context` and `/pstatus` read the `▶ Resume here` block at the top of `TODO.md` first to restore
-  continuity. The dated session history stays in `private/project_log.md`.
+- `/context` and `/pstatus` read the `▶ Resume here` block at the top of `TODO.md` first to restore continuity. The dated session history stays in `private/project_log.md`.

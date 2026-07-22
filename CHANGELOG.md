@@ -2,8 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
@@ -11,78 +10,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **NASA FIRMS thermal hotspot detection** (`[{FirmsHotspots}]` plugin). Closes #4. Deliberately has **no import script or data manager** in this repo — FIRMS is CSV-only, and ngdpbase's `feeds` addon didn't have a `csv` adapter until [ngdpbase#911](https://github.com/jwilleke/ngdpbase/issues/911) shipped it (v3.60.0). The plugin reads `FeedManager.getRecords()` and does the volcano-proximity join (Haversine, 5 km, ~1° grid-bucketed for speed — 46ms measured for ~59k global hotspots × ~2,600 volcanoes) at render time, cached until the feed's `fetchedAt` advances. Requires `ngdpbase.addons.feeds.sources.firms-viirs.*` configured with a FIRMS MAP_KEY (a separate credential from Earthdata Login — see <https://firms.modaps.eosdis.nasa.gov/api/map_key/>).
 - **Washington VAAC ash advisory import** (`import-vaac.js`, `VaacDataManager`, `[{VaacAdvisories}]` plugin). Closes #5. No formal API — parses the archive index HTML for the most recent advisory per volcano, then fetches and parses the ICAO IWXXM 3.0 advisory XML directly (no XML parser dependency; the schema is fixed enough for targeted regex extraction). Treats an advisory as active if issued within the last 48h. Cross-references volcanoes.json by GVP number, which the advisory XML embeds directly in the volcano name field (e.g. `FUEGO 342090`). Covers only the Washington VAAC's region (Americas, E. Pacific, Caribbean) — the other 8 ICAO VAACs are not yet integrated. Refreshes on a background timer (`vaacIntervalMs`, default 30 min) and from the admin panel.
-- **`docker-compose.yml`** at the repo root for one-command deploy
-  (`git clone && docker compose up -d`). Pulls the published GHCR image,
-  uses a named volume `ghw-data` for persistent storage, exposes the site
-  on `http://localhost:3000` (override with `HOST_PORT`). Addresses
-  [jwilleke/ngdpbase#682](https://github.com/jwilleke/ngdpbase/issues/682)
-  Lever 1.
-- **README "Quick try" + "Deploy your own" sections** at the top. Quick
-  try is a `docker run` one-liner for a 30-second peek (no persistence);
-  Deploy your own uses the new compose file. The existing dev-oriented
-  install instructions are now under "Develop the addon." Addresses #682
-  Lever 2.
-- **Self-hosted Renovate** via `.github/workflows/renovate.yml`. Closes the
-  bridge from [jwilleke/ngdpbase#680](https://github.com/jwilleke/ngdpbase/issues/680).
-- Runs on a 6-hour cron + `workflow_dispatch`. Uses the existing
-  `renovate.json` (`auto-merge` rule for minor + patch updates of
-  `ghcr.io/jwilleke/ngdpbase`).
-- Requires a `RENOVATE_TOKEN` repo secret — fine-grained PAT scoped to
-  Contents, Pull requests, and **Workflows**. The Workflows scope is
-  required so auto-merged Dockerfile bumps trigger `auto-tag.yml` and the
-  publish-image cascade; the default `GITHUB_TOKEN` cannot cross-trigger
-  workflows. Operator may reuse `RELEASE_PAT` if scopes match.
-- Replaces the Mend-hosted Renovate App path, which 404'd on
-  org-onboarding.
+- **`docker-compose.yml`** at the repo root for one-command deploy (`git clone && docker compose up -d`). Pulls the published GHCR image, uses a named volume `ghw-data` for persistent storage, exposes the site on `http://localhost:3000` (override with `HOST_PORT`). Addresses [jwilleke/ngdpbase#682](https://github.com/jwilleke/ngdpbase/issues/682) Lever 1.
+- **README "Quick try" + "Deploy your own" sections** at the top. Quick try is a `docker run` one-liner for a 30-second peek (no persistence); Deploy your own uses the new compose file. The existing dev-oriented install instructions are now under "Develop the addon." Addresses #682 Lever 2.
+- **Self-hosted Renovate** via `.github/workflows/renovate.yml`. Closes the bridge from [jwilleke/ngdpbase#680](https://github.com/jwilleke/ngdpbase/issues/680).
+- Runs on a 6-hour cron + `workflow_dispatch`. Uses the existing `renovate.json` (`auto-merge` rule for minor + patch updates of `ghcr.io/jwilleke/ngdpbase`).
+- Requires a `RENOVATE_TOKEN` repo secret — fine-grained PAT scoped to Contents, Pull requests, and **Workflows**. The Workflows scope is required so auto-merged Dockerfile bumps trigger `auto-tag.yml` and the publish-image cascade; the default `GITHUB_TOKEN` cannot cross-trigger workflows. Operator may reuse `RELEASE_PAT` if scopes match.
+- Replaces the Mend-hosted Renovate App path, which 404'd on org-onboarding.
 
 ### Changed
 
-- **Bumped `NGDPBASE_VERSION` 3.13.2 → 3.14.5** in `Dockerfile`. Spans the
-  ngdpbase v3.14.0 minor plus patches v3.14.1–v3.14.5 (within the
-  auto-merge minor+patch policy; filed manually because self-hosted
-  Renovate has not been opening the PR — see note below). Operator-facing
-  fixes pulled in:
-  - **`POST /contact` no longer rejects every submission with "Forbidden —
-    invalid CSRF token"** ([jwilleke/ngdpbase#690](https://github.com/jwilleke/ngdpbase/issues/690)).
-    `views/contact.ejs` emitted `_csrfToken` while the CSRF middleware
-    reads `_csrf`. Directly affects the geohazardwatch.com contact form.
-  - **High-severity dependency bump: `systeminformation` 5.31.1 → 5.31.6**
-    (Dependabot alert #114 — Linux command injection via NetworkManager
-    profile names). Shipped in ngdpbase v3.14.2.
-  - **Authenticated user dropdown is opaque again** ([jwilleke/ngdpbase#717](https://github.com/jwilleke/ngdpbase/issues/717)).
-    Root cause was `backdrop-filter: blur()` on `.jspwiki-header`
-    creating a stacking context that made the dropdown render transparent;
-    removed. (Supersedes the partial #687 fix in v3.13.3.)
-  - **`.mov` videos play inline in Chrome instead of force-downloading**
-    ([jwilleke/ngdpbase#719](https://github.com/jwilleke/ngdpbase/issues/719)).
-    `video/quicktime` is relabeled `video/mp4` on the attachment and
-    media-serving routes (identical H.264/AAC bitstream).
-  - **Calendar addon manage page reads nested config correctly**
-    ([jwilleke/ngdpbase#718](https://github.com/jwilleke/ngdpbase/issues/718)).
-    `AddonsManager.getAddonConfig()` now deep-nests dotted config keys, so
-    `ngdpbase.addons.<name>.<group>.<id>.<field>` resolves as a structured
-    object instead of flat keys.
-  - **Audience picker accepts individual usernames, not just roles**
-    ([jwilleke/ngdpbase#710](https://github.com/jwilleke/ngdpbase/issues/710)),
-    and **profile-page rename demotes the old page to `general` instead of
-    hard-deleting it** ([jwilleke/ngdpbase#662](https://github.com/jwilleke/ngdpbase/issues/662)).
-- **Bumped `NGDPBASE_VERSION` 3.13.1 → 3.13.2** in `Dockerfile`. Pulls in
-  two upstream patch fixes shipped in ngdpbase v3.13.2:
-  - **`POST /contact` returns HTTP 200 (not 400) on `EmailManager.sendTo`
-    failure** ([jwilleke/ngdpbase#677](https://github.com/jwilleke/ngdpbase/issues/677)).
-    Aligns the response with the documented state matrix; mail-send
-    failure is server-side, not a client validation error.
-  - **Seeded `request-access` page now uses `system-category: system` and
-    links to `/contact`** via JSPWiki link-with-target syntax. Affects
-    fresh deployments only; existing instances retain whatever copy is on
-    their persistent volume.
-- Bump filed manually pending the auto-rebuild loop above; once the new
-  Renovate workflow runs, future ngdpbase updates land here without
-  operator action.
-- Removed the global `"schedule": ["before 6am on monday"]` from
-  `renovate.json` so the 6-hour cron in the new Renovate workflow has
-  windows to act on. Per-rule schedules (e.g. `lockFileMaintenance.schedule`)
-  remain — only the global gate was lifted.
+- **Bumped `NGDPBASE_VERSION` 3.13.2 → 3.14.5** in `Dockerfile`. Spans the ngdpbase v3.14.0 minor plus patches v3.14.1–v3.14.5 (within the auto-merge minor+patch policy; filed manually because self-hosted Renovate has not been opening the PR — see note below). Operator-facing fixes pulled in:
+  - **`POST /contact` no longer rejects every submission with "Forbidden — invalid CSRF token"** ([jwilleke/ngdpbase#690](https://github.com/jwilleke/ngdpbase/issues/690)). `views/contact.ejs` emitted `_csrfToken` while the CSRF middleware reads `_csrf`. Directly affects the geohazardwatch.com contact form.
+  - **High-severity dependency bump: `systeminformation` 5.31.1 → 5.31.6** (Dependabot alert #114 — Linux command injection via NetworkManager profile names). Shipped in ngdpbase v3.14.2.
+  - **Authenticated user dropdown is opaque again** ([jwilleke/ngdpbase#717](https://github.com/jwilleke/ngdpbase/issues/717)). Root cause was `backdrop-filter: blur()` on `.jspwiki-header` creating a stacking context that made the dropdown render transparent; removed. (Supersedes the partial #687 fix in v3.13.3.)
+  - **`.mov` videos play inline in Chrome instead of force-downloading** ([jwilleke/ngdpbase#719](https://github.com/jwilleke/ngdpbase/issues/719)). `video/quicktime` is relabeled `video/mp4` on the attachment and media-serving routes (identical H.264/AAC bitstream).
+  - **Calendar addon manage page reads nested config correctly** ([jwilleke/ngdpbase#718](https://github.com/jwilleke/ngdpbase/issues/718)). `AddonsManager.getAddonConfig()` now deep-nests dotted config keys, so `ngdpbase.addons.<name>.<group>.<id>.<field>` resolves as a structured object instead of flat keys.
+  - **Audience picker accepts individual usernames, not just roles** ([jwilleke/ngdpbase#710](https://github.com/jwilleke/ngdpbase/issues/710)), and **profile-page rename demotes the old page to `general` instead of hard-deleting it** ([jwilleke/ngdpbase#662](https://github.com/jwilleke/ngdpbase/issues/662)).
+- **Bumped `NGDPBASE_VERSION` 3.13.1 → 3.13.2** in `Dockerfile`. Pulls in two upstream patch fixes shipped in ngdpbase v3.13.2:
+  - **`POST /contact` returns HTTP 200 (not 400) on `EmailManager.sendTo` failure** ([jwilleke/ngdpbase#677](https://github.com/jwilleke/ngdpbase/issues/677)). Aligns the response with the documented state matrix; mail-send failure is server-side, not a client validation error.
+  - **Seeded `request-access` page now uses `system-category: system` and links to `/contact`** via JSPWiki link-with-target syntax. Affects fresh deployments only; existing instances retain whatever copy is on their persistent volume.
+- Bump filed manually pending the auto-rebuild loop above; once the new Renovate workflow runs, future ngdpbase updates land here without operator action.
+- Removed the global `"schedule": ["before 6am on monday"]` from `renovate.json` so the 6-hour cron in the new Renovate workflow has windows to act on. Per-rule schedules (e.g. `lockFileMaintenance.schedule`) remain — only the global gate was lifted.
 
 ## [1.2.89] - 2026-07-22
 
@@ -801,112 +749,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **VolcanoInfobox `placement` parameter** — supports the shared cross-addon
-  placement contract via ngdpbase's `parsePlacementParam` / `placementClass`
-  helpers (`right` / `left` / `block` / `inline`). Combines with the
-  `.plugin-placement-*` CSS classes added in ngdpbase 3.11.3 so plugin
-  placement is consistent platform-wide.
+- **VolcanoInfobox `placement` parameter** — supports the shared cross-addon placement contract via ngdpbase's `parsePlacementParam` / `placementClass` helpers (`right` / `left` / `block` / `inline`). Combines with the `.plugin-placement-*` CSS classes added in ngdpbase 3.11.3 so plugin placement is consistent platform-wide.
 
 ### Changed
 
-- **BREAKING — Full rebadge from `ve-geology` to `geohazardwatch`** across runtime
-  identity, not just the repo name. Affects npm package name, addon directory
-  (`addons/ve-geology/` → `addons/geohazardwatch/`), REST API mount
-  (`/api/ve-geology/*` → `/api/geohazardwatch/*`), admin mount, config keys
-  (`ngdpbase.addons.ve-geology.*` → `ngdpbase.addons.geohazardwatch.*`), background
-  job IDs, capability flag, default `dataPath`, stylesheet path, dashboard title
-  (`VE Geology` → `GeoHazardWatch`), and seed-page slugs.
-- Existing ngdpbase deployments must update `app-custom-config.json` for the new
-  `ngdpbase.addons.geohazardwatch.*` keys; the old keys are no longer read.
-- Existing instances retain pages at the old slug URLs (`/view/ve-geology-about`,
-  etc.) since `seedAddonPages` only seeds on first install — fresh installs get
-  the new slugs.
-- Bumped `Dockerfile` base image from `ghcr.io/jwilleke/ngdpbase:3.10.3` to
-  `3.11.3`. ngdpbase 3.11.3 ships security patches for `fast-uri`
-  (CVE-2026-6321 path traversal, CVE-2026-6322 host confusion) and `pm2`
-  (CVE-2025-5891 ReDoS plus three internal command-injection fixes). See
-  ngdpbase release notes for the full list.
-- Added `# renovate: datasource=docker depName=ghcr.io/jwilleke/ngdpbase`
-  annotation above the `ARG NGDPBASE_VERSION` line so Renovate's dockerfile
-  manager picks up the dependency. Future ngdpbase tags will be auto-PR'd by
-  Renovate (auto-merged for minor/patch per existing `renovate.json` rules).
-  Last hand-bump on this ARG should be this one. See
-  [ngdpbase#668](https://github.com/jwilleke/ngdpbase/issues/668) for the
-  decision context.
+- **BREAKING — Full rebadge from `ve-geology` to `geohazardwatch`** across runtime identity, not just the repo name. Affects npm package name, addon directory (`addons/ve-geology/` → `addons/geohazardwatch/`), REST API mount (`/api/ve-geology/*` → `/api/geohazardwatch/*`), admin mount, config keys (`ngdpbase.addons.ve-geology.*` → `ngdpbase.addons.geohazardwatch.*`), background job IDs, capability flag, default `dataPath`, stylesheet path, dashboard title (`VE Geology` → `GeoHazardWatch`), and seed-page slugs.
+- Existing ngdpbase deployments must update `app-custom-config.json` for the new `ngdpbase.addons.geohazardwatch.*` keys; the old keys are no longer read.
+- Existing instances retain pages at the old slug URLs (`/view/ve-geology-about`, etc.) since `seedAddonPages` only seeds on first install — fresh installs get the new slugs.
+- Bumped `Dockerfile` base image from `ghcr.io/jwilleke/ngdpbase:3.10.3` to `3.11.3`. ngdpbase 3.11.3 ships security patches for `fast-uri` (CVE-2026-6321 path traversal, CVE-2026-6322 host confusion) and `pm2` (CVE-2025-5891 ReDoS plus three internal command-injection fixes). See ngdpbase release notes for the full list.
+- Added `# renovate: datasource=docker depName=ghcr.io/jwilleke/ngdpbase` annotation above the `ARG NGDPBASE_VERSION` line so Renovate's dockerfile manager picks up the dependency. Future ngdpbase tags will be auto-PR'd by Renovate (auto-merged for minor/patch per existing `renovate.json` rules). Last hand-bump on this ARG should be this one. See [ngdpbase#668](https://github.com/jwilleke/ngdpbase/issues/668) for the decision context.
 
 ## [1.1.6] - 2026-05-08
 
 ### Added
 
-- New seed page `addons/ve-geology/pages/ve-geology-request-access.md`
-  (slug `request-access`). Destination for the **Request access** button
-  shown when ngdpbase's `ngdpbase.application.registration` flag is `false`.
-  Operator edits the page in the admin UI to customize contact instructions
-  or drop in a `[{Form …}]` plugin invocation.
+- New seed page `addons/ve-geology/pages/ve-geology-request-access.md` (slug `request-access`). Destination for the **Request access** button shown when ngdpbase's `ngdpbase.application.registration` flag is `false`. Operator edits the page in the admin UI to customize contact instructions or drop in a `[{Form …}]` plugin invocation.
 
 ### Changed
 
-- Bumped `Dockerfile` base image from `ghcr.io/jwilleke/ngdpbase:3.10.2` to
-  `3.10.3`. ngdpbase 3.10.3 introduces the `ngdpbase.application.registration`
-  config flag (default `true`); operators set it to `false` to lock down
-  self-registration. See ngdpbase PR #654.
+- Bumped `Dockerfile` base image from `ghcr.io/jwilleke/ngdpbase:3.10.2` to `3.10.3`. ngdpbase 3.10.3 introduces the `ngdpbase.application.registration` config flag (default `true`); operators set it to `false` to lock down self-registration. See ngdpbase PR #654.
 
 ## [1.1.5] - 2026-05-07
 
 ### Changed
 
-- Bumped `Dockerfile` base image from `ghcr.io/jwilleke/ngdpbase:3.10.1` to
-  `3.10.2`. ngdpbase 3.10.2 ships the `themes/` directory in the runtime
-  image (per `jwilleke/ngdpbase#652`); 3.10.1 omitted it, which broke the
-  volcano theme, favicon, and core CSS variables in the cluster deployment
-  (geohazardwatch#26).
+- Bumped `Dockerfile` base image from `ghcr.io/jwilleke/ngdpbase:3.10.1` to `3.10.2`. ngdpbase 3.10.2 ships the `themes/` directory in the runtime image (per `jwilleke/ngdpbase#652`); 3.10.1 omitted it, which broke the volcano theme, favicon, and core CSS variables in the cluster deployment (geohazardwatch#26).
 
 ## [1.1.4] - 2026-05-07
 
 ### Changed
 
-- Bumped `Dockerfile` base image from `ghcr.io/jwilleke/ngdpbase:3.9.0` to
-  `3.10.1`. 3.10 introduced the OrganizationRole-based role assignment that
-  the headless install needs in order for the seeded `admin` user to actually
-  carry the `admin` role at login. Without it (3.9.x), `admin` resolved to the
-  implicit `All` role and the cluster deployment showed no Edit button or
-  admin dashboard.
+- Bumped `Dockerfile` base image from `ghcr.io/jwilleke/ngdpbase:3.9.0` to `3.10.1`. 3.10 introduced the OrganizationRole-based role assignment that the headless install needs in order for the seeded `admin` user to actually carry the `admin` role at login. Without it (3.9.x), `admin` resolved to the implicit `All` role and the cluster deployment showed no Edit button or admin dashboard.
 
 ## [1.1.3] - 2026-05-07
 
 ### Fixed
 
-- Replaced placeholder `uuid` frontmatter on all 8 seed pages
-  (`ve-geology-about`, `ve-geology-demo`, `ve-geology-earthquakes`,
-  `ve-geology-hans`, `ve-geology-home`, `ve-geology-japan`,
-  `ve-geology-plugins`, `ve-geology-volcanoes`) with real UUID v4 values.
-  The placeholders contained non-hex characters (`v`, `g`, `l`, `o`, `y`)
-  and were rejected by `AddonsManager`'s validator (`/^[0-9a-f]{8}-…$/`),
-  so none of the pages were being seeded into the site on startup. See
-  the upstream [addon development guide](https://github.com/jwilleke/ngdpbase/blob/master/docs/platform/addon-development-guide.md#uuid-requirements)
-  for the rules.
+- Replaced placeholder `uuid` frontmatter on all 8 seed pages (`ve-geology-about`, `ve-geology-demo`, `ve-geology-earthquakes`, `ve-geology-hans`, `ve-geology-home`, `ve-geology-japan`, `ve-geology-plugins`, `ve-geology-volcanoes`) with real UUID v4 values. The placeholders contained non-hex characters (`v`, `g`, `l`, `o`, `y`) and were rejected by `AddonsManager`'s validator (`/^[0-9a-f]{8}-…$/`), so none of the pages were being seeded into the site on startup. See the upstream [addon development guide](https://github.com/jwilleke/ngdpbase/blob/master/docs/platform/addon-development-guide.md#uuid-requirements) for the rules.
 
 ## [1.1.2] - 2026-05-07
 
 ### Fixed
 
-- `Dockerfile` — `npm ci --omit=dev` ran the `prepare` lifecycle script,
-  which calls `husky install`. Husky is a devDependency that's not installed
-  under `--omit=dev`, so the script exited 127. Added `--ignore-scripts` to
-  skip lifecycle scripts during the container build — git hooks aren't
-  meaningful inside a runtime image. Without this fix, the v1.1.1 publish
-  workflow failed at `RUN npm ci`.
+- `Dockerfile` — `npm ci --omit=dev` ran the `prepare` lifecycle script, which calls `husky install`. Husky is a devDependency that's not installed under `--omit=dev`, so the script exited 127. Added `--ignore-scripts` to skip lifecycle scripts during the container build — git hooks aren't meaningful inside a runtime image. Without this fix, the v1.1.1 publish workflow failed at `RUN npm ci`.
 
 ## [1.1.1] - 2026-05-07
 
 ### Fixed
 
-- `Dockerfile` — base image reference was `ghcr.io/jwilleke/ngdpbase:v3.10.0`,
-  which doesn't exist. Published `ngdpbase` image tags don't carry the `v`
-  prefix (the `docker/metadata-action` strips it), and the most recent
-  published `ngdpbase` release is `3.9.0`, not `3.10.0`. Pinned to `3.9.0` —
-  Renovate will PR an upgrade once `ngdpbase` publishes `3.10.0`. Without this
-  fix, the v1.1.0 release workflow failed at `FROM` resolution.
+- `Dockerfile` — base image reference was `ghcr.io/jwilleke/ngdpbase:v3.10.0`, which doesn't exist. Published `ngdpbase` image tags don't carry the `v` prefix (the `docker/metadata-action` strips it), and the most recent published `ngdpbase` release is `3.9.0`, not `3.10.0`. Pinned to `3.9.0` — Renovate will PR an upgrade once `ngdpbase` publishes `3.10.0`. Without this fix, the v1.1.0 release workflow failed at `FROM` resolution.
 
 ## [1.1.0] - 2026-05-07
 

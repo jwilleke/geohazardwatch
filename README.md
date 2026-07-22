@@ -1,9 +1,6 @@
 # geohazardwatch
 
-Volcano and geology data platform built as an [ngdpbase](https://github.com/jwilleke/ngdpbase) add-on.
-Powered by [Global Volcanism Program (GVP)](https://volcano.si.edu/) volcano data,
-[USGS Earthquake Hazards Program](https://earthquake.usgs.gov/) feeds, and
-[USGS HANS](https://volcanoes.usgs.gov/hans-public/api/) real-time volcano alerts.
+Volcano and geology data platform built as an [ngdpbase](https://github.com/jwilleke/ngdpbase) add-on. Powered by [Global Volcanism Program (GVP)](https://volcano.si.edu/) volcano data, [USGS Earthquake Hazards Program](https://earthquake.usgs.gov/) feeds, and [USGS HANS](https://volcanoes.usgs.gov/hans-public/api/) real-time volcano alerts.
 
 ## What it does
 
@@ -13,8 +10,7 @@ Powered by [Global Volcanism Program (GVP)](https://volcano.si.edu/) volcano dat
 - Imports active volcanic ash advisories from the Washington VAAC, refreshed on a background timer
 - Surfaces NASA FIRMS thermal anomalies near known volcanoes via ngdpbase's `feeds` addon (no import script of its own)
 - Registers nine markup plugins (infoboxes, tables, search widgets, Leaflet maps, alert tables)
-- Seeds demo pages into your ngdpbase instance automatically on first load, including
-  Tsunami and Landslide pages that render live NOAA/NASA feeds when ngdpbase's `feeds` addon is configured
+- Seeds demo pages into your ngdpbase instance automatically on first load, including Tsunami and Landslide pages that render live NOAA/NASA feeds when ngdpbase's `feeds` addon is configured
 - Exposes a REST API at `/api/geohazardwatch/*` and an admin panel for manual data refreshes
 
 ## Quick try (30 seconds)
@@ -37,11 +33,7 @@ cd geohazardwatch
 docker compose up -d
 ```
 
-The bundled `docker-compose.yml` pulls the published image, mounts a named
-volume for persistent storage, and exposes the site on `http://localhost:3000`.
-Override the host port with `HOST_PORT=8080 docker compose up -d`. For HTTPS,
-put a reverse proxy in front (Caddy, nginx, Cloudflare Tunnel) or pin to a
-specific image tag.
+The bundled `docker-compose.yml` pulls the published image, mounts a named volume for persistent storage, and exposes the site on `http://localhost:3000`. Override the host port with `HOST_PORT=8080 docker compose up -d`. For HTTPS, put a reverse proxy in front (Caddy, nginx, Cloudflare Tunnel) or pin to a specific image tag.
 
 Need to run without Docker? See [SETUP.md](./SETUP.md) for the direct install path (clone ngdpbase + this addon side-by-side, no containers).
 

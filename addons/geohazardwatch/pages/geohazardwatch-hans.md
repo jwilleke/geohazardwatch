@@ -8,8 +8,7 @@ tags: [geology, volcanoes, alerts, usgs]
 
 ## US Volcano Alerts
 
-Real-time alert levels for monitored US volcanoes, sourced from the
-[USGS Hazard Alert Notification System (HANS)](https://volcanoes.usgs.gov/hans-public/api/).
+Real-time alert levels for monitored US volcanoes, sourced from the [USGS Hazard Alert Notification System (HANS)](https://volcanoes.usgs.gov/hans-public/api/).
 
 ## Currently Elevated Volcanoes
 
@@ -40,5 +39,4 @@ Real-time alert levels for monitored US volcanoes, sourced from the
 
 ## Data Source
 
-HANS data is imported via `npm run import:hans` and reflects a point-in-time snapshot.
-For live data visit [volcanoes.usgs.gov](https://volcanoes.usgs.gov/).
+HANS data is imported via `npm run import:hans` and reflects a point-in-time snapshot. For live data visit [volcanoes.usgs.gov](https://volcanoes.usgs.gov/).

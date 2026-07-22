@@ -1,7 +1,6 @@
 # Session Commit
 
-Commit the session's work, refresh the priority mirror, journal the session, and update
-related GitHub issues. The personal log is **never committed**.
+Commit the session's work, refresh the priority mirror, journal the session, and update related GitHub issues. The personal log is **never committed**.
 
 ## Steps
 
@@ -20,9 +19,7 @@ related GitHub issues. The personal log is **never committed**.
 
 ### Step 3: Refresh `TODO.md` and commit it
 
-- Regenerate `TODO.md` from the current GitHub issue labels (same banding as `/pstatus`:
-  P0 / P1 / P2 / Deferred / Needs triage). The `▶ Resume here` pointer is owned by `/wrap`; no need
-  to preserve it here. If `/pstatus` was just run, it is already current.
+- Regenerate `TODO.md` from the current GitHub issue labels (same banding as `/pstatus`: P0 / P1 / P2 / Deferred / Needs triage). The `▶ Resume here` pointer is owned by `/wrap`; no need to preserve it here. If `/pstatus` was just run, it is already current.
 - Stage and commit `TODO.md` if it changed: `docs: refresh TODO from issue labels`.
 
 ### Step 4: Journal the session (local only — NOT committed)
@@ -49,8 +46,7 @@ Use today's date; `NN` increments per same-day entry starting at `01`.
 For each related open issue:
 
 - Comment summarizing what was done, referencing the commit hash(es).
-- If the work fully resolves it, say so but do **not** close it — let the operator decide
-  (consider adding `in-review`).
+- If the work fully resolves it, say so but do **not** close it — let the operator decide (consider adding `in-review`).
 - Use `gh issue comment <number> --body "<comment>"`.
 
 ### Step 6: Push
@@ -60,6 +56,5 @@ For each related open issue:
 ## Notes
 
 - `private/project_log.md` is gitignored and personal — it is appended locally only.
-- If `docs/project_log.md` still exists (pre-kit), it should have been migrated to
-  `private/project_log.md` by `install-kit.sh`.
+- If `docs/project_log.md` still exists (pre-kit), it should have been migrated to `private/project_log.md` by `install-kit.sh`.
 - After committing, the natural next step is `/pstatus`.

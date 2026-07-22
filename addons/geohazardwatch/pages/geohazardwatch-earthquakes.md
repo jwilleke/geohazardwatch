@@ -12,8 +12,7 @@ editor: system
 ---
 ## Earthquakes
 
-Recent seismic activity from the [USGS Earthquake Hazards Program|https://earthquake.usgs.gov/].
-Earthquakes within 50 km of a known volcano are linked to that volcano.
+Recent seismic activity from the [USGS Earthquake Hazards Program|https://earthquake.usgs.gov/]. Earthquakes within 50 km of a known volcano are linked to that volcano.
 
 ## Recent M4.5+ Earthquakes (Past 7 Days)
 

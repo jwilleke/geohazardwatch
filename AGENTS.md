@@ -48,13 +48,11 @@ Then:
 
 - Dash (`-`) bullets; no bare numbered lists. ATX (`#`) headings. Spaced tables (`| a | b |`).
 - Inline HTML is **not** allowed. Long lines are fine.
-- Rules live in `.markdownlint.jsonc`; the editor, CLI, CI and agents all read that one file.
-<!-- KIT:END -->
+- Rules live in `.markdownlint.jsonc`; the editor, CLI, CI and agents all read that one file. <!-- KIT:END -->
 
 ## Project Context for AI Agents
 
-This file is the single source of truth for project context and agent guidance.
-Read this before starting any work. Update `last_updated` and relevant sections after significant changes.
+This file is the single source of truth for project context and agent guidance. Read this before starting any work. Update `last_updated` and relevant sections after significant changes.
 
 ## CRITICAL
 
@@ -72,8 +70,7 @@ The addon:
 - Mounts REST API routes at `/api/geohazardwatch/*`
 - Mounts an admin panel (`/addons/geohazardwatch`) with manual HANS/earthquake refresh buttons
 - Registers background jobs that poll USGS HANS and earthquake feeds on a timer
-- Seeds demo pages into the ngdpbase instance on first load, including Tsunami and
-  Landslide pages that render live via the separate ngdpbase `feeds` addon (see Key Decisions)
+- Seeds demo pages into the ngdpbase instance on first load, including Tsunami and Landslide pages that render live via the separate ngdpbase `feeds` addon (see Key Decisions)
 
 ## Commands
 
@@ -90,8 +87,7 @@ npm run import:hans              # USGS HANS real-time US volcano alerts
 npm run import:vaac              # Washington VAAC active ash advisories
 ```
 
-Earthquake import requires `volcanoes.json` to exist first (proximity matching).
-All data lands in `addons/geohazardwatch/data/` (gitignored).
+Earthquake import requires `volcanoes.json` to exist first (proximity matching). All data lands in `addons/geohazardwatch/data/` (gitignored).
 
 ### Lint
 
@@ -106,8 +102,7 @@ Pre-commit hook runs `npm run lint` automatically via Husky.
 
 ### No build step, no test suite
 
-The addon is plain CommonJS JavaScript — no TypeScript compile needed.
-No test suite exists yet (see open issue jwilleke/geohazardwatch#1 area for future work).
+The addon is plain CommonJS JavaScript — no TypeScript compile needed. No test suite exists yet (see open issue jwilleke/geohazardwatch#1 area for future work).
 
 ### ngdpbase (sister repo at `/Volumes/hd2A/workspaces/github/ngdpbase`)
 
@@ -124,9 +119,7 @@ ngdpbase runs on port 3333. Admin panel at `/admin`, pages at `/view/<slug>`.
 
 ### How the addon loads
 
-ngdpbase's `AddonsManager` discovers addons via the `addons-path` config key, finds
-`addons/geohazardwatch/index.js`, and calls `module.exports.register(engine, config)`.
-The `engine` object provides access to all ngdpbase managers and the Express app.
+ngdpbase's `AddonsManager` discovers addons via the `addons-path` config key, finds `addons/geohazardwatch/index.js`, and calls `module.exports.register(engine, config)`. The `engine` object provides access to all ngdpbase managers and the Express app.
 
 ```
 ngdpbase/src/managers/AddonsManager.ts
@@ -151,22 +144,13 @@ External API (GVP WFS / USGS / HANS)
   → routes/api.js                (REST endpoints for client-side widgets)
 ```
 
-The Tsunami and Landslide pages (`pages/Tsunamis.md`, `pages/Landslides.md`) are a
-separate, content-only path: they carry no import script or data manager in this repo.
-They render live data via `[{DataFeed source='...'}]` markup, a plugin provided by
-ngdpbase's own `feeds` addon ([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)),
-configured independently in the instance's `app-custom-config.json`. See
-[Key Decisions](#key-decisions) and the page files themselves for the feed source config.
+The Tsunami and Landslide pages (`pages/Tsunamis.md`, `pages/Landslides.md`) are a separate, content-only path: they carry no import script or data manager in this repo. They render live data via `[{DataFeed source='...'}]` markup, a plugin provided by ngdpbase's own `feeds` addon ([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)), configured independently in the instance's `app-custom-config.json`. See [Key Decisions](#key-decisions) and the page files themselves for the feed source config.
 
 ### Plugin system
 
-Plugins are plain objects `{ name, execute(context, params) }` registered with
-ngdpbase's `PluginManager`. The markup `[{PluginName key='val'}]` is resolved
-at page render time. `context.engine.getManager('XxxDataManager')` gives plugin
-access to in-memory data.
+Plugins are plain objects `{ name, execute(context, params) }` registered with ngdpbase's `PluginManager`. The markup `[{PluginName key='val'}]` is resolved at page render time. `context.engine.getManager('XxxDataManager')` gives plugin access to in-memory data.
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for repo structure, data pipeline depth, and guide to adding new data sources.
-See [addons/geohazardwatch/README.md](./addons/geohazardwatch/README.md) for config keys, plugin syntax, and API reference.
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for repo structure, data pipeline depth, and guide to adding new data sources. See [addons/geohazardwatch/README.md](./addons/geohazardwatch/README.md) for config keys, plugin syntax, and API reference.
 
 ## Key Decisions
 

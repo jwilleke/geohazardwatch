@@ -1,11 +1,8 @@
 # geohazardwatch Add-on
 
-Volcano & geology data platform for [ngdpbase](https://github.com/jwilleke/ngdpbase), powered by
-[Global Volcanism Program (GVP)](https://volcano.si.edu/) and
-[USGS Earthquake Hazards Program](https://earthquake.usgs.gov/) data.
+Volcano & geology data platform for [ngdpbase](https://github.com/jwilleke/ngdpbase), powered by [Global Volcanism Program (GVP)](https://volcano.si.edu/) and [USGS Earthquake Hazards Program](https://earthquake.usgs.gov/) data.
 
-For end-user documentation (what renders, when to use each plugin, example combinations),
-see the guide seeded at `/view/geohazardwatch-plugins`.
+For end-user documentation (what renders, when to use each plugin, example combinations), see the guide seeded at `/view/geohazardwatch-plugins`.
 
 ## Plugins
 
@@ -39,8 +36,7 @@ Renders a full infobox for a single volcano with GVP link, coordinates, type, ro
 | `number` | *(required)* | GVP volcano number |
 | `style` | `default` | `default` (full infobox) or `compact` (inline name span) |
 
-**Common use:** Add a `default` infobox at the top of a volcano-specific page, or use
-`compact` inline within body text — e.g. "…near [{VolcanoInfobox number='332010' style='compact'}]…"
+**Common use:** Add a `default` infobox at the top of a volcano-specific page, or use `compact` inline within body text — e.g. "…near [{VolcanoInfobox number='332010' style='compact'}]…"
 
 ---
 
@@ -66,9 +62,7 @@ Renders a filtered table of volcanoes. GVP numbers link to the Smithsonian volca
 | `limit` | `25` | Max rows |
 | `offset` | `0` | Pagination offset |
 
-**Common use:** `[{VolcanoList country='Japan' epoch='Holocene' limit='20'}]` for a country
-page sidebar; `[{VolcanoList volcanoType='Caldera' limit='50'}]` for a type-specific browse page.
-Previous / Next pagination controls render automatically when results exceed `limit`.
+**Common use:** `[{VolcanoList country='Japan' epoch='Holocene' limit='20'}]` for a country page sidebar; `[{VolcanoList volcanoType='Caldera' limit='50'}]` for a type-specific browse page. Previous / Next pagination controls render automatically when results exceed `limit`.
 
 ---
 
@@ -87,8 +81,7 @@ Renders an interactive live-search widget with dropdowns for country, region, vo
 | `defaultCountry` | | Pre-select country dropdown |
 | `defaultLimit` | `25` | Results per page |
 
-**Common use:** `[{VolcanoSearch defaultEpoch='Holocene' defaultLimit='50'}]` on a main
-volcano browse page; combine with VolcanoMap below it for a full explore experience.
+**Common use:** `[{VolcanoSearch defaultEpoch='Holocene' defaultLimit='50'}]` on a main volcano browse page; combine with VolcanoMap below it for a full explore experience.
 
 ---
 
@@ -114,8 +107,7 @@ Renders a Leaflet map. Red markers = Holocene, blue = Pleistocene.
 | `lat` / `lon` | `20` / `0` | Initial centre |
 | `zoom` | `2` | Initial zoom level |
 
-**Common use:** `[{VolcanoMap country='Indonesia' lat='-2' lon='118' zoom='4' height='500'}]`
-for a country page; `[{VolcanoMap epoch='Holocene'}]` for a global overview.
+**Common use:** `[{VolcanoMap country='Indonesia' lat='-2' lon='118' zoom='4' height='500'}]` for a country page; `[{VolcanoMap epoch='Holocene'}]` for a global overview.
 
 ---
 
@@ -140,9 +132,7 @@ Renders a filtered table of recent earthquakes with PAGER alert badges, tsunami 
 | `limit` | `50` | Max rows |
 | `offset` | `0` | Pagination offset |
 
-**Common use:** `[{EarthquakeList nearVolcano='true' minMagnitude='4.5' limit='25'}]` on a
-seismic monitoring page; `[{EarthquakeList alert='red' limit='10'}]` for a hazard summary widget.
-Previous / Next pagination controls render automatically when results exceed `limit`.
+**Common use:** `[{EarthquakeList nearVolcano='true' minMagnitude='4.5' limit='25'}]` on a seismic monitoring page; `[{EarthquakeList alert='red' limit='10'}]` for a hazard summary widget. Previous / Next pagination controls render automatically when results exceed `limit`.
 
 ---
 
@@ -165,15 +155,13 @@ Renders a Leaflet map of earthquakes coloured by PAGER alert level, with an opti
 | `lat` / `lon` | `20` / `0` | Initial centre |
 | `zoom` | `2` | Initial zoom level |
 
-**Common use:** `[{EarthquakeMap nearVolcano='true' showVolcanoes='true' height='500'}]` as a
-companion to EarthquakeList; `[{EarthquakeMap minMagnitude='6'}]` for major-event tracking.
+**Common use:** `[{EarthquakeMap nearVolcano='true' showVolcanoes='true' height='500'}]` as a companion to EarthquakeList; `[{EarthquakeMap minMagnitude='6'}]` for major-event tracking.
 
 ---
 
 ### HansAlerts
 
-Renders a table of US volcano alert levels from the USGS HANS API. By default shows only
-volcanoes at ADVISORY level or above. Filter by observatory to show a regional subset.
+Renders a table of US volcano alert levels from the USGS HANS API. By default shows only volcanoes at ADVISORY level or above. Filter by observatory to show a regional subset.
 
 ```
 [{HansAlerts}]
@@ -185,8 +173,7 @@ volcanoes at ADVISORY level or above. Filter by observatory to show a regional s
 |-----------|---------|-------------|
 | `observatory` | | Filter by observatory code: `avo`, `hvo`, `cvo`, `yvo`, `uvo` |
 
-**Common use:** `[{HansAlerts}]` on a US hazard summary page; `[{HansAlerts observatory='avo'}]`
-on an Alaska-specific page. Covers US volcanoes only.
+**Common use:** `[{HansAlerts}]` on a US hazard summary page; `[{HansAlerts observatory='avo'}]` on an Alaska-specific page. Covers US volcanoes only.
 
 ---
 
@@ -254,9 +241,7 @@ All endpoints are mounted at `/api/geohazardwatch`.
 | GET | `/volcano/:number` | Single volcano by GVP number |
 | GET | `/eruptions/:number` | Eruption records for a volcano |
 
-**Search query parameters:** `q`, `country`, `region`, `volcanoType`, `rockType`,
-`tectonicSetting`, `epoch`, `minElevation`, `maxElevation`, `minLatitude`,
-`maxLatitude`, `minLongitude`, `maxLongitude`, `limit` (default 100), `offset` (default 0).
+**Search query parameters:** `q`, `country`, `region`, `volcanoType`, `rockType`, `tectonicSetting`, `epoch`, `minElevation`, `maxElevation`, `minLatitude`, `maxLatitude`, `minLongitude`, `maxLongitude`, `limit` (default 100), `offset` (default 0).
 
 ### Earthquake endpoints
 
@@ -266,9 +251,7 @@ All endpoints are mounted at `/api/geohazardwatch`.
 | GET | `/earthquakes/near/:number` | Earthquakes near a specific volcano |
 | GET | `/earthquakes/status` | Feed metadata (source, fetch time, counts) |
 
-**Earthquake search parameters:** `minMagnitude`, `maxMagnitude`, `minDepth`, `maxDepth`,
-`nearVolcano` (true/false), `tsunamiOnly` (true/false), `alert`,
-`limit` (default 50), `offset` (default 0).
+**Earthquake search parameters:** `minMagnitude`, `maxMagnitude`, `minDepth`, `maxDepth`, `nearVolcano` (true/false), `tsunamiOnly` (true/false), `alert`, `limit` (default 50), `offset` (default 0).
 
 ### HANS alert endpoints
 
@@ -278,8 +261,7 @@ All endpoints are mounted at `/api/geohazardwatch`.
 | GET | `/hans/volcano/:number` | Alert status for a single GVP volcano number |
 | GET | `/hans/status` | Feed metadata (last fetch time, monitored/elevated counts) |
 
-**`/hans/elevated` query parameters:** `alertLevel`, `colorCode`, `observatory`
-(`avo`, `hvo`, `cvo`, `yvo`, `uvo`).
+**`/hans/elevated` query parameters:** `alertLevel`, `colorCode`, `observatory` (`avo`, `hvo`, `cvo`, `yvo`, `uvo`).
 
 ### VAAC advisory endpoints
 
@@ -356,8 +338,7 @@ Set in your ngdpbase `app-custom-config.json`:
 | `ngdpbase.addons.geohazardwatch.eqIntervalMs` | `1200000` (20 min) | Earthquake background refresh interval; `0` disables polling |
 | `ngdpbase.addons.geohazardwatch.vaacIntervalMs` | `1800000` (30 min) | VAAC advisory background refresh interval; `0` disables polling |
 
-The Tsunami and Landslide pages render live data through a separate ngdpbase
-`feeds` addon, configured independently — see [Tsunami & Landslide pages](#tsunami--landslide-pages) below.
+The Tsunami and Landslide pages render live data through a separate ngdpbase `feeds` addon, configured independently — see [Tsunami & Landslide pages](#tsunami--landslide-pages) below.
 
 ---
 
@@ -413,30 +394,18 @@ addons/geohazardwatch/
 
 ## Tsunami & Landslide pages
 
-`pages/Tsunamis.md` and `pages/Landslides.md` are seeded like any other page, but they
-carry no import script or data manager in this repo. They render live data with
-`[{DataFeed source='...'}]` markup — a plugin supplied by ngdpbase's own `feeds` addon
-([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)), not by geohazardwatch.
+`pages/Tsunamis.md` and `pages/Landslides.md` are seeded like any other page, but they carry no import script or data manager in this repo. They render live data with `[{DataFeed source='...'}]` markup — a plugin supplied by ngdpbase's own `feeds` addon ([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)), not by geohazardwatch.
 
-To make the feeds render, enable the `feeds` addon and declare its sources in the
-instance's `app-custom-config.json`:
+To make the feeds render, enable the `feeds` addon and declare its sources in the instance's `app-custom-config.json`:
 
 | Page | Feed source | Upstream |
 |------|-------------|----------|
 | Tsunamis | `tsunami-alerts` | NOAA/NWS `api.weather.gov` active tsunami alerts |
 | Landslides | `landslide-events` | NASA COOLR Global Landslide Catalog (ArcGIS FeatureServer) |
 
-See the `Configuration` section inside each page file for the exact source block to
-paste (adapter, field mappings, poll interval). If the `feeds` addon is absent or a
-source isn't configured, the page falls back to static informational content — no error,
-no missing data files to import.
+See the `Configuration` section inside each page file for the exact source block to paste (adapter, field mappings, poll interval). If the `feeds` addon is absent or a source isn't configured, the page falls back to static informational content — no error, no missing data files to import.
 
-`schemaType` on both sources stays `Article` until ngdpbase implements the
-`WarningAlert`/`Event` schema.org union types
-([ngdpbase#762](https://github.com/jwilleke/ngdpbase/issues/762)); `type` carries the
-intended domain label in the meantime. The COOLR field names in the Landslides source
-block should be re-verified against the live FeatureServer schema before relying on them
-in production — ArcGIS field casing can drift between service revisions.
+`schemaType` on both sources stays `Article` until ngdpbase implements the `WarningAlert`/`Event` schema.org union types ([ngdpbase#762](https://github.com/jwilleke/ngdpbase/issues/762)); `type` carries the intended domain label in the meantime. The COOLR field names in the Landslides source block should be re-verified against the live FeatureServer schema before relying on them in production — ArcGIS field casing can drift between service revisions.
 
 ---
 

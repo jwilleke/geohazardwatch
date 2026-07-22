@@ -12,9 +12,7 @@ editor: system
 ---
 ## Volcanoes
 
-Global volcano data from the [Smithsonian Global Volcanism Program (GVP)|https://volcano.si.edu/].
-Records cover __2,661__ Holocene and Pleistocene volcanoes worldwide.
-GVP numbers link directly to the Smithsonian volcano page.
+Global volcano data from the [Smithsonian Global Volcanism Program (GVP)|https://volcano.si.edu/]. Records cover __2,661__ Holocene and Pleistocene volcanoes worldwide. GVP numbers link directly to the Smithsonian volcano page.
 
 ## Search & Filter
 

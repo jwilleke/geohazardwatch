@@ -17,8 +17,7 @@ This applies to ALL work on this project.
 
 ## By Topic
 
-Current project state in machine-readable format (JSON metadata block at top)
-Last update timestamp to help agents understand staleness
+Current project state in machine-readable format (JSON metadata block at top) Last update timestamp to help agents understand staleness
 
 ## Example format
 

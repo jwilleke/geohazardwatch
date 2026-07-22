@@ -6,9 +6,7 @@ Related: [CODE_STANDARDS.md](./CODE_STANDARDS.md) · [AGENTS.md](./AGENTS.md) ·
 
 ## Overview
 
-geohazardwatch is a **ngdpbase add-on** — it has no server of its own. It extends the
-[ngdpbase](https://github.com/jwilleke/ngdpbase) content platform at runtime by registering
-data managers, plugins, Express routes, and static assets through the engine API.
+geohazardwatch is a **ngdpbase add-on** — it has no server of its own. It extends the [ngdpbase](https://github.com/jwilleke/ngdpbase) content platform at runtime by registering data managers, plugins, Express routes, and static assets through the engine API.
 
 ## Project Structure
 
@@ -54,8 +52,7 @@ status()                   ← health check: returns record counts
 shutdown()                 ← cleanup: null out manager references
 ```
 
-`config` is the flat dot-notation config from `app-custom-config.json` scoped to
-`ngdpbase.addons.geohazardwatch.*` and resolved by `AddonsManager.getAddonConfig()`.
+`config` is the flat dot-notation config from `app-custom-config.json` scoped to `ngdpbase.addons.geohazardwatch.*` and resolved by `AddonsManager.getAddonConfig()`.
 
 ## Data Pipeline
 

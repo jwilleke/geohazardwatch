@@ -29,8 +29,7 @@ npm run import:earthquakes  # USGS M4.5+ earthquakes (past 7 days)
 npm run import:hans         # USGS HANS US volcano alert levels
 ```
 
-Data is written to `addons/geohazardwatch/data/` (gitignored). Re-run any time to refresh.
-For all import options (custom feeds, data directories) see [addons/geohazardwatch/README.md](./addons/geohazardwatch/README.md#import-scripts).
+Data is written to `addons/geohazardwatch/data/` (gitignored). Re-run any time to refresh. For all import options (custom feeds, data directories) see [addons/geohazardwatch/README.md](./addons/geohazardwatch/README.md#import-scripts).
 
 ## Step 3 — Wire to ngdpbase
 
@@ -52,8 +51,7 @@ npm run build        # Required if any ngdpbase .ts files were changed
 ./server.sh restart
 ```
 
-On startup the addon seeds four demo pages into the ngdpbase instance
-(`/view/volcanoes`, `/view/earthquakes`, `/view/geology-demo`, `/view/volcano-alerts`).
+On startup the addon seeds four demo pages into the ngdpbase instance (`/view/volcanoes`, `/view/earthquakes`, `/view/geology-demo`, `/view/volcano-alerts`).
 
 ## Step 5 — Verify
 
@@ -74,19 +72,14 @@ npm run lint        # Check code and markdown before committing
 npm run lint:fix    # Auto-fix lint issues
 ```
 
-The Husky pre-commit hook runs `npm run lint` automatically.
-Commits are rejected if lint fails.
+The Husky pre-commit hook runs `npm run lint` automatically. Commits are rejected if lint fails.
 
 ## Troubleshooting
 
-**Addon not loading:** Check `pm2 logs` — common causes are missing `node_modules`
-in the geohazardwatch directory or incorrect `addons-path` config.
+**Addon not loading:** Check `pm2 logs` — common causes are missing `node_modules` in the geohazardwatch directory or incorrect `addons-path` config.
 
-**Empty API responses `{ volcanoes: [], total: 0 }`:** Data files are missing —
-run `npm run import:all`.
+**Empty API responses `{ volcanoes: [], total: 0 }`:** Data files are missing — run `npm run import:all`.
 
-**HANS data not showing:** `activity.json` is absent — run `npm run import:hans`.
-The addon starts cleanly without it; HANS is optional.
+**HANS data not showing:** `activity.json` is absent — run `npm run import:hans`. The addon starts cleanly without it; HANS is optional.
 
-**Earthquake proximity not working:** `volcanoes.json` must exist before running
-`import:earthquakes` — the proximity match requires volcano coordinates.
+**Earthquake proximity not working:** `volcanoes.json` must exist before running `import:earthquakes` — the proximity match requires volcano coordinates.

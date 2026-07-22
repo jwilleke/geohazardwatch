@@ -10,18 +10,11 @@ author: system
 
 ## Volcanoes and Earthquakes
 
-Earth is a restless planet. Beneath our feet, tectonic plates grind against one another,
-magma surges toward the surface, and the ground shakes with energy released from hundreds
-of kilometers below. This site brings together the best available open data to help you
-explore that activity — from the ancient calderas of the Pleistocene to volcanoes erupting
-right now.
+Earth is a restless planet. Beneath our feet, tectonic plates grind against one another, magma surges toward the surface, and the ground shakes with energy released from hundreds of kilometers below. This site brings together the best available open data to help you explore that activity — from the ancient calderas of the Pleistocene to volcanoes erupting right now.
 
 ## Volcanoes
 
-The [Smithsonian Global Volcanism Program (GVP)](https://volcano.si.edu/) maintains the
-world's most comprehensive catalog of volcanic activity — more than 2,600 volcanoes
-documented across the Holocene and Pleistocene epochs, with eruption histories stretching
-back thousands of years.
+The [Smithsonian Global Volcanism Program (GVP)](https://volcano.si.edu/) maintains the world's most comprehensive catalog of volcanic activity — more than 2,600 volcanoes documented across the Holocene and Pleistocene epochs, with eruption histories stretching back thousands of years.
 
 [{VolcanoMap height='400' epoch='Holocene'}]
 
@@ -29,9 +22,7 @@ back thousands of years.
 
 ## Earthquakes
 
-The [USGS Earthquake Hazards Program](https://earthquake.usgs.gov/) monitors seismic
-activity globally. This site tracks significant earthquakes and identifies those occurring
-within 50 km of a known volcano — a relationship that can signal volcanic unrest.
+The [USGS Earthquake Hazards Program](https://earthquake.usgs.gov/) monitors seismic activity globally. This site tracks significant earthquakes and identifies those occurring within 50 km of a known volcano — a relationship that can signal volcanic unrest.
 
 [{EarthquakeList nearVolcano='true' minMagnitude='4.5' limit='10'}]
 
@@ -43,8 +34,7 @@ within 50 km of a known volcano — a relationship that can signal volcanic unre
 
 ## About this site
 
-This site is powered by **geohazardwatch**, an open-source add-on for the
-[ngdpbase](https://github.com/jwilleke/ngdpbase) platform.
+This site is powered by **geohazardwatch**, an open-source add-on for the [ngdpbase](https://github.com/jwilleke/ngdpbase) platform.
 
 | Data source | Provider | Coverage |
 |-------------|----------|---------|
