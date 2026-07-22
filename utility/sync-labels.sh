@@ -35,7 +35,7 @@ apply_to() {
   local spec name color desc
   for spec in "${LABELS[@]}"; do
     IFS='|' read -r name color desc <<<"$spec"
-    gh label create "$name" --color "$color" --description "$desc" --force "${repo_args[@]}" >/dev/null
+    gh label create "$name" --color "$color" --description "$desc" --force "${repo_args[@]+"${repo_args[@]}"}" >/dev/null
     echo "   ✓ $name"
   done
 }
