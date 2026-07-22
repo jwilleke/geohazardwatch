@@ -1,7 +1,7 @@
 ---
 title: TODO
 description: Priority bands and resume pointer for this repo.
-last_updated: "2026-07-22"
+last_updated: "2026-07-22T15:00:00Z"
 kit_version: "3aa1bb4"
 ---
 
@@ -27,7 +27,6 @@ kit_version: "3aa1bb4"
 ## 🟡 P2
 
 - [#36](https://github.com/jwilleke/geohazardwatch/issues/36) — [FEATURE] Best sources for
-- [#134](https://github.com/jwilleke/geohazardwatch/issues/134) — [blocked] NASA COOLR (maps.nccs.nasa.gov) is IPv6-only — no route from prod cluster
 
 ## 🔵 In review
 
