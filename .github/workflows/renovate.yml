@@ -39,6 +39,12 @@ on:
   schedule:
     - cron: '0 * * * *'  # every hour
   workflow_dispatch:
+    inputs:
+      debug:
+        description: 'Run with LOG_LEVEL=debug (geohazardwatch#143 — automerge diagnosis)'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -63,6 +69,11 @@ jobs:
           # ESP32-tests, etc.) and Renovate tried to act on them. Explicit
           # single-repo pin is the safe form.
           RENOVATE_REPOSITORIES: "jwilleke/geohazardwatch"
+          # geohazardwatch#143: manual workflow_dispatch with debug=true bumps
+          # this to see automerge-decision log lines the default info level
+          # doesn't surface. Scheduled/non-debug runs are unaffected (defaults
+          # to unset, which renovate treats as its normal default level).
+          LOG_LEVEL: ${{ inputs.debug && 'debug' || '' }}
         with:
           token: ${{ secrets.RENOVATE_TOKEN }}
           configurationFile: renovate.json
