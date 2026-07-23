@@ -1,7 +1,7 @@
 ---
 title: TODO
 description: Priority bands and resume pointer for this repo.
-last_updated: "2026-07-23T17:30:00Z"
+last_updated: "2026-07-23T17:40:00Z"
 kit_version: "3aa1bb4"
 ---
 
@@ -27,7 +27,7 @@ kit_version: "3aa1bb4"
 
 ## 🔵 In review
 
-- [#7](https://github.com/jwilleke/geohazardwatch/issues/7) — Import: VolcanoDiscovery RSS — aggregated global activity feed
+- none
 
 ## ⏸ Deferred
 
