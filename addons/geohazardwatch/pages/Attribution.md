@@ -17,6 +17,8 @@ geohazardwatch is a data platform, not a data producer. Every hazard record show
 
 > Recommended citation: Global Volcanism Program, Smithsonian Institution. *Volcanoes of the World (VOTW) Database*. <https://volcano.si.edu/>
 
+**[VolcanoDiscovery](https://www.volcanodiscovery.com/)** — aggregated global volcanic activity reports, via their RSS feed. Used with permission (Dr. Tom Pfeiffer, VolcanoDiscovery, 2026-07-23); each item displayed here links back to its source page on volcanodiscovery.com.
+
 ## Earthquakes
 
 **[USGS Earthquake Hazards Program](https://earthquake.usgs.gov/)** — real-time and recent earthquake data via the [USGS earthquake summary feeds](https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary). A work of the U.S. Government; USGS earthquake data is in the public domain.
