@@ -21,38 +21,39 @@ If nothing renders above, no recent reports are available — or the `volcanodis
 
 ## Data Sources
 
-| Source | Provider | Coverage |
-|--------|----------|---------|
-| Volcano activity news | [VolcanoDiscovery](https://www.volcanodiscovery.com/) | Global, aggregated from all 9 VAACs and national observatories |
+%%table-fit
+%%table-bordered
+%%table-striped
+%%table-hover
+||Source||Provider||Coverage
+|Volcano activity news|[VolcanoDiscovery](https://www.volcanodiscovery.com/)|Global, aggregated from all 9 VAACs and national observatories
+/%
+/%
+/%
+/%
 
 ## Configuration
 
-The live feed is served by the ngdpbase `feeds` addon (#685). Enable it and declare the source in the instance `app-custom-config.json`, then restart:
+The live feed is served by the ngdpbase `feeds` addon (#685). Enable it and declare the source in the instance `app-custom-config.json`, then restart. The production config uses flat dot-notation keys (not nested JSON):
 
 ```json
 {
   "ngdpbase.addons.feeds.enabled": true,
-  "ngdpbase.addons.feeds.sources": {
-    "volcanodiscovery-activity": {
-      "adapter": "xml",
-      "url": "https://www.volcanodiscovery.com/volcanonews.rss",
-      "itemsPath": "rss.channel.item",
-      "type": "VolcanoActivityReport",
-      "schemaType": "Article",
-      "intervalMinutes": 30,
-      "recordIdField": "guid",
-      "map": {
-        "title": "title",
-        "link": "link",
-        "pubDate": "pubDate",
-        "summary": "description"
-      }
-    }
-  }
+  "ngdpbase.addons.feeds.sources.volcanodiscovery-activity.adapter": "xml",
+  "ngdpbase.addons.feeds.sources.volcanodiscovery-activity.url": "https://www.volcanodiscovery.com/volcanonews.rss",
+  "ngdpbase.addons.feeds.sources.volcanodiscovery-activity.itemsPath": "rss.channel.item",
+  "ngdpbase.addons.feeds.sources.volcanodiscovery-activity.type": "VolcanoActivityReport",
+  "ngdpbase.addons.feeds.sources.volcanodiscovery-activity.schemaType": "Article",
+  "ngdpbase.addons.feeds.sources.volcanodiscovery-activity.intervalMinutes": 30,
+  "ngdpbase.addons.feeds.sources.volcanodiscovery-activity.recordIdField": "link",
+  "ngdpbase.addons.feeds.sources.volcanodiscovery-activity.map.title": "title",
+  "ngdpbase.addons.feeds.sources.volcanodiscovery-activity.map.link": "link",
+  "ngdpbase.addons.feeds.sources.volcanodiscovery-activity.map.pubDate": "pubDate",
+  "ngdpbase.addons.feeds.sources.volcanodiscovery-activity.map.summary": "description"
 }
 ```
 
-`type` is the domain label (`VolcanoActivityReport`); `schemaType` stays `Article` per the same constraint noted on [Tsunamis].
+`type` is the domain label (`VolcanoActivityReport`); `schemaType` stays `Article` per the same constraint noted on [Tsunamis]. `recordIdField` is `link`, not `guid` — VolcanoDiscovery's `<guid isPermaLink="true">` element carries an attribute, so the XML parser returns it as `{@isPermaLink, #text}` rather than a plain string, and the adapter silently drops any record whose id doesn't resolve to a string/number. `<link>` has no attributes and is guaranteed unique per article, so it's used as the id instead.
 
 ## Licensing
 
@@ -60,4 +61,4 @@ Used with permission from VolcanoDiscovery (Dr. Tom Pfeiffer, 2026-07-23), condi
 
 ----
 
-__Status:__ page and feed wiring live; requires the `volcanodiscovery-activity` source to be added to the instance `app-custom-config.json` (not yet deployed to production — tracked in #7).
+__Status:__ page and feed wiring live in production — `volcanodiscovery-activity` is registered in `app-custom-config.json` and ingesting (20 items on first fetch).
