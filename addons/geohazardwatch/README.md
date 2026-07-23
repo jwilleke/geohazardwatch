@@ -379,7 +379,6 @@ addons/geohazardwatch/
 │   ├── geohazardwatch-demo.md
 │   ├── geohazardwatch-japan.md
 │   ├── geohazardwatch-plugins.md
-│   ├── geohazardwatch-request-access.md
 │   ├── Tsunamis.md                ← Content-only; live via ngdpbase `feeds` addon
 │   ├── Landslides.md               ← Content-only; live via ngdpbase `feeds` addon
 │   ├── left-menu-content.md
