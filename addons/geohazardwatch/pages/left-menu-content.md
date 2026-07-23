@@ -10,6 +10,7 @@ author: geohazardwatch
 - <a href="/"><i class="fas fa-home"></i> Home</a>
 - <a href="/search"><i class="fas fa-search"></i> Search</a>
 - [Volcanoes]
+- [Volcano Activity]
 - [Earthquakes]
 - [Tsunamis]
 - [Landslides]
