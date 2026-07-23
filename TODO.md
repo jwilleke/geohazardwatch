@@ -1,7 +1,7 @@
 ---
 title: TODO
 description: Priority bands and resume pointer for this repo.
-last_updated: "2026-07-23T17:00:00Z"
+last_updated: "2026-07-23T17:30:00Z"
 kit_version: "3aa1bb4"
 ---
 
@@ -20,6 +20,8 @@ kit_version: "3aa1bb4"
 ## 🟡 P2
 
 - [#149](https://github.com/jwilleke/geohazardwatch/issues/149) — [security] showdown — ReDoS in anchor parsing (CVE-2024-1899)
+- [#148](https://github.com/jwilleke/geohazardwatch/issues/148) — [BUG] Tag-push trigger for publish-image.yml didn't fire for v1.2.92
+- [#143](https://github.com/jwilleke/geohazardwatch/issues/143) — Renovate auto-merge not actually engaging on ngdpbase bump PRs (2nd occurrence today)
 - [#141](https://github.com/jwilleke/geohazardwatch/issues/141) — Migrate VAAC advisories from bespoke code to the new xml-index feeds adapter
 - [#36](https://github.com/jwilleke/geohazardwatch/issues/36) — [FEATURE] Best sources for
 
@@ -33,5 +35,4 @@ kit_version: "3aa1bb4"
 
 ## ❓ Needs triage
 
-- [#148](https://github.com/jwilleke/geohazardwatch/issues/148) — [BUG] Tag-push trigger for publish-image.yml didn't fire for v1.2.92
-- [#143](https://github.com/jwilleke/geohazardwatch/issues/143) — Renovate auto-merge not actually engaging on ngdpbase bump PRs (2nd occurrence today)
+- none
