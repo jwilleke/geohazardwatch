@@ -9,11 +9,11 @@ author: system
 ---
 ## Volcano Activity
 
-Recent volcanic activity reports from around the world, aggregated by [VolcanoDiscovery](https://www.volcanodiscovery.com/) from all nine Volcanic Ash Advisory Centers (VAACs) and national observatories. For individual volcano records and eruption history, see [Volcanoes]; for aviation ash advisories, see [Volcano Alerts|US Volcano Alerts (USGS HANS)].
+Recent volcanic activity reports from around the world, aggregated by [VolcanoDiscovery|https://www.volcanodiscovery.com/|target="_blank"] from all nine Volcanic Ash Advisory Centers (VAACs) and national observatories. For individual volcano records and eruption history, see [Volcanoes]; for aviation ash advisories, see [Volcano Alerts|US Volcano Alerts (USGS HANS)].
 
 ## Recent Reports
 
-Live activity reports, ingested via the platform [`feeds` addon](https://github.com/jwilleke/ngdpbase/issues/685) and rendered from the record store at view time (no page churn). Each headline links back to the full report on volcanodiscovery.com — source: __VolcanoDiscovery__.
+Live activity reports, ingested via the platform [`feeds` addon|https://github.com/jwilleke/ngdpbase/issues/685|target="_blank"] and rendered from the record store at view time (no page churn). Each headline links back to the full report on volcanodiscovery.com — source: __VolcanoDiscovery__.
 
 [{DataFeed source='volcanodiscovery-activity' columns='title,pubDate' sort='pubDate-desc' max='15' link='title=:link'}]
 
@@ -25,8 +25,8 @@ If nothing renders above, no recent reports are available — or the `volcanodis
 %%table-bordered
 %%table-striped
 %%table-hover
-||Source||Provider||Coverage
-|Volcano activity news|[VolcanoDiscovery](https://www.volcanodiscovery.com/)|Global, aggregated from all 9 VAACs and national observatories
+|| Source || Provider || Coverage
+| Volcano activity news | [VolcanoDiscovery|https://www.volcanodiscovery.com/|target="_blank"] | Global, aggregated from all 9 VAACs and national observatories
 /%
 /%
 /%
@@ -57,7 +57,7 @@ The live feed is served by the ngdpbase `feeds` addon (#685). Enable it and decl
 
 ## Licensing
 
-Used with permission from VolcanoDiscovery (Dr. Tom Pfeiffer, 2026-07-23), conditional on every displayed item linking directly back to its source page on volcanodiscovery.com and the source being clearly marked — see the `link='title=:link'` binding above and [Attribution]. See [issue #7](https://github.com/jwilleke/geohazardwatch/issues/7) for the full licensing correspondence.
+Used with permission from VolcanoDiscovery (Dr. Tom Pfeiffer, 2026-07-23), conditional on every displayed item linking directly back to its source page on volcanodiscovery.com and the source being clearly marked — see the `link='title=:link'` binding above and [Attribution]. See [issue #7|https://github.com/jwilleke/geohazardwatch/issues/7|target="_blank"] for the full licensing correspondence.
 
 ----
 
