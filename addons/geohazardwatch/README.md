@@ -342,6 +342,12 @@ The Tsunami and Landslide pages render live data through a separate ngdpbase `fe
 
 ---
 
+## Distribution
+
+This directory is also published as an npm package, `@jwilleke/geohazardwatch-addon` (see `package.json` in this directory), for production deployment — see [`../../Dockerfile`](../../Dockerfile) and [geohazardwatch#152](https://github.com/jwilleke/geohazardwatch/issues/152). Local development still uses **drop-in** (this directory referenced directly via `addons-path`, as in [SETUP.md](../../SETUP.md)); only the production image installs it as a versioned dependency instead of copying the directory. The addon's own runtime code, `register()` contract, and config keys are identical either way.
+
+---
+
 ## Structure
 
 ```

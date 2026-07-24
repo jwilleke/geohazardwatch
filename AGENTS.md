@@ -119,7 +119,9 @@ ngdpbase runs on port 3333. Admin panel at `/admin`, pages at `/view/<slug>`.
 
 ### How the addon loads
 
-ngdpbase's `AddonsManager` discovers addons via the `addons-path` config key, finds `addons/geohazardwatch/index.js`, and calls `module.exports.register(engine, config)`. The `engine` object provides access to all ngdpbase managers and the Express app.
+**Local development (drop-in):** ngdpbase's `AddonsManager` discovers addons via the `addons-path` config key, finds `addons/geohazardwatch/index.js`, and calls `module.exports.register(engine, config)`. The `engine` object provides access to all ngdpbase managers and the Express app.
+
+**Production (packaged):** the addon is also published as an npm package, `@jwilleke/geohazardwatch-addon` (see `addons/geohazardwatch/package.json`), installed into a generic `ghcr.io/jwilleke/ngdpbase` image via `Dockerfile`'s `npm install` line. A `node_modules:@jwilleke/*-addon` entry in the instance's `addons-path` config discovers it from `node_modules` instead of a directory — same `register()` contract, only the discovery mechanism differs. This decouples the addon's version from the ngdpbase base-image version ([#152](https://github.com/jwilleke/geohazardwatch/issues/152), following ngdpbase's [addon-packaged.md](https://github.com/jwilleke/ngdpbase/blob/master/docs/platform/deployment/addon-packaged.md)). The published package's version is kept in lockstep with the repo's own version by `src/utils/version.ts`.
 
 ```
 ngdpbase/src/managers/AddonsManager.ts

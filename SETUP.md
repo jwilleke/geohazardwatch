@@ -33,7 +33,7 @@ Data is written to `addons/geohazardwatch/data/` (gitignored). Re-run any time t
 
 ## Step 3 — Wire to ngdpbase
 
-Add to `$FAST_STORAGE/config/app-custom-config.json` on your ngdpbase instance:
+This is the **drop-in** path — the right choice for local development (edit-in-place, no publish step). Add to `$FAST_STORAGE/config/app-custom-config.json` on your ngdpbase instance:
 
 ```json
 {
@@ -42,6 +42,8 @@ Add to `$FAST_STORAGE/config/app-custom-config.json` on your ngdpbase instance:
   "ngdpbase.addons.geohazardwatch.dataPath": "./data/geohazardwatch"
 }
 ```
+
+> Production instead installs the addon as a versioned npm package (`@jwilleke/geohazardwatch-addon`) into a generic ngdpbase image — see `Dockerfile` and [#152](https://github.com/jwilleke/geohazardwatch/issues/152). That config uses `"node_modules:@jwilleke/*-addon"` in `addons-path` instead of a directory path. Local dev keeps using drop-in as shown above.
 
 ## Step 4 — Restart ngdpbase
 

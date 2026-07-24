@@ -5,6 +5,7 @@
  * Updates the version consistently across:
  *   - package.json
  *   - addons/geohazardwatch/index.js
+ *   - addons/geohazardwatch/package.json  (the published @jwilleke/geohazardwatch-addon package)
  *   - CHANGELOG.md  (prepends a new [x.y.z] section)
  *
  * Usage:
@@ -79,6 +80,14 @@ function updateIndexJs(next: string): void {
   console.log(`  addons/geohazardwatch/index.js  ${next}`);
 }
 
+function updateAddonPackageJson(next: string): void {
+  const rel = 'addons/geohazardwatch/package.json';
+  const pkg = JSON.parse(readFile(rel)) as Record<string, unknown>;
+  pkg.version = next;
+  writeFile(rel, JSON.stringify(pkg, null, 2) + '\n');
+  console.log(`  addons/geohazardwatch/package.json  ${next}`);
+}
+
 function updateChangelog(next: string, prev: string): void {
   const rel = 'CHANGELOG.md';
   const content = readFile(rel);
@@ -125,6 +134,7 @@ function main(): void {
   console.log(`\nBumping ${prev} → ${next}\n`);
   updatePackageJson(next);
   updateIndexJs(next);
+  updateAddonPackageJson(next);
   updateChangelog(next, prev);
 
   console.log(`\nNext steps:`);

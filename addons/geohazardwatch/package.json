@@ -1,0 +1,35 @@
+{
+  "name": "@jwilleke/geohazardwatch-addon",
+  "version": "1.2.100",
+  "description": "Volcano & geology data platform add-on for ngdpbase — GVP structured records, search, infoboxes, maps",
+  "main": "index.js",
+  "ngdpbase": {
+    "slug": "geohazardwatch",
+    "type": "domain"
+  },
+  "files": [
+    "config",
+    "import",
+    "managers",
+    "pages",
+    "plugins",
+    "public",
+    "routes",
+    "views",
+    "index.js",
+    "README.md"
+  ],
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwilleke/geohazardwatch.git",
+    "directory": "addons/geohazardwatch"
+  },
+  "author": "jwilleke",
+  "license": "MIT"
+}
