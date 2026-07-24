@@ -22,6 +22,12 @@ Global volcano data from the [Smithsonian Global Volcanism Program (GVP)|https:/
 
 [{VolcanoMap height='500'}]
 
+## Related Pages
+
+- [Volcano Activity] — recent eruption news and Volcanic Ash Advisories
+- [Japan Volcanoes] — regional deep-dive on the Pacific Ring of Fire
+- [US Volcano Alerts (USGS HANS)] — current US alert levels by observatory
+
 ----
 
 __Data source:__ Global Volcanism Program, 2025. Volcanoes of the World (v. 5.3.4). Smithsonian Institution.

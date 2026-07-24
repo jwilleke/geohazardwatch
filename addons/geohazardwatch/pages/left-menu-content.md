@@ -10,12 +10,12 @@ author: geohazardwatch
 - <a href="/"><i class="fas fa-home"></i> Home</a>
 - <a href="/search"><i class="fas fa-search"></i> Search</a>
 - [Volcanoes]
-- [Volcano Activity]
 - [Earthquakes]
-- [Tsunamis]
 - [Landslides]
-- [Japan Volcanoes|Japan Volcanoes]
-- [Volcano Alerts|US Volcano Alerts (USGS HANS)]
+- [Tsunamis]
+
+<h6 class="sidebar-heading text-muted fw-semibold mb-1 mt-3">More</h6>
+
 - [Demo|Geology Demo]
 - [About|About geohazardwatch]
 - [Plugin Guide]
