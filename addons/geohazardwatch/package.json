@@ -1,6 +1,6 @@
 {
   "name": "@jwilleke/geohazardwatch-addon",
-  "version": "1.2.100",
+  "version": "1.2.101",
   "description": "Volcano & geology data platform add-on for ngdpbase — GVP structured records, search, infoboxes, maps",
   "main": "index.js",
   "ngdpbase": {
