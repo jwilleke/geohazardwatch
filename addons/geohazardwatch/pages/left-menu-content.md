@@ -13,6 +13,7 @@ author: geohazardwatch
 - [Earthquakes]
 - [Landslides]
 - [Tsunamis]
+- [Wildfires]
 - [Alerts]
 
 <h6 class="sidebar-heading text-muted fw-semibold mb-1 mt-3">More</h6>

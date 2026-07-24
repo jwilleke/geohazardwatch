@@ -37,7 +37,7 @@ __Coverage note:__ Washington VAAC only (Americas, E. Pacific, Caribbean) — on
 
 ## Wildfire Alerts
 
-__Coming soon__ — design decided ([geohazardwatch#161](https://github.com/jwilleke/geohazardwatch/issues/161): high-confidence FIRMS/VIIRS detections clustered into named events), implementation pending the wildfire map plugin ([geohazardwatch#162](https://github.com/jwilleke/geohazardwatch/issues/162)).
+The full interactive map is live on [Wildfires] — high-confidence FIRMS/VIIRS hotspots, sized by intensity. This section itself is still __coming soon__: [geohazardwatch#161](https://github.com/jwilleke/geohazardwatch/issues/161) decided that a proper alert *list* here needs individual detections clustered into named events (e.g. "81 distinct fires" instead of hundreds of raw points) — clustering that the current `[{DataFeed}]` plugin doesn't do (it can filter and sort, not group). That's a real, separate piece of work, not yet started.
 
 ----
 
@@ -46,6 +46,7 @@ __Coming soon__ — design decided ([geohazardwatch#161](https://github.com/jwil
 - [Volcanoes] — search, filter, and map every GVP-catalogued volcano
 - [Earthquakes] — recent seismic activity
 - [Tsunamis] — tsunami hazard background and historical sources
+- [Wildfires] — global thermal hotspot map
 - [US Volcano Alerts (USGS HANS)] — full alert-level reference
 
-__Status:__ HANS, Tsunami, and VAAC sections live. Wildfire section pending #161/#162.
+__Status:__ HANS, Tsunami, and VAAC sections live. Wildfire *alert list* pending clustering work (#161); the full map is live on [Wildfires].
