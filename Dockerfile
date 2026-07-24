@@ -16,7 +16,7 @@
 # set via the runtime ConfigMap, not here) must include
 # "node_modules:@jwilleke/*-addon" for this image to actually load the addon.
 
-ARG NGDPBASE_VERSION=3.63.0
+ARG NGDPBASE_VERSION=3.64.0
 FROM ghcr.io/jwilleke/ngdpbase:${NGDPBASE_VERSION}
 
 LABEL org.opencontainers.image.title="geohazardwatch"
