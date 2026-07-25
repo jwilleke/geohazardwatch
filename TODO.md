@@ -1,7 +1,7 @@
 ---
 title: TODO
 description: Priority bands and resume pointer for this repo.
-last_updated: "2026-07-25T00:01:00Z"
+last_updated: "2026-07-25T00:02:00Z"
 kit_version: "3aa1bb4"
 ---
 
@@ -17,7 +17,6 @@ kit_version: "3aa1bb4"
 
 - [#163](https://github.com/jwilleke/geohazardwatch/issues/163) — [EPIC] Restructure navigation into 5 hazard hubs + consolidated Alerts page
 - [#158](https://github.com/jwilleke/geohazardwatch/issues/158) — [FEATURE] Left-menu restructure: 5 hazard hubs + related-pages links
-- [#161](https://github.com/jwilleke/geohazardwatch/issues/161) — [FEATURE] Wildfire alert design: FRP/confidence threshold and/or clustering for FIRMS hotspots
 
 ## 🟡 P2
 
@@ -31,7 +30,7 @@ kit_version: "3aa1bb4"
 
 ## 🔵 In review
 
-- none
+- [#161](https://github.com/jwilleke/geohazardwatch/issues/161) — [FEATURE] Wildfire alert design: FRP/confidence threshold and/or clustering for FIRMS hotspots
 
 ## ⏸ Deferred
 
@@ -39,4 +38,4 @@ kit_version: "3aa1bb4"
 
 ## ❓ Needs triage
 
-- none
+- [#169](https://github.com/jwilleke/geohazardwatch/issues/169) — [FEATURE] Reverse geocode wildfire alert detections to nearest named place
