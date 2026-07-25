@@ -29,7 +29,7 @@ If nothing renders above, no tsunami messages are currently active.
 
 ## Volcanic Ash Advisories (VAAC)
 
-Active Volcanic Ash Advisories from the Washington VAAC, structured directly from NOAA OSPO — not the re-published copy shown on [Volcano Activity].
+Active Volcanic Ash Advisories from the Washington VAAC, structured directly from NOAA OSPO — not VolcanoDiscovery's re-published copy, which is filtered out of [Volcano Activity] in favor of this section (geohazardwatch#159).
 
 [{VaacAdvisories}]
 

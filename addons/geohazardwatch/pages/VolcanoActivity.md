@@ -3,19 +3,21 @@ title: Volcano Activity
 uuid: 42fd6ec1-e8a6-4f0c-a21e-bb1a87483700
 slug: volcano-activity
 system-category: addon
-description: Recent global volcanic activity reports, aggregated from all nine VAACs and national observatories
+description: Original volcanic activity news and eruption reports from VolcanoDiscovery — for VAAC ash advisories, see Alerts
 tags: [geology, volcanoes, volcanodiscovery]
 author: system
 ---
 ## Volcano Activity
 
-Recent volcanic activity reports from around the world, aggregated by [VolcanoDiscovery|https://www.volcanodiscovery.com/|target="_blank"] from all nine Volcanic Ash Advisory Centers (VAACs) and national observatories. For individual volcano records and eruption history, see [Volcanoes]; for aviation ash advisories, see [Volcano Alerts|US Volcano Alerts (USGS HANS)].
+Original volcanic activity news from around the world — eruption narratives and the daily "Volcanoes Today" digest — reported by [VolcanoDiscovery|https://www.volcanodiscovery.com/|target="_blank"]. For individual volcano records and eruption history, see [Volcanoes]; for Volcanic Ash Advisory (VAAC) bulletins, see [Alerts]; for USGS alert levels, see [Volcano Alerts|US Volcano Alerts (USGS HANS)].
 
 ## Recent Reports
 
 Live activity reports, ingested via the platform [`feeds` addon|https://github.com/jwilleke/ngdpbase/issues/685|target="_blank"] and rendered from the record store at view time (no page churn). Each headline links back to the full report on volcanodiscovery.com — source: __VolcanoDiscovery__.
 
-[{DataFeed source='volcanodiscovery-activity' columns='title,pubDate' sort='pubDate-desc' max='15' link='title=:link'}]
+Volcanic Ash Advisory (VAAC) bulletins are excluded from this list — VolcanoDiscovery re-publishes the same NOAA OSPO Washington VAAC bulletins this addon already fetches directly (see `docs/volcano-sources.md`), so the structured, GVP-matched original is shown on [Alerts] instead of a re-published copy here. This page keeps VolcanoDiscovery's original content: eruption narratives and the "Volcanoes Today" digest.
+
+[{DataFeed source='volcanodiscovery-activity' columns='title,pubDate' exclude='summary~VAAC:|VA ADVISORY|DTG:' sort='pubDate-desc' max='15' link='title=:link'}]
 
 If nothing renders above, no recent reports are available — or the `volcanodiscovery-activity` feed source is not yet configured (see Configuration).
 
@@ -26,7 +28,7 @@ If nothing renders above, no recent reports are available — or the `volcanodis
 %%table-striped
 %%table-hover
 || Source || Provider || Coverage
-| Volcano activity news | [VolcanoDiscovery|https://www.volcanodiscovery.com/|target="_blank"] | Global, aggregated from all 9 VAACs and national observatories
+| Volcano activity news | [VolcanoDiscovery|https://www.volcanodiscovery.com/|target="_blank"] | Global — original eruption narratives and daily digest only; VAAC bulletins excluded (see [Alerts])
 /%
 /%
 /%
@@ -61,4 +63,4 @@ Used with permission from VolcanoDiscovery (Dr. Tom Pfeiffer, 2026-07-23), condi
 
 ----
 
-__Status:__ page and feed wiring live in production — `volcanodiscovery-activity` is registered in `app-custom-config.json` and ingesting (20 items on first fetch).
+__Status:__ page and feed wiring live in production — `volcanodiscovery-activity` is registered in `app-custom-config.json` and ingesting (20 items on first fetch). VAAC-shaped items are filtered out via `exclude='summary~VAAC:|VA ADVISORY|DTG:'` per [geohazardwatch#159|https://github.com/jwilleke/geohazardwatch/issues/159|target="_blank"]; the structured original is on [Alerts] instead.
