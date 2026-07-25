@@ -1,7 +1,7 @@
 ---
 title: TODO
 description: Priority bands and resume pointer for this repo.
-last_updated: "2026-07-24T16:05:00Z"
+last_updated: "2026-07-25T00:00:00Z"
 kit_version: "3aa1bb4"
 ---
 
@@ -11,7 +11,7 @@ kit_version: "3aa1bb4"
 
 ## 🔴 P0 — Security & Critical
 
-- none
+- [#168](https://github.com/jwilleke/geohazardwatch/issues/168) — [security] js-yaml — Exponential parsing time DoS (GHSA-pm4m-ph32-ghv5)
 
 ## 🟠 P1
 
