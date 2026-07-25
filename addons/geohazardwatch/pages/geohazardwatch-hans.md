@@ -30,10 +30,6 @@ Real-time alert levels for monitored US volcanoes, sourced from the [USGS Hazard
 
 ## Alert Levels
 
-<!-- Nested %%feed-badge %%feed-badge--COLOR .../% /% spans render correctly standalone (verified against
-     WikiStyleHandler directly) but not yet inside table cells here in production -- tracked upstream as
-     ngdpbase#938 (in progress). Markup below is left in place for when that lands; until then the Aviation
-     Code column renders as plain text in this table. -->
 %%table-fit
 %%table-bordered
 %%table-striped
