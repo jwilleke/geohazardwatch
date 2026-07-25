@@ -30,17 +30,20 @@ Real-time alert levels for monitored US volcanoes, sourced from the [USGS Hazard
 
 ## Alert Levels
 
-<!-- markdownlint-disable MD033 -- aviation color-code badges reuse the platform's feed-badge classes -->
+<!-- Nested %%feed-badge %%feed-badge--COLOR .../% /% spans render correctly standalone (verified against
+     WikiStyleHandler directly) but not yet inside table cells here in production -- tracked upstream as
+     ngdpbase#938 (in progress). Markup below is left in place for when that lands; until then the Aviation
+     Code column renders as plain text in this table. -->
 %%table-fit
 %%table-bordered
 %%table-striped
 %%table-hover
 %%sortable
 || Level || Aviation Code || Meaning ||
-| NORMAL | <span class="feed-badge feed-badge--green">GREEN</span> | Volcano is in typical background state |
-| ADVISORY | <span class="feed-badge feed-badge--yellow">YELLOW</span> | Elevated unrest above known background levels |
-| WATCH | <span class="feed-badge feed-badge--orange">ORANGE</span> | Heightened unrest with increased eruption potential |
-| WARNING | <span class="feed-badge feed-badge--red">RED</span> | Highly hazardous eruption imminent or underway |
+| NORMAL | %%feed-badge %%feed-badge--green GREEN/% /% | Volcano is in typical background state |
+| ADVISORY | %%feed-badge %%feed-badge--yellow YELLOW/% /% | Elevated unrest above known background levels |
+| WATCH | %%feed-badge %%feed-badge--orange ORANGE/% /% | Heightened unrest with increased eruption potential |
+| WARNING | %%feed-badge %%feed-badge--red RED/% /% | Highly hazardous eruption imminent or underway |
 /%
 /%
 /%
