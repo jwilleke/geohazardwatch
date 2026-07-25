@@ -37,7 +37,11 @@ __Coverage note:__ Washington VAAC only (Americas, E. Pacific, Caribbean) — on
 
 ## Wildfire Alerts
 
-The full interactive map is live on [Wildfires] — high-confidence FIRMS/VIIRS hotspots, sized by intensity. This section itself is still __coming soon__: [geohazardwatch#161](https://github.com/jwilleke/geohazardwatch/issues/161) decided that a proper alert *list* here needs individual detections clustered into named events (e.g. "81 distinct fires" instead of hundreds of raw points) — clustering that the current `[{DataFeed}]` plugin doesn't do (it can filter and sort, not group). That's a real, separate piece of work, not yet started.
+Highest-intensity high-confidence FIRMS/VIIRS detections globally, most intense first. Each entry is a single satellite detection, not a confirmed named fire — see [geohazardwatch#161](https://github.com/jwilleke/geohazardwatch/issues/161) for why this stays a threshold-only list rather than clustered events (real clustering work, not started) and [geohazardwatch#169](https://github.com/jwilleke/geohazardwatch/issues/169) for the pending reverse-geocoded place-name upgrade.
+
+[{DataFeed source='firms-viirs' columns='latitude,longitude,frp,acq_date,acq_time' exclude='confidence~^[ln]$' sort='frp-desc' max='20'}]
+
+If nothing renders above, the `firms-viirs` feed source is not yet configured — see [Wildfires] for configuration details. The full interactive map, with every high-confidence detection plotted, is also on [Wildfires].
 
 ----
 
@@ -49,4 +53,4 @@ The full interactive map is live on [Wildfires] — high-confidence FIRMS/VIIRS 
 - [Wildfires] — global thermal hotspot map
 - [US Volcano Alerts (USGS HANS)] — full alert-level reference
 
-__Status:__ HANS, Tsunami, and VAAC sections live. Wildfire *alert list* pending clustering work (#161); the full map is live on [Wildfires].
+__Status:__ HANS, Tsunami, VAAC, and Wildfire sections all live. Wildfire entries are threshold-only detections, not clustered named events — see [geohazardwatch#161](https://github.com/jwilleke/geohazardwatch/issues/161).
