@@ -46,29 +46,41 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Bump patch, commit, tag, push
+      - name: Bump patch, commit, push, then tag
         run: |
-          npm run version:bump -- patch
-          VERSION=$(node -p "require('./package.json').version")
-          git add -A
-          git commit -m "chore: release v${VERSION}"
-          git tag -a "v${VERSION}" -m "geohazardwatch v${VERSION}"
-
-          # Race-safe push: if another commit landed on main between checkout
-          # and push, rebase the release commit on top of origin/main and retry.
-          # The annotated tag points at a specific SHA, so it must be dropped
-          # before rebase and re-created after, otherwise --follow-tags would
-          # push a tag pointing at an orphan commit.
+          # #178: the tag must never be created before the branch push it
+          # names is confirmed on origin/main. A prior version bundled both
+          # via `git push --follow-tags`, which can partially succeed — the
+          # new tag ref lands even when the bundled branch-ref update is
+          # rejected (no fast-forward constraint on a brand-new ref). Two
+          # auto-tag runs racing within seconds of each other (two Renovate
+          # PRs merging back-to-back) hit exactly this: the loser's tag still
+          # got created, permanently naming a stale commit, while the winner's
+          # branch push landed under a tag name that was already taken.
+          #
+          # Fixed by never tagging speculatively: push the branch alone first;
+          # only on confirmed success do we create+push the tag, so it always
+          # names the commit actually on origin/main. On rejection, discard
+          # the attempt entirely and restart from a fresh origin/main rather
+          # than rebasing — recomputing the version fresh each attempt also
+          # avoids reusing a stale-computed version number against a newer
+          # base.
           for attempt in 1 2; do
-            if git push --follow-tags origin main; then
+            npm run version:bump -- patch
+            VERSION=$(node -p "require('./package.json').version")
+            git add -A
+            git commit -m "chore: release v${VERSION}"
+
+            if git push origin main; then
+              git tag -a "v${VERSION}" -m "geohazardwatch v${VERSION}"
+              git push origin "v${VERSION}"
               exit 0
             fi
-            echo "Push rejected; rebasing on origin/main and retrying (attempt ${attempt})"
+
+            echo "Branch push rejected; discarding and retrying against origin/main (attempt ${attempt})"
             git fetch origin main
-            git tag -d "v${VERSION}"
-            git rebase origin/main
-            git tag -a "v${VERSION}" -m "geohazardwatch v${VERSION}"
+            git reset --hard origin/main
           done
 
-          echo "Push still rejected after rebase + retry; failing." >&2
+          echo "Push still rejected after retry; failing." >&2
           exit 1
