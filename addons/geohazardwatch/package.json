@@ -5,7 +5,11 @@
   "main": "index.js",
   "ngdpbase": {
     "slug": "geohazardwatch",
-    "type": "domain"
+    "type": "domain",
+    "domainDefaults": {
+      "ngdpbase.chrome.left-menu-page": "left-menu-content",
+      "ngdpbase.chrome.footer-page": "footer-content"
+    }
   },
   "files": [
     "config",
