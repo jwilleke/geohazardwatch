@@ -1,7 +1,7 @@
 ---
 title: TODO
 description: Priority bands and resume pointer for this repo.
-last_updated: "2026-07-27T09:03:21Z"
+last_updated: "2026-07-27T20:45:00Z"
 kit_version: "3aa1bb4"
 ---
 
@@ -22,9 +22,8 @@ kit_version: "3aa1bb4"
 - [#173](https://github.com/jwilleke/geohazardwatch/issues/173) — [FEATURE] National Fire Danger Rating System (NFDRS)
 - [#169](https://github.com/jwilleke/geohazardwatch/issues/169) — [FEATURE] Reverse geocode wildfire alert detections to nearest named place
 - [#164](https://github.com/jwilleke/geohazardwatch/issues/164) — [FEATURE] Create VolcanoInfobox with Images
-- [#149](https://github.com/jwilleke/geohazardwatch/issues/149) — [security] showdown — ReDoS in anchor parsing (CVE-2024-1899)
 - [#148](https://github.com/jwilleke/geohazardwatch/issues/148) — [BUG] Tag-push trigger for publish-image.yml didn't fire for v1.2.92
-- [#141](https://github.com/jwilleke/geohazardwatch/issues/141) — Migrate VAAC advisories from bespoke code to the new xml-index feeds adapter (blocked on ngdpbase#989)
+- [#141](https://github.com/jwilleke/geohazardwatch/issues/141) — Migrate VAAC advisories from bespoke code to the new xml-index feeds adapter (no longer blocked — ngdpbase#989 shipped)
 
 ## 🔵 In review
 
