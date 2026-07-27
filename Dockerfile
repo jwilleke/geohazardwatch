@@ -20,17 +20,18 @@
 # runtime image entirely (as of NGDPBASE_VERSION >= 3.70.3) — reasonable
 # for ngdpbase's own runtime, which never shells out to npm, but this
 # repo's "packaged/npm model" needs npm to install the addon package at
-# build time. Installing it in a plain Node image instead, then copying
-# just its node_modules into the ngdpbase-based runtime stage, keeps this
-# working with no npm required in the final image.
+# build time. ngdpbase#1001/v4.0.0 added an official `-devtools` tag
+# (npm restored, not for deployment) precisely for this — the installer
+# stage below builds FROM that instead of a generic Node image, so it
+# stays in lockstep with ngdpbase's own Node version automatically. Only
+# its node_modules gets copied into the plain (npm-free) runtime stage.
 
-ARG NGDPBASE_VERSION=3.71.0
-ARG NODE_VERSION=24
+ARG NGDPBASE_VERSION=4.0.0
 
 # =============================================================================
-# Stage 1: addon-installer — plain Node image, still has npm
+# Stage 1: addon-installer — ngdpbase's own devtools variant (has npm)
 # =============================================================================
-FROM node:${NODE_VERSION}-alpine AS addon-installer
+FROM ghcr.io/jwilleke/ngdpbase:${NGDPBASE_VERSION}-devtools AS addon-installer
 
 WORKDIR /app
 
