@@ -2,7 +2,7 @@
 title: Volcano Activity
 uuid: 42fd6ec1-e8a6-4f0c-a21e-bb1a87483700
 slug: volcano-activity
-system-category: addon
+system-category: general
 description: Original volcanic activity news and eruption reports from VolcanoDiscovery — for VAAC ash advisories, see Alerts
 tags: [geology, volcanoes, volcanodiscovery]
 author: system

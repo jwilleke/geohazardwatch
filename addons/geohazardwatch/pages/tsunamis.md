@@ -2,7 +2,7 @@
 title: Tsunamis
 uuid: ee6ec3ff-b822-4d1d-beb2-0ea2d39603f1
 slug: tsunamis
-system-category: addon
+system-category: general
 description: Tsunami warnings, advisories, and historical events for geohazardwatch
 tags: [geology, tsunamis, ocean, noaa, usgs]
 author: system

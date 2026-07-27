@@ -2,6 +2,7 @@
 title: Japan Volcanoes
 uuid: d72befb6-5596-4e7e-b0ca-5c95d7ff32c1
 slug: japan-volcanoes
+system-category: general
 author: system
 user-keywords:
   - Japan

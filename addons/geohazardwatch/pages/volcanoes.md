@@ -2,6 +2,7 @@
 title: Volcanoes
 uuid: 3b3828dd-590f-46fe-9030-d3306ed2ac98
 slug: volcanoes
+system-category: general
 author: system
 user-keywords:
   - volcanoes

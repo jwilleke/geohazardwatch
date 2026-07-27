@@ -2,6 +2,7 @@
 title: US Volcano Alerts (USGS HANS)
 uuid: ea663c20-6809-4443-91ba-6cefbf48b2e1
 slug: us-volcano-alerts-usgs-hans
+system-category: general
 description: Real-time US volcano alert levels from the USGS Hazard Alert Notification System
 tags: [geology, volcanoes, alerts, usgs]
 ---

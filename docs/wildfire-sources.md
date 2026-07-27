@@ -27,17 +27,17 @@ Adapter: `csv` (unlike the other three hazard categories, which all use `geojson
 
 ## Wildfire alert design (decided, geohazardwatch#161)
 
-Design decision for what counts as an "alert-worthy" wildfire unit on the consolidated [Alerts page](../addons/geohazardwatch/pages/Alerts.md) (geohazardwatch#160). No new code in this decision itself — implementation belongs to the sub-issues below.
+Design decision for what counts as an "alert-worthy" wildfire unit on the consolidated [Alerts page](../addons/geohazardwatch/pages/alerts.md) (geohazardwatch#160). No new code in this decision itself — implementation belongs to the sub-issues below.
 
 | Question | Decision | Rationale |
 |---|---|---|
-| Threshold | High-confidence detections only (`confidence` != low/nominal); no FRP floor | Matches the filter already live on `Wildfires.md` (`exclude='confidence~^[ln]$'`) — reuses an existing, already-configured pattern instead of introducing a second, differently-tuned threshold |
+| Threshold | High-confidence detections only (`confidence` != low/nominal); no FRP floor | Matches the filter already live on `wildfires.md` (`exclude='confidence~^[ln]$'`) — reuses an existing, already-configured pattern instead of introducing a second, differently-tuned threshold |
 | Clustering | Threshold-only for now — list raw high-confidence detections, not grouped events | `DataFeedPlugin` (ngdpbase `feeds` addon) supports `source`/`exclude`/`columns`/`sort`/`max`/`sizeBy`/`badge`/`link` but has no group-by/clustering parameter (verified against `DataFeedPlugin.ts`); real clustering (spatial grouping + event lifecycle) is separate, not-yet-started work and would need its own implementation issue |
-| Scope | Global | Matches `Wildfires.md`'s existing global map — scoping the Alerts-page list to US-only while the map stays global would be inconsistent between the two pages |
+| Scope | Global | Matches `wildfires.md`'s existing global map — scoping the Alerts-page list to US-only while the map stays global would be inconsistent between the two pages |
 | Naming/display | Reverse geocode each detection to its nearest named place | `firms-viirs` only provides `latitude`/`longitude`/`frp`/`confidence`/`acq_date`/`acq_time` — no place name. Reverse geocoding is a **new external data source** (provider TBD, likely requires an API key) — out of scope for #161 itself; needs its own issue and, per this repo's agent priority matrix, human review before implementation |
 
 ## Known issues / follow-ups
 
 - If a real wildfire feature (not just volcano-adjacent thermal detection) is ever wanted, `firms-viirs` is already the right upstream source — it would need its own page/plugin rather than reusing `FirmsHotspotsPlugin`, which is purpose-built for the volcano proximity join.
-- Like `VaacAdvisoriesPlugin`, this pipeline works and has real data but isn't surfaced anywhere a visitor would see it — worth deciding whether to wire it into `VolcanoActivity.md` or a dedicated page, or leave it demo-only.
+- Like `VaacAdvisoriesPlugin`, this pipeline works and has real data but isn't surfaced anywhere a visitor would see it — worth deciding whether to wire it into `volcano-activity.md` or a dedicated page, or leave it demo-only.
 - The FIRMS API key lives only in production's `app-custom-config.json` (not in this repo) — do not add the literal key value to any committed file.

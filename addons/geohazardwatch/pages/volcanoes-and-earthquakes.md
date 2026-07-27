@@ -2,7 +2,7 @@
 title: Volcanoes and Earthquakes
 uuid: 4bf246b9-ebcc-4774-8175-427c275d407c
 slug: volcanoes-and-earthquakes
-system-category: addon
+system-category: general
 description: Home page for the geohazardwatch volcano and earthquake data platform
 tags: [geology, volcanoes, earthquakes, home]
 author: system

@@ -2,7 +2,7 @@
 title: Left Menu Content
 uuid: 0c0cb715-a46c-4a91-9189-9e05b7f9e95f
 slug: left-menu-content
-system-category: addon
+system-category: system
 addon: geohazardwatch
 author: geohazardwatch
 ---

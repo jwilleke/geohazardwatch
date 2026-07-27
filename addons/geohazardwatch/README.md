@@ -377,16 +377,16 @@ addons/geohazardwatch/
 │   ├── import-earthquakes.js       ← USGS feed importer + proximity matching
 │   └── import-hans.js              ← USGS HANS alert importer
 ├── pages/                          ← Seeded into ngdpbase on first load, never overwritten
-│   ├── geohazardwatch-home.md
+│   ├── volcanoes-and-earthquakes.md
 │   ├── geohazardwatch-about.md
-│   ├── geohazardwatch-volcanoes.md
-│   ├── geohazardwatch-earthquakes.md
-│   ├── geohazardwatch-hans.md
-│   ├── geohazardwatch-demo.md
-│   ├── geohazardwatch-japan.md
+│   ├── volcanoes.md
+│   ├── earthquakes.md
+│   ├── us-volcano-alerts-usgs-hans.md
+│   ├── geology-demo.md
+│   ├── japan-volcanoes.md
 │   ├── geohazardwatch-plugins.md
-│   ├── Tsunamis.md                ← Content-only; live via ngdpbase `feeds` addon
-│   ├── Landslides.md               ← Content-only; live via ngdpbase `feeds` addon
+│   ├── tsunamis.md                ← Content-only; live via ngdpbase `feeds` addon
+│   ├── landslides.md               ← Content-only; live via ngdpbase `feeds` addon
 │   ├── left-menu-content.md
 │   └── footer-content.md
 ├── public/
@@ -399,7 +399,7 @@ addons/geohazardwatch/
 
 ## Tsunami & Landslide pages
 
-`pages/Tsunamis.md` and `pages/Landslides.md` are seeded like any other page, but they carry no import script or data manager in this repo. They render live data with `[{DataFeed source='...'}]` markup — a plugin supplied by ngdpbase's own `feeds` addon ([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)), not by geohazardwatch.
+`pages/tsunamis.md` and `pages/landslides.md` are seeded like any other page, but they carry no import script or data manager in this repo. They render live data with `[{DataFeed source='...'}]` markup — a plugin supplied by ngdpbase's own `feeds` addon ([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)), not by geohazardwatch.
 
 To make the feeds render, enable the `feeds` addon and declare its sources in the instance's `app-custom-config.json`:
 

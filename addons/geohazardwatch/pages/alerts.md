@@ -2,7 +2,7 @@
 title: Alerts
 uuid: db1a542e-71e2-489a-80ff-4b5b022a2bf6
 slug: alerts
-system-category: addon
+system-category: general
 description: Everything currently active and dangerous across volcanoes, tsunamis, and volcanic ash — one page, all hazard types
 tags: [geology, alerts, volcanoes, tsunamis, hans, vaac]
 author: system

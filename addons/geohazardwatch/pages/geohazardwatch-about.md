@@ -2,6 +2,7 @@
 title: About geohazardwatch
 uuid: 98f2df76-5d86-472a-9862-9a01267cf4a7
 slug: geohazardwatch-about
+system-category: documentation
 description: What geohazardwatch is, where the data comes from, and how to interpret data freshness
 tags: [geology, about, data-sources, volcanoes, earthquakes]
 author: system
