@@ -24,7 +24,7 @@
 # just its node_modules into the ngdpbase-based runtime stage, keeps this
 # working with no npm required in the final image.
 
-ARG NGDPBASE_VERSION=3.70.3
+ARG NGDPBASE_VERSION=3.71.0
 ARG NODE_VERSION=24
 
 # =============================================================================
