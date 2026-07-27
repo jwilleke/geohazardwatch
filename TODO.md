@@ -1,7 +1,7 @@
 ---
 title: TODO
 description: Priority bands and resume pointer for this repo.
-last_updated: "2026-07-27T20:45:00Z"
+last_updated: "2026-07-27T21:05:00Z"
 kit_version: "3aa1bb4"
 ---
 
@@ -15,7 +15,8 @@ kit_version: "3aa1bb4"
 
 ## 🟠 P1
 
-- [#177](https://github.com/jwilleke/geohazardwatch/issues/177) — [BUG] Seeded pages non-compliant with ngdpbase addon decisions — system-category on 13/14, filename/slug drift on 10/14 (steps 1–3 done via #182/#183; step 4 blocked on ngdpbase#971)
+- [#191](https://github.com/jwilleke/geohazardwatch/issues/191) — [BUG] All 16 seeded pages locked to admin-only edit, 12 wrongly — system-category from step 1 never reached live pages (blocked on ngdpbase#1003)
+- [#177](https://github.com/jwilleke/geohazardwatch/issues/177) — [BUG] Seeded pages non-compliant with ngdpbase addon decisions — system-category on 13/14, filename/slug drift on 10/14 (steps 1–3 done via #182/#183; step 4 blocked on ngdpbase#1003, was #971)
 
 ## 🟡 P2
 
