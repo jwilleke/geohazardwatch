@@ -15,8 +15,40 @@
 # NOTE: the running instance's addons-path config (app-custom-config.json,
 # set via the runtime ConfigMap, not here) must include
 # "node_modules:@jwilleke/*-addon" for this image to actually load the addon.
+#
+# Two stages, not one: ngdpbase#956 removed npm/npx from the ngdpbase
+# runtime image entirely (as of NGDPBASE_VERSION >= 3.70.3) — reasonable
+# for ngdpbase's own runtime, which never shells out to npm, but this
+# repo's "packaged/npm model" needs npm to install the addon package at
+# build time. Installing it in a plain Node image instead, then copying
+# just its node_modules into the ngdpbase-based runtime stage, keeps this
+# working with no npm required in the final image.
 
 ARG NGDPBASE_VERSION=3.70.3
+ARG NODE_VERSION=24
+
+# =============================================================================
+# Stage 1: addon-installer — plain Node image, still has npm
+# =============================================================================
+FROM node:${NODE_VERSION}-alpine AS addon-installer
+
+WORKDIR /app
+
+ARG GEOHAZARDWATCH_ADDON_VERSION
+COPY .npmrc ./
+
+# Installs the addon as an ordinary npm dependency into /app/node_modules.
+# The GitHub token is mounted only for this RUN step (BuildKit secret) and
+# is never written to an image layer; .npmrc is removed in the same layer
+# once the install completes.
+RUN --mount=type=secret,id=github_token \
+    NODE_AUTH_TOKEN="$(cat /run/secrets/github_token)" \
+    npm install "@jwilleke/geohazardwatch-addon@${GEOHAZARDWATCH_ADDON_VERSION}" --omit=dev && \
+    rm -f .npmrc
+
+# =============================================================================
+# Stage 2: runtime — ngdpbase base image, no npm needed or present
+# =============================================================================
 FROM ghcr.io/jwilleke/ngdpbase:${NGDPBASE_VERSION}
 
 LABEL org.opencontainers.image.title="geohazardwatch"
@@ -26,15 +58,10 @@ LABEL org.opencontainers.image.licenses="MIT"
 
 WORKDIR /app
 
-ARG GEOHAZARDWATCH_ADDON_VERSION
-COPY .npmrc ./
-
-# Installs the addon as an ordinary npm dependency into /app/node_modules,
-# where ngdpbase's `node_modules:@jwilleke/*-addon` addons-path glob finds
-# it. The GitHub token is mounted only for this RUN step (BuildKit secret)
-# and is never written to an image layer; .npmrc is removed in the same
-# layer once the install completes.
-RUN --mount=type=secret,id=github_token \
-    NODE_AUTH_TOKEN="$(cat /run/secrets/github_token)" \
-    npm install "@jwilleke/geohazardwatch-addon@${GEOHAZARDWATCH_ADDON_VERSION}" --omit=dev && \
-    rm -f .npmrc
+# Merges the addon-installer's node_modules (the addon + its own deps, e.g.
+# express) into the runtime image's existing node_modules from ngdpbase's
+# own build — the trailing `/.` copies contents into the destination
+# rather than replacing it, so ngdpbase's own dependencies are preserved.
+# ngdpbase's `node_modules:@jwilleke/*-addon` addons-path glob finds the
+# addon here exactly as before.
+COPY --from=addon-installer /app/node_modules/. ./node_modules/
