@@ -1,7 +1,7 @@
 ---
 title: TODO
 description: Priority bands and resume pointer for this repo.
-last_updated: "2026-07-25T00:03:00Z"
+last_updated: "2026-07-27T08:41:44Z"
 kit_version: "3aa1bb4"
 ---
 
@@ -11,26 +11,28 @@ kit_version: "3aa1bb4"
 
 ## 🔴 P0 — Security & Critical
 
-- [#168](https://github.com/jwilleke/geohazardwatch/issues/168) — [security] js-yaml — Exponential parsing time DoS (GHSA-pm4m-ph32-ghv5)
+- _None._
 
 ## 🟠 P1
 
+- [#178](https://github.com/jwilleke/geohazardwatch/issues/178) — [bug] auto-tag.yml can push a version tag pointing at a stale commit, silently orphaning the real release
+- [#177](https://github.com/jwilleke/geohazardwatch/issues/177) — [BUG] Seeded pages non-compliant with ngdpbase addon decisions — system-category on 13/14, filename/slug drift on 10/14 (steps 1–3 done via #182/#183; step 4 blocked on ngdpbase#971)
 - [#163](https://github.com/jwilleke/geohazardwatch/issues/163) — [EPIC] Restructure navigation into 5 hazard hubs + consolidated Alerts page
 - [#158](https://github.com/jwilleke/geohazardwatch/issues/158) — [FEATURE] Left-menu restructure: 5 hazard hubs + related-pages links
 
 ## 🟡 P2
 
+- [#173](https://github.com/jwilleke/geohazardwatch/issues/173) — [FEATURE] National Fire Danger Rating System (NFDRS)
+- [#169](https://github.com/jwilleke/geohazardwatch/issues/169) — [FEATURE] Reverse geocode wildfire alert detections to nearest named place
+- [#164](https://github.com/jwilleke/geohazardwatch/issues/164) — [FEATURE] Create VolcanoInfobox with Images
+- [#162](https://github.com/jwilleke/geohazardwatch/issues/162) — [FEATURE] Wildfire map plugin: global FIRMS/VIIRS hotspot map
 - [#149](https://github.com/jwilleke/geohazardwatch/issues/149) — [security] showdown — ReDoS in anchor parsing (CVE-2024-1899)
 - [#148](https://github.com/jwilleke/geohazardwatch/issues/148) — [BUG] Tag-push trigger for publish-image.yml didn't fire for v1.2.92
-- [#141](https://github.com/jwilleke/geohazardwatch/issues/141) — Migrate VAAC advisories from bespoke code to the new xml-index feeds adapter
-- [#36](https://github.com/jwilleke/geohazardwatch/issues/36) — [FEATURE] Best sources for
-- [#162](https://github.com/jwilleke/geohazardwatch/issues/162) — [FEATURE] Wildfire map plugin: global FIRMS/VIIRS hotspot map
-- [#164](https://github.com/jwilleke/geohazardwatch/issues/164) — [FEATURE] Create VolcanoInfobox with Images
+- [#141](https://github.com/jwilleke/geohazardwatch/issues/141) — Migrate VAAC advisories from bespoke code to the new xml-index feeds adapter (blocked on ngdpbase#989)
 
 ## 🔵 In review
 
-- [#161](https://github.com/jwilleke/geohazardwatch/issues/161) — [FEATURE] Wildfire alert design: FRP/confidence threshold and/or clustering for FIRMS hotspots
-- [#160](https://github.com/jwilleke/geohazardwatch/issues/160) — [FEATURE] New consolidated Alerts page (HANS + Tsunami + VAAC + Wildfire)
+- _None._
 
 ## ⏸ Deferred
 
@@ -38,4 +40,4 @@ kit_version: "3aa1bb4"
 
 ## ❓ Needs triage
 
-- [#169](https://github.com/jwilleke/geohazardwatch/issues/169) — [FEATURE] Reverse geocode wildfire alert detections to nearest named place
+- _None._
