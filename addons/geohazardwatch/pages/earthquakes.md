@@ -2,6 +2,7 @@
 title: Earthquakes
 uuid: ac0ce090-ddae-44cc-b5e8-0d9c5922e5dc
 slug: earthquakes
+system-category: general
 author: system
 user-keywords:
   - earthquakes

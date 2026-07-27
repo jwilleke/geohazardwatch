@@ -2,7 +2,7 @@
 title: Wildfires
 uuid: 8d673582-02e8-47fe-80fb-1e27ea98d34a
 slug: wildfires
-system-category: addon
+system-category: general
 description: Global wildfire thermal hotspots from NASA FIRMS/VIIRS
 tags: [geology, wildfires, fire, nasa, firms]
 author: system

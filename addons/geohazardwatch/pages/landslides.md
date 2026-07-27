@@ -2,7 +2,7 @@
 title: Landslides
 uuid: e32456ef-4cfa-40ed-a20a-382aa81438b7
 slug: landslides
-system-category: addon
+system-category: general
 description: Landslide events, warnings, and historical catalog for geohazardwatch
 tags: [geology, landslides, mass-wasting, nasa, usgs]
 author: system

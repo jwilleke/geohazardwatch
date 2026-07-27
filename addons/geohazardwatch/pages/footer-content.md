@@ -2,7 +2,7 @@
 title: Footer Content
 uuid: 2b04424b-5541-41e5-b85c-dee161f66945
 slug: footer-content
-system-category: addon
+system-category: system
 addon: geohazardwatch
 author: geohazardwatch
 ---

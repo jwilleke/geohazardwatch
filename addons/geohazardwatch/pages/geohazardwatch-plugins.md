@@ -2,6 +2,7 @@
 title: Plugin Guide
 uuid: 93595dc0-1ba1-422a-9fd4-c2f6bf056b27
 slug: geohazardwatch-plugins
+system-category: general
 description: End-user guide to all geohazardwatch plugins — what they render, how to use them, and common combinations
 tags: [geology, plugins, guide, volcanoes, earthquakes]
 author: system

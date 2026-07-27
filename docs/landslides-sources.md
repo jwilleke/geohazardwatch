@@ -4,9 +4,9 @@
 
 | Our pipeline | Upstream (real source) | Kind | Poll interval | Rendered on |
 |---|---|---|---|---|
-| `landslide-events` (ngdpbase `feeds` addon) | `maps.nccs.nasa.gov/.../COOLR/COOLR_Events_Point/FeatureServer` (NASA COOLR — Cooperative Open Online Landslide Repository) | **Primary**, single source, no bespoke code | daily at 06:00 | `Landslides.md` (`/view/landslides`) |
+| `landslide-events` (ngdpbase `feeds` addon) | `maps.nccs.nasa.gov/.../COOLR/COOLR_Events_Point/FeatureServer` (NASA COOLR — Cooperative Open Online Landslide Repository) | **Primary**, single source, no bespoke code | daily at 06:00 | `landslides.md` (`/view/landslides`) |
 
-No redundancy here — unlike volcano data, landslides have exactly one pipeline: a generic `geojson`-adapter `DataFeed` config entry pointed straight at NASA's own COOLR ArcGIS FeatureServer. There's no bespoke manager/plugin (`addons/geohazardwatch/managers/` and `plugins/` have nothing landslide-specific) — it's entirely declarative config, rendered via `[{DataFeed source='landslide-events' ...}]` in `Landslides.md`.
+No redundancy here — unlike volcano data, landslides have exactly one pipeline: a generic `geojson`-adapter `DataFeed` config entry pointed straight at NASA's own COOLR ArcGIS FeatureServer. There's no bespoke manager/plugin (`addons/geohazardwatch/managers/` and `plugins/` have nothing landslide-specific) — it's entirely declarative config, rendered via `[{DataFeed source='landslide-events' ...}]` in `landslides.md`.
 
 ## Field mapping (production config)
 

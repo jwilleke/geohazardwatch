@@ -146,7 +146,7 @@ External API (GVP WFS / USGS / HANS)
   → routes/api.js                (REST endpoints for client-side widgets)
 ```
 
-The Tsunami and Landslide pages (`pages/Tsunamis.md`, `pages/Landslides.md`) are a separate, content-only path: they carry no import script or data manager in this repo. They render live data via `[{DataFeed source='...'}]` markup, a plugin provided by ngdpbase's own `feeds` addon ([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)), configured independently in the instance's `app-custom-config.json`. See [Key Decisions](#key-decisions) and the page files themselves for the feed source config.
+The Tsunami and Landslide pages (`pages/tsunamis.md`, `pages/landslides.md`) are a separate, content-only path: they carry no import script or data manager in this repo. They render live data via `[{DataFeed source='...'}]` markup, a plugin provided by ngdpbase's own `feeds` addon ([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)), configured independently in the instance's `app-custom-config.json`. See [Key Decisions](#key-decisions) and the page files themselves for the feed source config.
 
 ### Plugin system
 
@@ -161,7 +161,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for repo structure, data pipeline depth
 - **Pages seeded, never overwritten** — `seedAddonPages()` in ngdpbase copies `.md` files from `pages/` on first load only. User edits are preserved.
 - **HansDataManager loads silently if `activity.json` is absent** — HANS data is optional; the addon starts cleanly without it.
 - **ESLint config targets TS but addon code is JS** — `.eslintrc.json` is from the project template and is wired for future TS work. Current `lint:code` targets `addons/**/*.js` with plain JS linting rules only.
-- **Tsunami/Landslide pages depend on an addon this repo does not own** — `pages/Tsunamis.md` and `pages/Landslides.md` render live data through `[{DataFeed}]` markup from ngdpbase's `feeds` addon ([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)). If that addon is absent or its `tsunami-alerts` / `landslide-events` sources aren't configured, the pages fall back to static informational content — geohazardwatch never fetches or stores this data itself. Field mappings (esp. NASA COOLR) should be re-verified against the live upstream schema before relying on them.
+- **Tsunami/Landslide pages depend on an addon this repo does not own** — `pages/tsunamis.md` and `pages/landslides.md` render live data through `[{DataFeed}]` markup from ngdpbase's `feeds` addon ([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)). If that addon is absent or its `tsunami-alerts` / `landslide-events` sources aren't configured, the pages fall back to static informational content — geohazardwatch never fetches or stores this data itself. Field mappings (esp. NASA COOLR) should be re-verified against the live upstream schema before relying on them.
 - **`type` vs `schemaType` on DataFeed sources** — `schemaType` stays `Article` for these two feeds until ngdpbase implements the `WarningAlert`/`Event` schema.org union types ([ngdpbase#762](https://github.com/jwilleke/ngdpbase/issues/762)); `type` carries the intended domain label in the meantime.
 
 ## Open Issues

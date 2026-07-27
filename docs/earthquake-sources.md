@@ -6,7 +6,7 @@ Not one of the four the user asked about by name, but the same treatment applies
 
 | Our pipeline | Upstream (real source) | Kind | Poll/import cadence | Rendered on |
 |---|---|---|---|---|
-| `EarthquakeDataManager` | `earthquake.usgs.gov/earthquakes/feed/v1.0/summary/<feed>.geojson` (USGS) | **Primary**, single source, no re-publishers involved | manual (`npm run import:earthquakes[:month]`) | `geohazardwatch-earthquakes.md`, EarthquakeList/Map plugins, `/api/geohazardwatch/*` |
+| `EarthquakeDataManager` | `earthquake.usgs.gov/earthquakes/feed/v1.0/summary/<feed>.geojson` (USGS) | **Primary**, single source, no re-publishers involved | manual (`npm run import:earthquakes[:month]`) | `earthquakes.md`, EarthquakeList/Map plugins, `/api/geohazardwatch/*` |
 
 USGS's own standard summary feeds — no third party in between, unlike the volcano-activity situation. Available feed variants (selectable via `--feed=`):
 

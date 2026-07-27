@@ -2,7 +2,7 @@
 title: Attribution
 uuid: efaa8c71-593a-4155-84cd-04c770bc5247
 slug: attribution
-system-category: addon
+system-category: documentation
 description: Credit and citation for every data source geohazardwatch imports, links to, or displays
 tags: [attribution, credits, data-sources, licensing, gvp, usgs, nasa, noaa]
 author: system

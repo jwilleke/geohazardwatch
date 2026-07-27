@@ -2,6 +2,7 @@
 title: Geology Demo
 uuid: 37a05b59-a793-4204-b389-f5e89fb80537
 slug: geology-demo
+system-category: general
 author: system
 user-keywords:
   - demo
