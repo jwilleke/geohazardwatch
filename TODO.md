@@ -1,7 +1,7 @@
 ---
 title: TODO
 description: Priority bands and resume pointer for this repo.
-last_updated: "2026-07-27T08:55:00Z"
+last_updated: "2026-07-27T09:03:21Z"
 kit_version: "3aa1bb4"
 ---
 
@@ -15,7 +15,6 @@ kit_version: "3aa1bb4"
 
 ## 🟠 P1
 
-- [#178](https://github.com/jwilleke/geohazardwatch/issues/178) — [bug] auto-tag.yml can push a version tag pointing at a stale commit, silently orphaning the real release
 - [#177](https://github.com/jwilleke/geohazardwatch/issues/177) — [BUG] Seeded pages non-compliant with ngdpbase addon decisions — system-category on 13/14, filename/slug drift on 10/14 (steps 1–3 done via #182/#183; step 4 blocked on ngdpbase#971)
 
 ## 🟡 P2
