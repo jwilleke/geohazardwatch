@@ -84,10 +84,11 @@ npm run import:all               # + eruptions + global activity
 npm run import:earthquakes       # USGS M4.5+ past 7 days
 npm run import:earthquakes:month # USGS M4.5+ past 30 days
 npm run import:hans              # USGS HANS real-time US volcano alerts
-npm run import:vaac              # Washington VAAC active ash advisories
 ```
 
 Earthquake import requires `volcanoes.json` to exist first (proximity matching). All data lands in `addons/geohazardwatch/data/` (gitignored).
+
+Washington VAAC ash advisories are not imported by this addon — the ngdpbase `feeds` addon fetches them (`vaac-advisories` source, `xml-index` adapter). See `docs/volcano-sources.md` for the config and `VaacAdvisoriesPlugin.js` for the render-time volcano-name/GVP-number split.
 
 ### Lint
 

@@ -312,7 +312,7 @@ Renders just the volcano name as a styled inline span — useful mid-sentence.
 [{VaacAdvisories region='GUATEMALA'}]
 ```
 
-**Data:** Reflects the most recent import snapshot. Run `npm run import:vaac` to refresh. For live advisories visit the [Washington VAAC archive](https://www.ospo.noaa.gov/products/atmosphere/vaac/archive.html).
+**Data:** Fetched and refreshed by the ngdpbase `feeds` addon (`vaac-advisories` source, no manual import step) — see `docs/volcano-sources.md` for the config. For live advisories visit the [Washington VAAC archive](https://www.ospo.noaa.gov/products/atmosphere/vaac/archive.html).
 
 ---
 

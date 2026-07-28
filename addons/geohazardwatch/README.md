@@ -179,7 +179,7 @@ Renders a table of US volcano alert levels from the USGS HANS API. By default sh
 
 ### VaacAdvisories
 
-Renders a table of active Volcanic Ash Advisories from the Washington VAAC (Americas, E. Pacific, Caribbean). An advisory counts as "active" if it's the most recent one for that volcano and was issued within the last 48 hours.
+Renders a table of active Volcanic Ash Advisories from the Washington VAAC (Americas, E. Pacific, Caribbean). An advisory counts as "active" if it's the most recent one for that volcano and was issued within the last 48 hours. Like FirmsHotspots below, **this addon has no import script, manager, or scheduler for VAAC** — ngdpbase's generic `feeds` addon fetches/schedules/stores it (`adapter: 'xml-index'`, see [`docs/volcano-sources.md`](../../docs/volcano-sources.md#configuration-vaac-advisories) for the config). This plugin only reads already-ingested records via `FeedManager.getRecords()` and splits the volcano-name/GVP-number field at render time (geohazardwatch#141).
 
 ```
 [{VaacAdvisories}]
@@ -189,7 +189,6 @@ Renders a table of active Volcanic Ash Advisories from the Washington VAAC (Amer
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `region` | | Filter by state/region (e.g. `GUATEMALA`, `ECUADOR`) |
-| `vaac` | | Filter by issuing VAAC (currently only `WASHINGTON`) |
 
 **Common use:** `[{VaacAdvisories}]` on a global hazard summary page. Covers only the Washington VAAC's region (Americas, E. Pacific, Caribbean) — see geohazardwatch#5 for the other 8 ICAO VAACs, not yet integrated.
 
@@ -215,16 +214,15 @@ Renders volcanoes currently showing a NASA FIRMS thermal anomaly within 5 km of 
 
 ## Admin panel
 
-`/addons/geohazardwatch` — status dashboard (record counts, HANS elevated alerts, active VAAC advisories). Requires an authenticated session; the refresh buttons require the `admin` role.
+`/addons/geohazardwatch` — status dashboard (record counts, HANS elevated alerts). Requires an authenticated session; the refresh buttons require the `admin` role.
 
 | Method | Path | Description |
 |--------|------|-------------|
 | GET | `/addons/geohazardwatch` | Status dashboard (authenticated) |
 | POST | `/addons/geohazardwatch/jobs/hans` | Enqueue a HANS refresh job (admin) |
 | POST | `/addons/geohazardwatch/jobs/earthquakes` | Enqueue an earthquake refresh job (admin) |
-| POST | `/addons/geohazardwatch/jobs/vaac` | Enqueue a VAAC advisory refresh job (admin) |
 
-All three jobs also run automatically on a timer via ngdpbase's `BackgroundJobManager` — see `hansIntervalMs` / `eqIntervalMs` / `vaacIntervalMs` in Configuration keys.
+Both jobs also run automatically on a timer via ngdpbase's `BackgroundJobManager` — see `hansIntervalMs` / `eqIntervalMs` in Configuration keys. VAAC advisories (and FIRMS/VIIRS) are refreshed by the ngdpbase `feeds` addon's own poll scheduler instead — no admin button here.
 
 ---
 
@@ -263,15 +261,7 @@ All endpoints are mounted at `/api/geohazardwatch`.
 
 **`/hans/elevated` query parameters:** `alertLevel`, `colorCode`, `observatory` (`avo`, `hvo`, `cvo`, `yvo`, `uvo`).
 
-### VAAC advisory endpoints
-
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/vaac/active` | List active Washington VAAC advisories |
-| GET | `/vaac/volcano/:number` | Advisory status for a single GVP volcano number |
-| GET | `/vaac/status` | Feed metadata (last fetch time, active count) |
-
-**`/vaac/active` query parameters:** `region`, `vaac`.
+VAAC ash advisories have no dedicated API endpoint here — they're served by the generic ngdpbase `feeds` surface (`FeedManager.getRecords('vaac-advisories')`), same as FIRMS/VIIRS.
 
 ---
 
@@ -300,10 +290,9 @@ npm run import:activity
 
 # USGS HANS real-time US volcano alert levels
 npm run import:hans
-
-# Washington VAAC active ash advisories
-npm run import:vaac
 ```
+
+Washington VAAC ash advisories have no import script — the ngdpbase `feeds` addon fetches them, same as FIRMS/VIIRS (see [`docs/volcano-sources.md`](../../docs/volcano-sources.md#configuration-vaac-advisories)).
 
 Custom options (run directly):
 
@@ -317,12 +306,9 @@ node addons/geohazardwatch/import/import-earthquakes.js --feed=significant-week
 
 # HANS import to a custom data directory
 node addons/geohazardwatch/import/import-hans.js --data-dir /path/to/data
-
-# VAAC import to a custom data directory
-node addons/geohazardwatch/import/import-vaac.js --data-dir /path/to/data
 ```
 
-Earthquake import requires `volcanoes.json` to already exist (for proximity matching). HANS import needs no auth and covers US volcanoes only (~65 monitored); it writes `activity.json`, which `HansDataManager` treats as optional — the addon starts cleanly without it. VAAC import needs no auth either, covers only the Washington VAAC's region (Americas, E. Pacific, Caribbean), and writes `vaac.json` (also optional — cross-references `volcanoes.json` by GVP number when present, but works without it). All three refresh automatically on a timer once the addon is registered (see `hansIntervalMs` / `eqIntervalMs` / `vaacIntervalMs` below), or on demand from the Admin panel.
+Earthquake import requires `volcanoes.json` to already exist (for proximity matching). HANS import needs no auth and covers US volcanoes only (~65 monitored); it writes `activity.json`, which `HansDataManager` treats as optional — the addon starts cleanly without it. Both refresh automatically on a timer once the addon is registered (see `hansIntervalMs` / `eqIntervalMs` below), or on demand from the Admin panel.
 
 ---
 
@@ -336,9 +322,8 @@ Set in your ngdpbase `app-custom-config.json`:
 | `ngdpbase.addons.geohazardwatch.dataPath` | `./data/geohazardwatch` | Path to data directory |
 | `ngdpbase.addons.geohazardwatch.hansIntervalMs` | `600000` (10 min) | HANS background refresh interval; `0` disables polling |
 | `ngdpbase.addons.geohazardwatch.eqIntervalMs` | `1200000` (20 min) | Earthquake background refresh interval; `0` disables polling |
-| `ngdpbase.addons.geohazardwatch.vaacIntervalMs` | `1800000` (30 min) | VAAC advisory background refresh interval; `0` disables polling |
 
-The Tsunami and Landslide pages render live data through a separate ngdpbase `feeds` addon, configured independently — see [Tsunami & Landslide pages](#tsunami--landslide-pages) below.
+The Tsunami and Landslide pages, and VAAC advisories, render live data through a separate ngdpbase `feeds` addon, configured independently — see [Tsunami & Landslide pages](#tsunami--landslide-pages) below and [`docs/volcano-sources.md`](../../docs/volcano-sources.md#configuration-vaac-advisories) for VAAC.
 
 ---
 
