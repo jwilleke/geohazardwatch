@@ -7,8 +7,7 @@ Volcano and geology data platform built as an [ngdpbase](https://github.com/jwil
 - Imports 2,600+ GVP volcano and eruption records into a local JSON snapshot
 - Imports USGS earthquake data matched to the nearest volcano within 50 km
 - Imports real-time US volcano alert levels from USGS HANS, refreshed on a background timer
-- Imports active volcanic ash advisories from the Washington VAAC, refreshed on a background timer
-- Surfaces NASA FIRMS thermal anomalies near known volcanoes via ngdpbase's `feeds` addon (no import script of its own)
+- Surfaces active volcanic ash advisories from the Washington VAAC and NASA FIRMS thermal anomalies near known volcanoes via ngdpbase's `feeds` addon (no import script of its own for either)
 - Registers nine markup plugins (infoboxes, tables, search widgets, Leaflet maps, alert tables)
 - Seeds demo pages into your ngdpbase instance automatically on first load, including Tsunami and Landslide pages that render live NOAA/NASA feeds when ngdpbase's `feeds` addon is configured
 - Exposes a REST API at `/api/geohazardwatch/*` and an admin panel for manual data refreshes
