@@ -1,7 +1,7 @@
 ---
 title: TODO
 description: Priority bands and resume pointer for this repo.
-last_updated: "2026-07-28T00:08:31Z"
+last_updated: "2026-07-28T08:15:14Z"
 kit_version: "3aa1bb4"
 ---
 
@@ -27,8 +27,7 @@ kit_version: "3aa1bb4"
 
 ## 🔵 In review
 
-- [#191](https://github.com/jwilleke/geohazardwatch/issues/191) — [BUG] All 16 seeded pages were locked to admin-only edit, 12 wrongly — verified fixed live on v1.2.128 (ngdpbase#1003/v4.0.1), awaiting operator close
-- [#177](https://github.com/jwilleke/geohazardwatch/issues/177) — [BUG] Seeded pages non-compliant with ngdpbase addon decisions — all 4 steps done and verified live, awaiting operator close
+- _None._
 
 ## ⏸ Deferred
 
