@@ -32,6 +32,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Bump filed manually pending the auto-rebuild loop above; once the new Renovate workflow runs, future ngdpbase updates land here without operator action.
 - Removed the global `"schedule": ["before 6am on monday"]` from `renovate.json` so the 6-hour cron in the new Renovate workflow has windows to act on. Per-rule schedules (e.g. `lockFileMaintenance.schedule`) remain — only the global gate was lifted.
 
+## [1.2.147] - 2026-08-07
+
+### Added
+
+### Changed
+
+### Fixed
+
 ## [1.2.146] - 2026-08-07
 
 ### Added
@@ -1474,4 +1482,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 [1.2.144]: https://github.com/jwilleke/geohazardwatch/compare/v1.2.143...v1.2.144
 [1.2.145]: https://github.com/jwilleke/geohazardwatch/compare/v1.2.144...v1.2.145
 [1.2.146]: https://github.com/jwilleke/geohazardwatch/compare/v1.2.145...v1.2.146
+[1.2.147]: https://github.com/jwilleke/geohazardwatch/compare/v1.2.146...v1.2.147
 [1.0.0]: https://github.com/jwilleke/geohazardwatch/releases/tag/v1.0.0
