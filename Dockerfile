@@ -26,7 +26,7 @@
 # stays in lockstep with ngdpbase's own Node version automatically. Only
 # its node_modules gets copied into the plain (npm-free) runtime stage.
 
-ARG NGDPBASE_VERSION=4.11.0
+ARG NGDPBASE_VERSION=4.11.1
 
 # =============================================================================
 # Stage 1: addon-installer — ngdpbase's own devtools variant (has npm)
