@@ -26,7 +26,7 @@ Run in parallel:
 
 - Read `package.json` `version` field.
 - Compute the next version from the requested bump (`patch` increments the third number, `minor` increments the second and zeros the third, `major` increments the first and zeros the rest).
-- Show the user: `current → next` and confirm before continuing **only if** the bump is `major` or if there are no commits since the last tag (i.e., nothing to release). For `patch` / `minor` with new commits, proceed without prompting.
+- Show the user: `current → next` and confirm before continuing __only if__ the bump is `major` or if there are no commits since the last tag (i.e., nothing to release). For `patch` / `minor` with new commits, proceed without prompting.
 
 ### Step 3: Summarize what's in the release
 
@@ -35,7 +35,7 @@ Run in parallel:
 
 ### Step 4: Build, then run the full test suite
 
-A release that doesn't pass tests should not exist. Run tests **before** any version bump so nothing on disk has to be rolled back if a test fails.
+A release that doesn't pass tests should not exist. Run tests __before__ any version bump so nothing on disk has to be rolled back if a test fails.
 
 Run sequentially:
 
@@ -43,11 +43,11 @@ Run sequentially:
 - `npm test` — must pass (Vitest unit + integration).
 - `npm run test:e2e` — must pass (Playwright). The dev server must be up; if it isn't, run `./server.sh restart` and wait for `http://localhost:3000` before invoking E2E.
 
-If anything fails, **stop**. Fix the failures and start again from Step 1. The working tree is still clean at this point — nothing to roll back.
+If anything fails, __stop__. Fix the failures and start again from Step 1. The working tree is still clean at this point — nothing to roll back.
 
 ### Step 5: Bump the version with `version.ts`
 
-ngdpbase ships its own version tool at `src/utils/version.ts` which keeps `package.json`, `config/app-default-config.json`, and `CHANGELOG.md` in lockstep. **Do not** edit those files by hand.
+ngdpbase ships its own version tool at `src/utils/version.ts` which keeps `package.json`, `config/app-default-config.json`, and `CHANGELOG.md` in lockstep. __Do not__ edit those files by hand.
 
 Run sequentially:
 
@@ -57,7 +57,7 @@ Run sequentially:
 
 ### Step 5a: Capture a performance baseline + diff vs previous (#611)
 
-After the version bump (so the new `<VERSION>` is reflected in the filename) and before the release commit, capture a baseline snapshot **and** diff it against the most recent prior baseline in one shot:
+After the version bump (so the new `<VERSION>` is reflected in the filename) and before the release commit, capture a baseline snapshot __and__ diff it against the most recent prior baseline in one shot:
 
 - `npm run test:baseline:compare` — runs `scripts/baseline-profile.sh --compare`. Writes `docs/performance/baseline-v<VERSION>-<DATE>.md` (or `-r2.md` etc. if a same-day same-version baseline already exists), then appends a `## Drift vs <previous>` section to it and prints the same table to stdout.
 - Stage the new file: `git add docs/performance/baseline-v<VERSION>-*.md`.
@@ -68,23 +68,23 @@ The script auto-detects the previous baseline. If this is the first-ever baselin
 
 ### Step 5b: Surface the perf diff to the user (and maybe stop)
 
-The script flags regression candidates with `⚠️` and **exits non-zero** when any threshold trips. Default thresholds (override via env var if you have a reason):
+The script flags regression candidates with `⚠️` and __exits non-zero__ when any threshold trips. Default thresholds (override via env var if you have a reason):
 
 - `BASELINE_MEM_DELTA_PCT=25` — memory % regression
 - `BASELINE_RT_DELTA_PCT=50` — route % regression (must trip together with the ms threshold below)
 - `BASELINE_RT_DELTA_MS=50` — route absolute regression (avoids 1ms-on-already-fast-route false positives)
 
-**Default thresholds** — override via env var if needed:
+__Default thresholds__ — override via env var if needed:
 
 - `BASELINE_MEM_DELTA_PCT=25` — memory % regression
 - `BASELINE_RT_DELTA_PCT=50` — route % regression (must trip together with the ms threshold below)
 - `BASELINE_RT_DELTA_MS=50` — route absolute regression (avoids 1ms-on-already-fast-route false positives)
 
-Behavior on regression: the script exits 1 with the warning printed. Acknowledge the regression in your reply, surface it in the release report (Step 9), and ask the user whether to proceed before continuing to Step 6. **Don't auto-rollback** — measurement noise is real (cold-cache snapshots show 100ms+ outliers across the historical baseline series; see `docs/performance/`). User judgment required.
+Behavior on regression: the script exits 1 with the warning printed. Acknowledge the regression in your reply, surface it in the release report (Step 9), and ask the user whether to proceed before continuing to Step 6. __Don't auto-rollback__ — measurement noise is real (cold-cache snapshots show 100ms+ outliers across the historical baseline series; see `docs/performance/`). User judgment required.
 
-**No regressions** (script exits 0): just include the printed Drift table in the report and continue.
+__No regressions__ (script exits 0): just include the printed Drift table in the report and continue.
 
-**First release** (no prior baseline): the script prints "no prior baseline to compare against" and exits 0 — proceed normally.
+__First release__ (no prior baseline): the script prints "no prior baseline to compare against" and exits 0 — proceed normally.
 
 ### Step 6: Commit, tag, and push
 
@@ -97,11 +97,11 @@ Run sequentially:
 
 ### Step 7: Create the GitHub release (conditional)
 
-**Auto-release rule:**
+__Auto-release rule:__
 
-- **`minor` or `major`** — always create the GitHub release. New feature surface or breaking change deserves a visible release entry every time.
-- **`patch`** — skip the GitHub release unless the user explicitly asked for one in this turn (or in an earlier turn of the same session). Patch chains shipped without releases can be consolidated later via the `/release` skill — see `.claude/commands/release.md`.
-- **When in doubt or when the user asks** — create the release.
+- __`minor` or `major`__ — always create the GitHub release. New feature surface or breaking change deserves a visible release entry every time.
+- __`patch`__ — skip the GitHub release unless the user explicitly asked for one in this turn (or in an earlier turn of the same session). Patch chains shipped without releases can be consolidated later via the `/release` skill — see `.claude/commands/release.md`.
+- __When in doubt or when the user asks__ — create the release.
 
 When creating:
 
@@ -133,7 +133,7 @@ Output to the user:
 - Old version → new version
 - Tag URL (from `gh release view v<next> --json url --jq .url`)
 - Number of commits in this release (from Step 3)
-- **Perf diff table** from Step 5b (re-included here for easy reference; if any regression candidate was flagged, repeat the warning)
+- __Perf diff table__ from Step 5b (re-included here for easy reference; if any regression candidate was flagged, repeat the warning)
 - Whether `/othersites` propagation succeeded.
 
 ## Rules

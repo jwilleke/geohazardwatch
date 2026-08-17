@@ -8,27 +8,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- **NASA FIRMS thermal hotspot detection** (`[{FirmsHotspots}]` plugin). Closes #4. Deliberately has **no import script or data manager** in this repo — FIRMS is CSV-only, and ngdpbase's `feeds` addon didn't have a `csv` adapter until [ngdpbase#911](https://github.com/jwilleke/ngdpbase/issues/911) shipped it (v3.60.0). The plugin reads `FeedManager.getRecords()` and does the volcano-proximity join (Haversine, 5 km, ~1° grid-bucketed for speed — 46ms measured for ~59k global hotspots × ~2,600 volcanoes) at render time, cached until the feed's `fetchedAt` advances. Requires `ngdpbase.addons.feeds.sources.firms-viirs.*` configured with a FIRMS MAP_KEY (a separate credential from Earthdata Login — see <https://firms.modaps.eosdis.nasa.gov/api/map_key/>).
-- **Washington VAAC ash advisory import** (`import-vaac.js`, `VaacDataManager`, `[{VaacAdvisories}]` plugin). Closes #5. No formal API — parses the archive index HTML for the most recent advisory per volcano, then fetches and parses the ICAO IWXXM 3.0 advisory XML directly (no XML parser dependency; the schema is fixed enough for targeted regex extraction). Treats an advisory as active if issued within the last 48h. Cross-references volcanoes.json by GVP number, which the advisory XML embeds directly in the volcano name field (e.g. `FUEGO 342090`). Covers only the Washington VAAC's region (Americas, E. Pacific, Caribbean) — the other 8 ICAO VAACs are not yet integrated. Refreshes on a background timer (`vaacIntervalMs`, default 30 min) and from the admin panel.
-- **`docker-compose.yml`** at the repo root for one-command deploy (`git clone && docker compose up -d`). Pulls the published GHCR image, uses a named volume `ghw-data` for persistent storage, exposes the site on `http://localhost:3000` (override with `HOST_PORT`). Addresses [jwilleke/ngdpbase#682](https://github.com/jwilleke/ngdpbase/issues/682) Lever 1.
-- **README "Quick try" + "Deploy your own" sections** at the top. Quick try is a `docker run` one-liner for a 30-second peek (no persistence); Deploy your own uses the new compose file. The existing dev-oriented install instructions are now under "Develop the addon." Addresses #682 Lever 2.
-- **Self-hosted Renovate** via `.github/workflows/renovate.yml`. Closes the bridge from [jwilleke/ngdpbase#680](https://github.com/jwilleke/ngdpbase/issues/680).
+- __NASA FIRMS thermal hotspot detection__ (`[{FirmsHotspots}]` plugin). Closes #4. Deliberately has __no import script or data manager__ in this repo — FIRMS is CSV-only, and ngdpbase's `feeds` addon didn't have a `csv` adapter until [ngdpbase#911](https://github.com/jwilleke/ngdpbase/issues/911) shipped it (v3.60.0). The plugin reads `FeedManager.getRecords()` and does the volcano-proximity join (Haversine, 5 km, ~1° grid-bucketed for speed — 46ms measured for ~59k global hotspots × ~2,600 volcanoes) at render time, cached until the feed's `fetchedAt` advances. Requires `ngdpbase.addons.feeds.sources.firms-viirs.*` configured with a FIRMS MAP_KEY (a separate credential from Earthdata Login — see <https://firms.modaps.eosdis.nasa.gov/api/map_key/>).
+- __Washington VAAC ash advisory import__ (`import-vaac.js`, `VaacDataManager`, `[{VaacAdvisories}]` plugin). Closes #5. No formal API — parses the archive index HTML for the most recent advisory per volcano, then fetches and parses the ICAO IWXXM 3.0 advisory XML directly (no XML parser dependency; the schema is fixed enough for targeted regex extraction). Treats an advisory as active if issued within the last 48h. Cross-references volcanoes.json by GVP number, which the advisory XML embeds directly in the volcano name field (e.g. `FUEGO 342090`). Covers only the Washington VAAC's region (Americas, E. Pacific, Caribbean) — the other 8 ICAO VAACs are not yet integrated. Refreshes on a background timer (`vaacIntervalMs`, default 30 min) and from the admin panel.
+- __`docker-compose.yml`__ at the repo root for one-command deploy (`git clone && docker compose up -d`). Pulls the published GHCR image, uses a named volume `ghw-data` for persistent storage, exposes the site on `http://localhost:3000` (override with `HOST_PORT`). Addresses [jwilleke/ngdpbase#682](https://github.com/jwilleke/ngdpbase/issues/682) Lever 1.
+- __README "Quick try" + "Deploy your own" sections__ at the top. Quick try is a `docker run` one-liner for a 30-second peek (no persistence); Deploy your own uses the new compose file. The existing dev-oriented install instructions are now under "Develop the addon." Addresses #682 Lever 2.
+- __Self-hosted Renovate__ via `.github/workflows/renovate.yml`. Closes the bridge from [jwilleke/ngdpbase#680](https://github.com/jwilleke/ngdpbase/issues/680).
 - Runs on a 6-hour cron + `workflow_dispatch`. Uses the existing `renovate.json` (`auto-merge` rule for minor + patch updates of `ghcr.io/jwilleke/ngdpbase`).
-- Requires a `RENOVATE_TOKEN` repo secret — fine-grained PAT scoped to Contents, Pull requests, and **Workflows**. The Workflows scope is required so auto-merged Dockerfile bumps trigger `auto-tag.yml` and the publish-image cascade; the default `GITHUB_TOKEN` cannot cross-trigger workflows. Operator may reuse `RELEASE_PAT` if scopes match.
+- Requires a `RENOVATE_TOKEN` repo secret — fine-grained PAT scoped to Contents, Pull requests, and __Workflows__. The Workflows scope is required so auto-merged Dockerfile bumps trigger `auto-tag.yml` and the publish-image cascade; the default `GITHUB_TOKEN` cannot cross-trigger workflows. Operator may reuse `RELEASE_PAT` if scopes match.
 - Replaces the Mend-hosted Renovate App path, which 404'd on org-onboarding.
 
 ### Changed
 
-- **Bumped `NGDPBASE_VERSION` 3.13.2 → 3.14.5** in `Dockerfile`. Spans the ngdpbase v3.14.0 minor plus patches v3.14.1–v3.14.5 (within the auto-merge minor+patch policy; filed manually because self-hosted Renovate has not been opening the PR — see note below). Operator-facing fixes pulled in:
-  - **`POST /contact` no longer rejects every submission with "Forbidden — invalid CSRF token"** ([jwilleke/ngdpbase#690](https://github.com/jwilleke/ngdpbase/issues/690)). `views/contact.ejs` emitted `_csrfToken` while the CSRF middleware reads `_csrf`. Directly affects the geohazardwatch.com contact form.
-  - **High-severity dependency bump: `systeminformation` 5.31.1 → 5.31.6** (Dependabot alert #114 — Linux command injection via NetworkManager profile names). Shipped in ngdpbase v3.14.2.
-  - **Authenticated user dropdown is opaque again** ([jwilleke/ngdpbase#717](https://github.com/jwilleke/ngdpbase/issues/717)). Root cause was `backdrop-filter: blur()` on `.jspwiki-header` creating a stacking context that made the dropdown render transparent; removed. (Supersedes the partial #687 fix in v3.13.3.)
-  - **`.mov` videos play inline in Chrome instead of force-downloading** ([jwilleke/ngdpbase#719](https://github.com/jwilleke/ngdpbase/issues/719)). `video/quicktime` is relabeled `video/mp4` on the attachment and media-serving routes (identical H.264/AAC bitstream).
-  - **Calendar addon manage page reads nested config correctly** ([jwilleke/ngdpbase#718](https://github.com/jwilleke/ngdpbase/issues/718)). `AddonsManager.getAddonConfig()` now deep-nests dotted config keys, so `ngdpbase.addons.<name>.<group>.<id>.<field>` resolves as a structured object instead of flat keys.
-  - **Audience picker accepts individual usernames, not just roles** ([jwilleke/ngdpbase#710](https://github.com/jwilleke/ngdpbase/issues/710)), and **profile-page rename demotes the old page to `general` instead of hard-deleting it** ([jwilleke/ngdpbase#662](https://github.com/jwilleke/ngdpbase/issues/662)).
-- **Bumped `NGDPBASE_VERSION` 3.13.1 → 3.13.2** in `Dockerfile`. Pulls in two upstream patch fixes shipped in ngdpbase v3.13.2:
-  - **`POST /contact` returns HTTP 200 (not 400) on `EmailManager.sendTo` failure** ([jwilleke/ngdpbase#677](https://github.com/jwilleke/ngdpbase/issues/677)). Aligns the response with the documented state matrix; mail-send failure is server-side, not a client validation error.
-  - **Seeded `request-access` page now uses `system-category: system` and links to `/contact`** via JSPWiki link-with-target syntax. Affects fresh deployments only; existing instances retain whatever copy is on their persistent volume.
+- __Bumped `NGDPBASE_VERSION` 3.13.2 → 3.14.5__ in `Dockerfile`. Spans the ngdpbase v3.14.0 minor plus patches v3.14.1–v3.14.5 (within the auto-merge minor+patch policy; filed manually because self-hosted Renovate has not been opening the PR — see note below). Operator-facing fixes pulled in:
+  - __`POST /contact` no longer rejects every submission with "Forbidden — invalid CSRF token"__ ([jwilleke/ngdpbase#690](https://github.com/jwilleke/ngdpbase/issues/690)). `views/contact.ejs` emitted `_csrfToken` while the CSRF middleware reads `_csrf`. Directly affects the geohazardwatch.com contact form.
+  - __High-severity dependency bump: `systeminformation` 5.31.1 → 5.31.6__ (Dependabot alert #114 — Linux command injection via NetworkManager profile names). Shipped in ngdpbase v3.14.2.
+  - __Authenticated user dropdown is opaque again__ ([jwilleke/ngdpbase#717](https://github.com/jwilleke/ngdpbase/issues/717)). Root cause was `backdrop-filter: blur()` on `.jspwiki-header` creating a stacking context that made the dropdown render transparent; removed. (Supersedes the partial #687 fix in v3.13.3.)
+  - __`.mov` videos play inline in Chrome instead of force-downloading__ ([jwilleke/ngdpbase#719](https://github.com/jwilleke/ngdpbase/issues/719)). `video/quicktime` is relabeled `video/mp4` on the attachment and media-serving routes (identical H.264/AAC bitstream).
+  - __Calendar addon manage page reads nested config correctly__ ([jwilleke/ngdpbase#718](https://github.com/jwilleke/ngdpbase/issues/718)). `AddonsManager.getAddonConfig()` now deep-nests dotted config keys, so `ngdpbase.addons.<name>.<group>.<id>.<field>` resolves as a structured object instead of flat keys.
+  - __Audience picker accepts individual usernames, not just roles__ ([jwilleke/ngdpbase#710](https://github.com/jwilleke/ngdpbase/issues/710)), and __profile-page rename demotes the old page to `general` instead of hard-deleting it__ ([jwilleke/ngdpbase#662](https://github.com/jwilleke/ngdpbase/issues/662)).
+- __Bumped `NGDPBASE_VERSION` 3.13.1 → 3.13.2__ in `Dockerfile`. Pulls in two upstream patch fixes shipped in ngdpbase v3.13.2:
+  - __`POST /contact` returns HTTP 200 (not 400) on `EmailManager.sendTo` failure__ ([jwilleke/ngdpbase#677](https://github.com/jwilleke/ngdpbase/issues/677)). Aligns the response with the documented state matrix; mail-send failure is server-side, not a client validation error.
+  - __Seeded `request-access` page now uses `system-category: system` and links to `/contact`__ via JSPWiki link-with-target syntax. Affects fresh deployments only; existing instances retain whatever copy is on their persistent volume.
 - Bump filed manually pending the auto-rebuild loop above; once the new Renovate workflow runs, future ngdpbase updates land here without operator action.
 - Removed the global `"schedule": ["before 6am on monday"]` from `renovate.json` so the 6-hour cron in the new Renovate workflow has windows to act on. Per-rule schedules (e.g. `lockFileMaintenance.schedule`) remain — only the global gate was lifted.
 
@@ -1428,9 +1428,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
-- **Bumped `NGDPBASE_VERSION` 3.11.3 → 3.13.1** in `Dockerfile`. Pulls in two cluster-side bug fixes for the `/contact` form on geohazardwatch.com that were already shipped in upstream ngdpbase but not yet deployed:
-  - **#670 Phase A** (ngdpbase v3.11.4) — footer `/contact` link rendering on every page when `contactAvailable` resolves true. Was missing on the live site (jwilleke/ngdpbase#678) because this image was still on v3.11.3.
-  - **#670 Phase C** (ngdpbase v3.12.0) — JSONL audit log at `{instanceDataFolder}/contact-submissions.log` for every legitimate submission. Was missing on the live site (jwilleke/ngdpbase#679) for the same reason.
+- __Bumped `NGDPBASE_VERSION` 3.11.3 → 3.13.1__ in `Dockerfile`. Pulls in two cluster-side bug fixes for the `/contact` form on geohazardwatch.com that were already shipped in upstream ngdpbase but not yet deployed:
+  - __#670 Phase A__ (ngdpbase v3.11.4) — footer `/contact` link rendering on every page when `contactAvailable` resolves true. Was missing on the live site (jwilleke/ngdpbase#678) because this image was still on v3.11.3.
+  - __#670 Phase C__ (ngdpbase v3.12.0) — JSONL audit log at `{instanceDataFolder}/contact-submissions.log` for every legitimate submission. Was missing on the live site (jwilleke/ngdpbase#679) for the same reason.
 - Both issues filed against `jwilleke/ngdpbase` per the cross-repo coordination convention; closed once the new image deploys and verification confirms the chrome + audit log are live.
 
 ## [1.2.3] - 2026-05-09
@@ -1461,11 +1461,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- **VolcanoInfobox `placement` parameter** — supports the shared cross-addon placement contract via ngdpbase's `parsePlacementParam` / `placementClass` helpers (`right` / `left` / `block` / `inline`). Combines with the `.plugin-placement-*` CSS classes added in ngdpbase 3.11.3 so plugin placement is consistent platform-wide.
+- __VolcanoInfobox `placement` parameter__ — supports the shared cross-addon placement contract via ngdpbase's `parsePlacementParam` / `placementClass` helpers (`right` / `left` / `block` / `inline`). Combines with the `.plugin-placement-*` CSS classes added in ngdpbase 3.11.3 so plugin placement is consistent platform-wide.
 
 ### Changed
 
-- **BREAKING — Full rebadge from `ve-geology` to `geohazardwatch`** across runtime identity, not just the repo name. Affects npm package name, addon directory (`addons/ve-geology/` → `addons/geohazardwatch/`), REST API mount (`/api/ve-geology/*` → `/api/geohazardwatch/*`), admin mount, config keys (`ngdpbase.addons.ve-geology.*` → `ngdpbase.addons.geohazardwatch.*`), background job IDs, capability flag, default `dataPath`, stylesheet path, dashboard title (`VE Geology` → `GeoHazardWatch`), and seed-page slugs.
+- __BREAKING — Full rebadge from `ve-geology` to `geohazardwatch`__ across runtime identity, not just the repo name. Affects npm package name, addon directory (`addons/ve-geology/` → `addons/geohazardwatch/`), REST API mount (`/api/ve-geology/*` → `/api/geohazardwatch/*`), admin mount, config keys (`ngdpbase.addons.ve-geology.*` → `ngdpbase.addons.geohazardwatch.*`), background job IDs, capability flag, default `dataPath`, stylesheet path, dashboard title (`VE Geology` → `GeoHazardWatch`), and seed-page slugs.
 - Existing ngdpbase deployments must update `app-custom-config.json` for the new `ngdpbase.addons.geohazardwatch.*` keys; the old keys are no longer read.
 - Existing instances retain pages at the old slug URLs (`/view/ve-geology-about`, etc.) since `seedAddonPages` only seeds on first install — fresh installs get the new slugs.
 - Bumped `Dockerfile` base image from `ghcr.io/jwilleke/ngdpbase:3.10.3` to `3.11.3`. ngdpbase 3.11.3 ships security patches for `fast-uri` (CVE-2026-6321 path traversal, CVE-2026-6322 host confusion) and `pm2` (CVE-2025-5891 ReDoS plus three internal command-injection fixes). See ngdpbase release notes for the full list.
@@ -1475,7 +1475,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- New seed page `addons/ve-geology/pages/ve-geology-request-access.md` (slug `request-access`). Destination for the **Request access** button shown when ngdpbase's `ngdpbase.application.registration` flag is `false`. Operator edits the page in the admin UI to customize contact instructions or drop in a `[{Form …}]` plugin invocation.
+- New seed page `addons/ve-geology/pages/ve-geology-request-access.md` (slug `request-access`). Destination for the __Request access__ button shown when ngdpbase's `ngdpbase.application.registration` flag is `false`. Operator edits the page in the admin UI to customize contact instructions or drop in a `[{Form …}]` plugin invocation.
 
 ### Changed
 
@@ -1550,23 +1550,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - Initial addon scaffold — `register()` / `shutdown()` / `status()` lifecycle wired into ngdpbase `AddonsManager`
-- **VolcanoDataManager** — loads GVP volcano and eruption snapshots from `volcanoes.json` / `eruptions.json`
-- **EarthquakeDataManager** — loads USGS earthquake snapshot from `earthquakes.json`; tracks proximity to known volcanoes
-- **HansDataManager** — loads USGS HANS alert snapshot from `activity.json` (optional; starts silently if absent)
-- **VolcanoInfoboxPlugin** — infobox card for a single volcano; supports `default` and `compact` styles
-- **VolcanoListPlugin** — filterable, paginated table of volcanoes (country, region, type, epoch, elevation)
-- **VolcanoSearchPlugin** — interactive live-search widget with dropdown filters
-- **VolcanoMapPlugin** — Leaflet map of volcanoes; red = Holocene, blue = Pleistocene
-- **EarthquakeListPlugin** — filterable, paginated table of recent earthquakes with PAGER alert badges and tsunami flag
-- **EarthquakeMapPlugin** — Leaflet map of earthquakes coloured by PAGER alert level; optional volcano overlay
-- **HansAlertPlugin** — US volcano alert level table filterable by USGS observatory
+- __VolcanoDataManager__ — loads GVP volcano and eruption snapshots from `volcanoes.json` / `eruptions.json`
+- __EarthquakeDataManager__ — loads USGS earthquake snapshot from `earthquakes.json`; tracks proximity to known volcanoes
+- __HansDataManager__ — loads USGS HANS alert snapshot from `activity.json` (optional; starts silently if absent)
+- __VolcanoInfoboxPlugin__ — infobox card for a single volcano; supports `default` and `compact` styles
+- __VolcanoListPlugin__ — filterable, paginated table of volcanoes (country, region, type, epoch, elevation)
+- __VolcanoSearchPlugin__ — interactive live-search widget with dropdown filters
+- __VolcanoMapPlugin__ — Leaflet map of volcanoes; red = Holocene, blue = Pleistocene
+- __EarthquakeListPlugin__ — filterable, paginated table of recent earthquakes with PAGER alert badges and tsunami flag
+- __EarthquakeMapPlugin__ — Leaflet map of earthquakes coloured by PAGER alert level; optional volcano overlay
+- __HansAlertPlugin__ — US volcano alert level table filterable by USGS observatory
 - Client-side pagination (Previous / Next) on VolcanoList and EarthquakeList
 - REST API at `/api/ve-geology/*` — volcano search/filter, single volcano, eruptions, earthquake search, earthquake near volcano, feed status
 - GVP WFS import script (`import-volcanoes.js`) — Holocene + Pleistocene volcanoes, eruption records, global activity snapshot
 - USGS earthquake import script (`import-earthquakes.js`) — multiple feeds (4.5-week default); Haversine proximity matching against volcano catalog
 - USGS HANS import script (`import-hans.js`) — elevated volcanoes, daily synopsis, monitored count
 - All import scripts export `runImport()` for programmatic use; CLI entry gated behind `require.main === module`
-- **BackgroundJobManager integration** — registers `ve-geology.import-hans` and `ve-geology.import-earthquakes` jobs; polls on configurable intervals (default 10 min / 20 min); hot-reloads in-memory managers after each run; intervals cleared in `shutdown()`
+- __BackgroundJobManager integration__ — registers `ve-geology.import-hans` and `ve-geology.import-earthquakes` jobs; polls on configurable intervals (default 10 min / 20 min); hot-reloads in-memory managers after each run; intervals cleared in `shutdown()`
 - Config keys: `dataPath`, `hansIntervalMs`, `eqIntervalMs`
 - Addon CSS served at `/addons/ve-geology/css/ve-geology.css`; registered with ngdpbase `AddonsManager`
 - Seeded pages: home, volcanoes, earthquakes, HANS alerts, Japan demo, geology demo, plugin guide, about

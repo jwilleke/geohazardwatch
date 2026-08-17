@@ -34,7 +34,7 @@ The [USGS Earthquake Hazards Program](https://earthquake.usgs.gov/) monitors sei
 
 ## About this site
 
-This site is powered by **geohazardwatch**, an open-source add-on for the [ngdpbase](https://github.com/jwilleke/ngdpbase) platform.
+This site is powered by __geohazardwatch__, an open-source add-on for the [ngdpbase](https://github.com/jwilleke/ngdpbase) platform.
 
 | Data source | Provider | Coverage |
 |-------------|----------|---------|

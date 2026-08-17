@@ -21,9 +21,9 @@ If nothing renders above, the `firms-viirs` feed source is not yet configured (s
 
 ## Reading the map
 
-- **Marker size** scales with FRP (fire radiative power, in megawatts) among the detections shown — bigger markers are more intense, not necessarily larger fires.
-- **High-confidence only.** Low and nominal-confidence detections are filtered out here to keep the map readable — VIIRS confidence reflects the satellite's certainty about the detection itself, not the fire's severity.
-- **Click a marker** for the raw detection: coordinates, FRP, confidence, and acquisition time (UTC).
+- __Marker size__ scales with FRP (fire radiative power, in megawatts) among the detections shown — bigger markers are more intense, not necessarily larger fires.
+- __High-confidence only.__ Low and nominal-confidence detections are filtered out here to keep the map readable — VIIRS confidence reflects the satellite's certainty about the detection itself, not the fire's severity.
+- __Click a marker__ for the raw detection: coordinates, FRP, confidence, and acquisition time (UTC).
 - This is a snapshot of the current ~24-hour NRT window, refreshed hourly — it is not a historical fire-tracking map.
 
 ## Data Source
@@ -62,7 +62,7 @@ Requires a free [NASA FIRMS API key](https://firms.modaps.eosdis.nasa.gov/api/) 
 
 ----
 
-**Status:** page and feed wiring live. For live data outside this instance visit [NASA FIRMS](https://firms.modaps.eosdis.nasa.gov/).
+__Status:__ page and feed wiring live. For live data outside this instance visit [NASA FIRMS](https://firms.modaps.eosdis.nasa.gov/).
 
 ## Related Pages
 

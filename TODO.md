@@ -11,11 +11,11 @@ kit_version: "3aa1bb4"
 
 ## 🔴 P0 — Security & Critical
 
-- _None._
+- *None.*
 
 ## 🟠 P1
 
-- _None._
+- *None.*
 
 ## 🟡 P2
 
@@ -27,7 +27,7 @@ kit_version: "3aa1bb4"
 
 ## 🔵 In review
 
-- _None._
+- *None.*
 
 ## ⏸ Deferred
 
@@ -35,4 +35,4 @@ kit_version: "3aa1bb4"
 
 ## ❓ Needs triage
 
-- _None._
+- *None.*

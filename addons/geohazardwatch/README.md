@@ -36,7 +36,7 @@ Renders a full infobox for a single volcano with GVP link, coordinates, type, ro
 | `number` | *(required)* | GVP volcano number |
 | `style` | `default` | `default` (full infobox) or `compact` (inline name span) |
 
-**Common use:** Add a `default` infobox at the top of a volcano-specific page, or use `compact` inline within body text — e.g. "…near [{VolcanoInfobox number='332010' style='compact'}]…"
+__Common use:__ Add a `default` infobox at the top of a volcano-specific page, or use `compact` inline within body text — e.g. "…near [{VolcanoInfobox number='332010' style='compact'}]…"
 
 ---
 
@@ -62,7 +62,7 @@ Renders a filtered table of volcanoes. GVP numbers link to the Smithsonian volca
 | `limit` | `25` | Max rows |
 | `offset` | `0` | Pagination offset |
 
-**Common use:** `[{VolcanoList country='Japan' epoch='Holocene' limit='20'}]` for a country page sidebar; `[{VolcanoList volcanoType='Caldera' limit='50'}]` for a type-specific browse page. Previous / Next pagination controls render automatically when results exceed `limit`.
+__Common use:__ `[{VolcanoList country='Japan' epoch='Holocene' limit='20'}]` for a country page sidebar; `[{VolcanoList volcanoType='Caldera' limit='50'}]` for a type-specific browse page. Previous / Next pagination controls render automatically when results exceed `limit`.
 
 ---
 
@@ -81,7 +81,7 @@ Renders an interactive live-search widget with dropdowns for country, region, vo
 | `defaultCountry` | | Pre-select country dropdown |
 | `defaultLimit` | `25` | Results per page |
 
-**Common use:** `[{VolcanoSearch defaultEpoch='Holocene' defaultLimit='50'}]` on a main volcano browse page; combine with VolcanoMap below it for a full explore experience.
+__Common use:__ `[{VolcanoSearch defaultEpoch='Holocene' defaultLimit='50'}]` on a main volcano browse page; combine with VolcanoMap below it for a full explore experience.
 
 ---
 
@@ -107,7 +107,7 @@ Renders a Leaflet map. Red markers = Holocene, blue = Pleistocene.
 | `lat` / `lon` | `20` / `0` | Initial centre |
 | `zoom` | `2` | Initial zoom level |
 
-**Common use:** `[{VolcanoMap country='Indonesia' lat='-2' lon='118' zoom='4' height='500'}]` for a country page; `[{VolcanoMap epoch='Holocene'}]` for a global overview.
+__Common use:__ `[{VolcanoMap country='Indonesia' lat='-2' lon='118' zoom='4' height='500'}]` for a country page; `[{VolcanoMap epoch='Holocene'}]` for a global overview.
 
 ---
 
@@ -132,7 +132,7 @@ Renders a filtered table of recent earthquakes with PAGER alert badges, tsunami 
 | `limit` | `50` | Max rows |
 | `offset` | `0` | Pagination offset |
 
-**Common use:** `[{EarthquakeList nearVolcano='true' minMagnitude='4.5' limit='25'}]` on a seismic monitoring page; `[{EarthquakeList alert='red' limit='10'}]` for a hazard summary widget. Previous / Next pagination controls render automatically when results exceed `limit`.
+__Common use:__ `[{EarthquakeList nearVolcano='true' minMagnitude='4.5' limit='25'}]` on a seismic monitoring page; `[{EarthquakeList alert='red' limit='10'}]` for a hazard summary widget. Previous / Next pagination controls render automatically when results exceed `limit`.
 
 ---
 
@@ -155,7 +155,7 @@ Renders a Leaflet map of earthquakes coloured by PAGER alert level, with an opti
 | `lat` / `lon` | `20` / `0` | Initial centre |
 | `zoom` | `2` | Initial zoom level |
 
-**Common use:** `[{EarthquakeMap nearVolcano='true' showVolcanoes='true' height='500'}]` as a companion to EarthquakeList; `[{EarthquakeMap minMagnitude='6'}]` for major-event tracking.
+__Common use:__ `[{EarthquakeMap nearVolcano='true' showVolcanoes='true' height='500'}]` as a companion to EarthquakeList; `[{EarthquakeMap minMagnitude='6'}]` for major-event tracking.
 
 ---
 
@@ -173,13 +173,13 @@ Renders a table of US volcano alert levels from the USGS HANS API. By default sh
 |-----------|---------|-------------|
 | `observatory` | | Filter by observatory code: `avo`, `hvo`, `cvo`, `yvo`, `uvo` |
 
-**Common use:** `[{HansAlerts}]` on a US hazard summary page; `[{HansAlerts observatory='avo'}]` on an Alaska-specific page. Covers US volcanoes only.
+__Common use:__ `[{HansAlerts}]` on a US hazard summary page; `[{HansAlerts observatory='avo'}]` on an Alaska-specific page. Covers US volcanoes only.
 
 ---
 
 ### VaacAdvisories
 
-Renders a table of active Volcanic Ash Advisories from the Washington VAAC (Americas, E. Pacific, Caribbean). An advisory counts as "active" if it's the most recent one for that volcano and was issued within the last 48 hours. Like FirmsHotspots below, **this addon has no import script, manager, or scheduler for VAAC** — ngdpbase's generic `feeds` addon fetches/schedules/stores it (`adapter: 'xml-index'`, see [`docs/volcano-sources.md`](../../docs/volcano-sources.md#configuration-vaac-advisories) for the config). This plugin only reads already-ingested records via `FeedManager.getRecords()` and splits the volcano-name/GVP-number field at render time (geohazardwatch#141).
+Renders a table of active Volcanic Ash Advisories from the Washington VAAC (Americas, E. Pacific, Caribbean). An advisory counts as "active" if it's the most recent one for that volcano and was issued within the last 48 hours. Like FirmsHotspots below, __this addon has no import script, manager, or scheduler for VAAC__ — ngdpbase's generic `feeds` addon fetches/schedules/stores it (`adapter: 'xml-index'`, see [`docs/volcano-sources.md`](../../docs/volcano-sources.md#configuration-vaac-advisories) for the config). This plugin only reads already-ingested records via `FeedManager.getRecords()` and splits the volcano-name/GVP-number field at render time (geohazardwatch#141).
 
 ```
 [{VaacAdvisories}]
@@ -190,13 +190,13 @@ Renders a table of active Volcanic Ash Advisories from the Washington VAAC (Amer
 |-----------|---------|-------------|
 | `region` | | Filter by state/region (e.g. `GUATEMALA`, `ECUADOR`) |
 
-**Common use:** `[{VaacAdvisories}]` on a global hazard summary page. Covers only the Washington VAAC's region (Americas, E. Pacific, Caribbean) — see geohazardwatch#5 for the other 8 ICAO VAACs, not yet integrated.
+__Common use:__ `[{VaacAdvisories}]` on a global hazard summary page. Covers only the Washington VAAC's region (Americas, E. Pacific, Caribbean) — see geohazardwatch#5 for the other 8 ICAO VAACs, not yet integrated.
 
 ---
 
 ### FirmsHotspots
 
-Renders volcanoes currently showing a NASA FIRMS thermal anomaly within 5 km of the summit. Unlike every other plugin above, **this addon has no import script, manager, or scheduler for FIRMS** — ngdpbase's generic `feeds` addon fetches/schedules/stores the raw CSV data (`adapter: 'csv'`, see [Data sources](#data-sources) below for the config). This plugin only reads already-ingested records via `FeedManager.getRecords()` and joins them against the volcano catalog at render time (cached until the feed's next poll — see geohazardwatch#4, ngdpbase#911).
+Renders volcanoes currently showing a NASA FIRMS thermal anomaly within 5 km of the summit. Unlike every other plugin above, __this addon has no import script, manager, or scheduler for FIRMS__ — ngdpbase's generic `feeds` addon fetches/schedules/stores the raw CSV data (`adapter: 'csv'`, see [Data sources](#data-sources) below for the config). This plugin only reads already-ingested records via `FeedManager.getRecords()` and joins them against the volcano catalog at render time (cached until the feed's next poll — see geohazardwatch#4, ngdpbase#911).
 
 ```
 [{FirmsHotspots}]
@@ -208,7 +208,7 @@ Renders volcanoes currently showing a NASA FIRMS thermal anomaly within 5 km of 
 | `source` | `firms-viirs` | The configured `ngdpbase.addons.feeds.sources.<id>` to read |
 | `limit` | all | Max volcanoes to show, strongest thermal signal (FRP) first |
 
-**Common use:** `[{FirmsHotspots}]` on a global hazard summary page alongside HansAlerts and VaacAdvisories. Satellite-detected heat, not a confirmed eruption.
+__Common use:__ `[{FirmsHotspots}]` on a global hazard summary page alongside HansAlerts and VaacAdvisories. Satellite-detected heat, not a confirmed eruption.
 
 ---
 
@@ -239,7 +239,7 @@ All endpoints are mounted at `/api/geohazardwatch`.
 | GET | `/volcano/:number` | Single volcano by GVP number |
 | GET | `/eruptions/:number` | Eruption records for a volcano |
 
-**Search query parameters:** `q`, `country`, `region`, `volcanoType`, `rockType`, `tectonicSetting`, `epoch`, `minElevation`, `maxElevation`, `minLatitude`, `maxLatitude`, `minLongitude`, `maxLongitude`, `limit` (default 100), `offset` (default 0).
+__Search query parameters:__ `q`, `country`, `region`, `volcanoType`, `rockType`, `tectonicSetting`, `epoch`, `minElevation`, `maxElevation`, `minLatitude`, `maxLatitude`, `minLongitude`, `maxLongitude`, `limit` (default 100), `offset` (default 0).
 
 ### Earthquake endpoints
 
@@ -249,7 +249,7 @@ All endpoints are mounted at `/api/geohazardwatch`.
 | GET | `/earthquakes/near/:number` | Earthquakes near a specific volcano |
 | GET | `/earthquakes/status` | Feed metadata (source, fetch time, counts) |
 
-**Earthquake search parameters:** `minMagnitude`, `maxMagnitude`, `minDepth`, `maxDepth`, `nearVolcano` (true/false), `tsunamiOnly` (true/false), `alert`, `limit` (default 50), `offset` (default 0).
+__Earthquake search parameters:__ `minMagnitude`, `maxMagnitude`, `minDepth`, `maxDepth`, `nearVolcano` (true/false), `tsunamiOnly` (true/false), `alert`, `limit` (default 50), `offset` (default 0).
 
 ### HANS alert endpoints
 
@@ -259,7 +259,7 @@ All endpoints are mounted at `/api/geohazardwatch`.
 | GET | `/hans/volcano/:number` | Alert status for a single GVP volcano number |
 | GET | `/hans/status` | Feed metadata (last fetch time, monitored/elevated counts) |
 
-**`/hans/elevated` query parameters:** `alertLevel`, `colorCode`, `observatory` (`avo`, `hvo`, `cvo`, `yvo`, `uvo`).
+__`/hans/elevated` query parameters:__ `alertLevel`, `colorCode`, `observatory` (`avo`, `hvo`, `cvo`, `yvo`, `uvo`).
 
 VAAC ash advisories have no dedicated API endpoint here — they're served by the generic ngdpbase `feeds` surface (`FeedManager.getRecords('vaac-advisories')`), same as FIRMS/VIIRS.
 
@@ -329,7 +329,7 @@ The Tsunami and Landslide pages, and VAAC advisories, render live data through a
 
 ## Distribution
 
-This directory is also published as an npm package, `@jwilleke/geohazardwatch-addon` (see `package.json` in this directory), for production deployment — see [`../../Dockerfile`](../../Dockerfile) and [geohazardwatch#152](https://github.com/jwilleke/geohazardwatch/issues/152). Local development still uses **drop-in** (this directory referenced directly via `addons-path`, as in [SETUP.md](../../SETUP.md)); only the production image installs it as a versioned dependency instead of copying the directory. The addon's own runtime code, `register()` contract, and config keys are identical either way.
+This directory is also published as an npm package, `@jwilleke/geohazardwatch-addon` (see `package.json` in this directory), for production deployment — see [`../../Dockerfile`](../../Dockerfile) and [geohazardwatch#152](https://github.com/jwilleke/geohazardwatch/issues/152). Local development still uses __drop-in__ (this directory referenced directly via `addons-path`, as in [SETUP.md](../../SETUP.md)); only the production image installs it as a versioned dependency instead of copying the directory. The addon's own runtime code, `register()` contract, and config keys are identical either way.
 
 ---
 

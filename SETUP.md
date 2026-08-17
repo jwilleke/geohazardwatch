@@ -2,12 +2,12 @@
 
 Step-by-step instructions to set up geohazardwatch locally for development.
 
-**First:** Read [GLOBAL-CODE-PREFERENCES.md](GLOBAL-CODE-PREFERENCES.md) and [AGENTS.md](AGENTS.md).
+__First:__ Read [GLOBAL-CODE-PREFERENCES.md](GLOBAL-CODE-PREFERENCES.md) and [AGENTS.md](AGENTS.md).
 
 ## Prerequisites
 
-- **Node.js** v18+ (`node --version`)
-- **npm** v9+ (`npm --version`)
+- __Node.js__ v18+ (`node --version`)
+- __npm__ v9+ (`npm --version`)
 - A running [ngdpbase](https://github.com/jwilleke/ngdpbase) instance (see ngdpbase README)
 - Internet access for initial data import
 
@@ -33,7 +33,7 @@ Data is written to `addons/geohazardwatch/data/` (gitignored). Re-run any time t
 
 ## Step 3 — Wire to ngdpbase
 
-This is the **drop-in** path — the right choice for local development (edit-in-place, no publish step). Add to `$FAST_STORAGE/config/app-custom-config.json` on your ngdpbase instance:
+This is the __drop-in__ path — the right choice for local development (edit-in-place, no publish step). Add to `$FAST_STORAGE/config/app-custom-config.json` on your ngdpbase instance:
 
 ```json
 {
@@ -78,10 +78,10 @@ The Husky pre-commit hook runs `npm run lint` automatically. Commits are rejecte
 
 ## Troubleshooting
 
-**Addon not loading:** Check `pm2 logs` — common causes are missing `node_modules` in the geohazardwatch directory or incorrect `addons-path` config.
+__Addon not loading:__ Check `pm2 logs` — common causes are missing `node_modules` in the geohazardwatch directory or incorrect `addons-path` config.
 
-**Empty API responses `{ volcanoes: [], total: 0 }`:** Data files are missing — run `npm run import:all`.
+__Empty API responses `{ volcanoes: [], total: 0 }`:__ Data files are missing — run `npm run import:all`.
 
-**HANS data not showing:** `activity.json` is absent — run `npm run import:hans`. The addon starts cleanly without it; HANS is optional.
+__HANS data not showing:__ `activity.json` is absent — run `npm run import:hans`. The addon starts cleanly without it; HANS is optional.
 
-**Earthquake proximity not working:** `volcanoes.json` must exist before running `import:earthquakes` — the proximity match requires volcano coordinates.
+__Earthquake proximity not working:__ `volcanoes.json` must exist before running `import:earthquakes` — the proximity match requires volcano coordinates.

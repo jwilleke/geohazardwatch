@@ -6,7 +6,7 @@ Related: [CODE_STANDARDS.md](./CODE_STANDARDS.md) · [AGENTS.md](./AGENTS.md) ·
 
 ## Overview
 
-geohazardwatch is a **ngdpbase add-on** — it has no server of its own. It extends the [ngdpbase](https://github.com/jwilleke/ngdpbase) content platform at runtime by registering data managers, plugins, Express routes, and static assets through the engine API.
+geohazardwatch is a __ngdpbase add-on__ — it has no server of its own. It extends the [ngdpbase](https://github.com/jwilleke/ngdpbase) content platform at runtime by registering data managers, plugins, Express routes, and static assets through the engine API.
 
 ## Project Structure
 
@@ -70,19 +70,19 @@ No live API calls happen during request handling — all data is pre-imported.
 
 ## Adding a New Data Source
 
-- **Step 1 — Import script:** `import/import-<source>.js` — fetch, transform, write JSON
-- **Step 2 — Manager:** `managers/<Source>DataManager.js` — load JSON, expose query methods
-- **Step 3 — Register manager** in `index.js` `register()` and `shutdown()`
-- **Step 4 — Plugin (optional):** `plugins/<Source>Plugin.js` — render HTML from manager
-- **Step 5 — API route (optional):** add to `routes/api.js`
-- **Step 6 — npm script:** add `import:<source>` to `package.json`
-- **Step 7 — Page (optional):** add `.md` to `pages/` for auto-seeding
+- __Step 1 — Import script:__ `import/import-<source>.js` — fetch, transform, write JSON
+- __Step 2 — Manager:__ `managers/<Source>DataManager.js` — load JSON, expose query methods
+- __Step 3 — Register manager__ in `index.js` `register()` and `shutdown()`
+- __Step 4 — Plugin (optional):__ `plugins/<Source>Plugin.js` — render HTML from manager
+- __Step 5 — API route (optional):__ add to `routes/api.js`
+- __Step 6 — npm script:__ add `import:<source>` to `package.json`
+- __Step 7 — Page (optional):__ add `.md` to `pages/` for auto-seeding
 
 Follow the HANS integration (`import-hans.js` → `HansDataManager.js` → `HansAlertPlugin.js`) as the reference implementation.
 
 ## Key Constraints
 
-- **CommonJS only** — ngdpbase uses `require()`. ESM imports will break the addon loader.
-- **No live API calls in request path** — import scripts are the only place external APIs are called.
-- **Pages seed once** — files in `pages/` are copied to the ngdpbase instance only if they don't already exist. User edits are never overwritten.
-- **Managers must handle missing data files gracefully** — HANS and earthquake managers return empty state when their JSON file is absent, so the addon starts cleanly without a full import.
+- __CommonJS only__ — ngdpbase uses `require()`. ESM imports will break the addon loader.
+- __No live API calls in request path__ — import scripts are the only place external APIs are called.
+- __Pages seed once__ — files in `pages/` are copied to the ngdpbase instance only if they don't already exist. User edits are never overwritten.
+- __Managers must handle missing data files gracefully__ — HANS and earthquake managers return empty state when their JSON file is absent, so the addon starts cleanly without a full import.

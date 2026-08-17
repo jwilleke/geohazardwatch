@@ -8,18 +8,18 @@ MCP (Model Context Protocol) allows Claude to quickly access project context thr
 
 ## Files
 
-- **`mcp.json`** - MCP server configuration (currently empty, ready for extension)
-- **`commands/`** - Directory containing command definitions
+- __`mcp.json`__ - MCP server configuration (currently empty, ready for extension)
+- __`commands/`__ - Directory containing command definitions
 
 ## Available Commands
 
 ### `/context`
 
-**File:** `commands/context.md`
+__File:__ `commands/context.md`
 
 Reads and summarizes the AGENTS.md file to get the current project state.
 
-**What it shows:**
+__What it shows:__
 
 - Project name, description, and goals
 - Current progress and status
@@ -27,9 +27,9 @@ Reads and summarizes the AGENTS.md file to get the current project state.
 - Known blockers or issues
 - TODO items and next priorities
 
-**When to use:** At the start of each session to understand what's been done and what needs attention.
+__When to use:__ At the start of each session to understand what's been done and what needs attention.
 
-**Example usage:**
+__Example usage:__
 
 ```
 /context
@@ -37,20 +37,20 @@ Reads and summarizes the AGENTS.md file to get the current project state.
 
 ### `/check-todos`
 
-**File:** `commands/check-todos.md`
+__File:__ `commands/check-todos.md`
 
 Displays actionable work items organized by priority level.
 
-**What it shows:**
+__What it shows:__
 
 - High priority tasks (should start here)
 - Medium priority tasks (important but not blocking)
 - Low priority tasks (nice to have)
 - Known blockers preventing progress
 
-**When to use:** To decide what to work on in the current session and focus effort appropriately.
+__When to use:__ To decide what to work on in the current session and focus effort appropriately.
 
-**Example usage:**
+__Example usage:__
 
 ```
 /check-todos
@@ -58,11 +58,11 @@ Displays actionable work items organized by priority level.
 
 ### `/update-agents`
 
-**File:** `commands/update-agents.md`
+__File:__ `commands/update-agents.md`
 
 Reminds you to update AGENTS.md with your session's progress.
 
-**What it helps document:**
+__What it helps document:__
 
 - Work completed this session
 - Files modified
@@ -70,9 +70,9 @@ Reminds you to update AGENTS.md with your session's progress.
 - New blockers discovered
 - Recommended next steps
 
-**When to use:** At the end of a session to document progress for the next agent or human contributor.
+__When to use:__ At the end of a session to document progress for the next agent or human contributor.
 
-**Example usage:**
+__Example usage:__
 
 ```
 /update-agents
@@ -80,10 +80,10 @@ Reminds you to update AGENTS.md with your session's progress.
 
 ## Typical Workflow
 
-1. **Start session:** Use `/context` to understand project state
-2. **Check priorities:** Use `/check-todos` to pick what to work on
-3. **Work on tasks:** Complete your assigned work, following CODE_STANDARDS.md
-4. **End session:** Use `/update-agents` to document progress in AGENTS.md
+1. __Start session:__ Use `/context` to understand project state
+2. __Check priorities:__ Use `/check-todos` to pick what to work on
+3. __Work on tasks:__ Complete your assigned work, following CODE_STANDARDS.md
+4. __End session:__ Use `/update-agents` to document progress in AGENTS.md
 
 ## Extending MCP
 
