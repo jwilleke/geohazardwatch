@@ -98,7 +98,7 @@ Key rules:
 - Line length limits (300 chars general, 80 for headings)
 - Blank lines around lists and code blocks
 - Consistent list marker style
-- **No bold text as headings (MD036)** - Use proper heading syntax (`##`, `###`, etc.) instead of `**Bold:**`
+- __No bold text as headings (MD036)__ - Use proper heading syntax (`##`, `###`, etc.) instead of `**Bold:**`
 
 Run markdown linting:
 
@@ -107,7 +107,7 @@ npm run lint:md       # Check all markdown files
 npm run lint:md:fix   # Auto-fix markdown issues (note: MD036 requires manual fix)
 ```
 
-**Heading vs Bold Text:**
+__Heading vs Bold Text:__
 
 ```markdown
 <!-- ❌ Bad - bold text used as heading -->

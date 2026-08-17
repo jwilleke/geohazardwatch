@@ -6,7 +6,7 @@ Not one of the four the user asked about by name, but the same treatment applies
 
 | Our pipeline | Upstream (real source) | Kind | Poll/import cadence | Rendered on |
 |---|---|---|---|---|
-| `EarthquakeDataManager` | `earthquake.usgs.gov/earthquakes/feed/v1.0/summary/<feed>.geojson` (USGS) | **Primary**, single source, no re-publishers involved | manual (`npm run import:earthquakes[:month]`) | `earthquakes.md`, EarthquakeList/Map plugins, `/api/geohazardwatch/*` |
+| `EarthquakeDataManager` | `earthquake.usgs.gov/earthquakes/feed/v1.0/summary/<feed>.geojson` (USGS) | __Primary__, single source, no re-publishers involved | manual (`npm run import:earthquakes[:month]`) | `earthquakes.md`, EarthquakeList/Map plugins, `/api/geohazardwatch/*` |
 
 USGS's own standard summary feeds — no third party in between, unlike the volcano-activity situation. Available feed variants (selectable via `--feed=`):
 
@@ -19,9 +19,9 @@ USGS's own standard summary feeds — no third party in between, unlike the volc
 
 ## Cross-references to other pillars (already implemented)
 
-- **Volcano proximity**: every earthquake is checked against the GVP volcano catalog; any quake within 50 km of a volcano summit gets `nearestVolcano` stamped on it. This is the same proximity-join pattern later reused by `FirmsHotspotsPlugin` for thermal-anomaly matching (see `wildfire-sources.md`).
-- **Tsunami potential**: USGS's own GeoJSON already includes a per-quake `tsunami` boolean (tsunami-generation potential), exposed via `EarthquakeDataManager`'s `tsunamiOnly` filter. See `tsunami-sources.md` for how this relates to (and differs from) the official NWS tsunami-alerts feed.
-- **PAGER alert level** (`green`/`yellow`/`orange`/`red`) is also carried straight through from USGS.
+- __Volcano proximity__: every earthquake is checked against the GVP volcano catalog; any quake within 50 km of a volcano summit gets `nearestVolcano` stamped on it. This is the same proximity-join pattern later reused by `FirmsHotspotsPlugin` for thermal-anomaly matching (see `wildfire-sources.md`).
+- __Tsunami potential__: USGS's own GeoJSON already includes a per-quake `tsunami` boolean (tsunami-generation potential), exposed via `EarthquakeDataManager`'s `tsunamiOnly` filter. See `tsunami-sources.md` for how this relates to (and differs from) the official NWS tsunami-alerts feed.
+- __PAGER alert level__ (`green`/`yellow`/`orange`/`red`) is also carried straight through from USGS.
 
 ## Known issues / follow-ups
 

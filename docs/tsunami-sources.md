@@ -4,8 +4,8 @@
 
 | Our pipeline | Upstream (real source) | Kind | Poll interval | Rendered on |
 |---|---|---|---|---|
-| `tsunami-alerts` (ngdpbase `feeds` addon) | `api.weather.gov/alerts/active` (NOAA / National Weather Service) | **Primary**, single source, no bespoke code | 10 min | `tsunamis.md` (`/view/tsunamis`) |
-| `tsunami` flag on `EarthquakeDataManager` records | `earthquake.usgs.gov/earthquakes/feed/v1.0/summary` (USGS) | **Secondary/related signal** — USGS's own per-quake tsunami-potential boolean, not an alert feed | shares the earthquake import cadence | exposed via `EarthquakeDataManager`'s `tsunamiOnly` filter; not a dedicated tsunami page |
+| `tsunami-alerts` (ngdpbase `feeds` addon) | `api.weather.gov/alerts/active` (NOAA / National Weather Service) | __Primary__, single source, no bespoke code | 10 min | `tsunamis.md` (`/view/tsunamis`) |
+| `tsunami` flag on `EarthquakeDataManager` records | `earthquake.usgs.gov/earthquakes/feed/v1.0/summary` (USGS) | __Secondary/related signal__ — USGS's own per-quake tsunami-potential boolean, not an alert feed | shares the earthquake import cadence | exposed via `EarthquakeDataManager`'s `tsunamiOnly` filter; not a dedicated tsunami page |
 
 Like landslides, the primary tsunami feed is a single declarative `DataFeed` config entry (`geojson` adapter) with no bespoke manager/plugin — filtered directly to `event=Tsunami Warning,Tsunami Advisory,Tsunami Watch` against NWS's own active-alerts API. This is the *actual issuing authority* for US tsunami alerts, not a re-publisher — there's no equivalent to volcano data's re-publisher problem here.
 

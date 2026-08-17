@@ -5,36 +5,44 @@ agent_priority_level: "medium"
 blockers: []
 requires_human_review: ["major architectural changes", "security policy modifications", "deployment to production"]
 agent_autonomy_level: "high"
-kit_version: "3aa1bb4"
+kit_version: "v1.8.1-0-gf013faa"
 ---
 
-<!-- KIT:START 3aa1bb4 — managed by mjs-project-template; edit below the KIT:END marker -->
-# Agent Context & Protocols
+<!-- KIT:START v1.8.1-0-gf013faa — managed by mjs-project-template; edit below the KIT:END marker -->
+## Agent Kit Protocols
 
-This section is **managed by the kit** (`install-kit.sh`) — it is identical across repos. Put repo-specific context **below the `KIT:END` marker**; do not edit here.
+This section is __managed by the kit__ (`install-kit.sh`) — it is identical across repos. Put repo-specific context __below the `KIT:END` marker__; do not edit here.
 
-## Session continuity
+The heading above names the kit on purpose. It used to read `Agent Context & Protocols`, which is the
+same wording a repo naturally picks for its own agent section below `KIT:END` — two identical `##`
+headings in one file, and `markdownlint` MD024 fails on it. The kit owns one heading string in every
+repo that installs it, so that string says whose it is.
+
+### Session continuity
 
 - Before starting, read the `▶ Resume here` block at the top of `TODO.md` (committed, so it syncs across machines) and recent `git log`. That is where the last session left off — repeating finished work is the most common avoidable mistake.
 - Commit a chunk of work with `/session-commit`: commits code + `TODO.md`, appends a journal entry to `private/project_log.md` (the log is never committed).
 - Run `/pstatus` often (after every `/session-commit`): it ranks open work and recommends the next step.
 - End a session with `/wrap`: commits anything outstanding, refreshes the `▶ Resume here` pointer, and reports whether it is safe to shut down the editor.
 
-## Priorities — GitHub labels are the source of truth
+### Priorities — GitHub labels are the source of truth
 
 Priority labels are mutually exclusive and mean:
 
-- `P0` — **Broken. Stop all work and fix it.** (production down / blocked / security breach)
-- `P1` — **Delivers value to the mission.**
-- `P2` — **Nice to have.**
+- `P0` — __Broken. Stop all work and fix it.__ (production down / blocked / security breach)
+- `P1` — __Delivers value to the mission.__
+- `P2` — __Nice to have.__
 - `deferred` — consciously postponed; `needs-triage` — awaiting a priority decision.
 
 Then:
 
 - Security comes first. Scanner alerts (Dependabot / code-scanning / GitGuardian) become issues labeled `security` + a graded priority: critical/high → `P0`, medium → `P1`, low → `P2`.
 - `TODO.md` = a `▶ Resume here` block (maintained by `/wrap`) on top, then priority bands that `/pstatus` regenerates from the labels. Do not hand-edit the bands.
+- The two halves have one writer each and a deliberate handover: `/wrap` writes the resume pointer at session end, `/context` reads it at session open, and the first `/pstatus` of the session __removes__ it — by then you have already resumed, so it has served its purpose. A bands-only `TODO.md` mid-session is expected, not a loss.
+- Kit files are overwritten wholesale on every sync — `.claude/commands/*.md`, `utility/sync-labels.sh`, `.markdownlint-cli2.jsonc`. Never add a rule to one of them: it is destroyed at the next sync (the installer now warns, but the rule still goes). A __generic__ rule belongs upstream in [mjs-project-template](https://github.com/jwilleke/mjs-project-template) so every repo gets it. A __repo-specific__ note about a command — a package manager the kit does not name, a scanner only this repo has — goes in `.claude/commands/<command>.local.md`, which the kit never writes, reads, or deletes. Read that file, if present, as part of the command; commit it, so it travels with the repo.
+- `TODO.md` holds __no history__ — only what is open right now. Never add "merged since last run", closed/merged counts, a session narrative, a dated changelog, or work from other repos. A closed item just stops appearing; that disappearance is the whole record. Session history goes in `private/project_log.md` via `/session-commit` and `/wrap`, and nowhere else.
 
-## Working agreement
+### Working agreement
 
 - Think before coding: state assumptions, surface trade-offs, ask when scope is ambiguous.
 - Simplicity first: the minimum that solves the problem; nothing speculative.
@@ -42,175 +50,21 @@ Then:
 - Issue decomposition — NEVER put "Steps", "Phases", or numbered sequences inside a single GitHub issue. Break each step into its own issue and link them using GitHub relationships: `closes #N` / `fixes #N` (resolves another), `blocked by #N` (dependency), `relates to #N` (context link). Example: a 3-phase migration = 3 issues with "blocked by" chains, not one issue with Phase headings.
 - Issue/PR links — Never use a bare `#N` reference alone. Always pair it with the full GitHub URL: `[#333](https://github.com/owner/repo/issues/333)`. This applies in commit messages, PR descriptions, comments, and any agent output. Use `/issues/N` for issues and `/pull/N` for PRs.
 - Awaiting approval — When work is complete but requires human sign-off before closing, apply the `in-review` label and leave a comment on the issue/PR that states: what was done, what the human needs to verify, and what action closes it. Never self-close an issue or PR.
+- Closing issues — __Always remove the `in-review` label when closing__ an issue or PR (`gh issue edit N --remove-label in-review` before or with the close). Closed items must not keep `in-review`, or the label stops meaning "awaiting a decision" and the queue it drives can no longer be trusted.
 - Commits — always use the `/session-commit` skill. Never run a bare `git commit` directly. `/session-commit` enforces the session log update, conventional commit format, and co-author trailer.
+- Direct commits by default — commit to the default branch; do not open a pull request unless someone other than you will actually look at it before it lands. On a single-maintainer repo a self-opened, self-merged PR reviews nothing: it just splits one explanation across a commit message and a near-identical PR body. Put the reasoning in the commit message. A change touching a "risky" path, closing an issue, or feeling significant is __not__ a reason to open one — CI runs on `push` as well as `pull_request`, so a direct commit is still tested. Where a PR does exist, its body points at the commit message rather than restating it.
 
-## Markdown conventions
+### Markdown conventions
 
-- Dash (`-`) bullets; no bare numbered lists. ATX (`#`) headings. Spaced tables (`| a | b |`).
-- Inline HTML is **not** allowed. Long lines are fine.
-- Rules live in `.markdownlint.jsonc`; the editor, CLI, CI and agents all read that one file. <!-- KIT:END -->
+__Read `.markdownlint-cli2.jsonc` before writing markdown.__ It is the control file — rules, globs
+and ignores in one place, read by the editor, the CLI, CI and you, and identical in every repo the
+kit installs into. Do not rely on a summary: this section deliberately does not restate the rules,
+because a second copy drifts from the first the moment someone changes one.
 
-## Project Context for AI Agents
+Most markdown here is written by agents, so these are writing rules, not review rules — conform on
+the first draft rather than relying on `--fix`. There is no exemption mechanism and none is wanted;
+a disabled check is a check nobody revisits. Verify with `npm run lint:md`, or `npx markdownlint-cli2`
+where there is no `package.json`.
 
-This file is the single source of truth for project context and agent guidance. Read this before starting any work. Update `last_updated` and relevant sections after significant changes.
-
-## CRITICAL
-
-Read [GLOBAL-CODE-PREFERENCES.md](./GLOBAL-CODE-PREFERENCES.md) first — overarching principles that govern all work.
-
-## What This Project Is
-
-**geohazardwatch** is an [ngdpbase](https://github.com/jwilleke/ngdpbase) add-on that provides volcano and geology data to an ngdpbase-based platform. It is **not a standalone app** — it runs inside an ngdpbase instance as an external addon loaded via `AddonsManager`.
-
-The addon:
-
-- Imports GVP volcano/eruption data and USGS earthquake/HANS alert data into local JSON snapshots
-- Registers data managers with the ngdpbase engine so plugins can access them
-- Registers nine markup plugins (`[{PluginName param='value'}]` syntax)
-- Mounts REST API routes at `/api/geohazardwatch/*`
-- Mounts an admin panel (`/addons/geohazardwatch`) with manual HANS/earthquake refresh buttons
-- Registers background jobs that poll USGS HANS and earthquake feeds on a timer
-- Seeds demo pages into the ngdpbase instance on first load, including Tsunami and Landslide pages that render live via the separate ngdpbase `feeds` addon (see Key Decisions)
-
-## Commands
-
-### Data import
-
-```bash
-npm run import                   # Volcanoes only
-npm run import:eruptions         # + eruption records
-npm run import:activity          # + global activity snapshot
-npm run import:all               # + eruptions + global activity
-npm run import:earthquakes       # USGS M4.5+ past 7 days
-npm run import:earthquakes:month # USGS M4.5+ past 30 days
-npm run import:hans              # USGS HANS real-time US volcano alerts
-```
-
-Earthquake import requires `volcanoes.json` to exist first (proximity matching). All data lands in `addons/geohazardwatch/data/` (gitignored).
-
-Washington VAAC ash advisories are not imported by this addon — the ngdpbase `feeds` addon fetches them (`vaac-advisories` source, `xml-index` adapter). See `docs/volcano-sources.md` for the config and `VaacAdvisoriesPlugin.js` for the render-time volcano-name/GVP-number split.
-
-### Lint
-
-```bash
-npm run lint          # ESLint (JS) + markdownlint (all .md)
-npm run lint:fix      # Auto-fix both
-npm run lint:code     # ESLint only  — targets addons/**/*.js
-npm run lint:md       # Markdownlint only
-```
-
-Pre-commit hook runs `npm run lint` automatically via Husky.
-
-### No build step, no test suite
-
-The addon is plain CommonJS JavaScript — no TypeScript compile needed. No test suite exists yet (see open issue jwilleke/geohazardwatch#1 area for future work).
-
-### ngdpbase (sister repo at `/Volumes/hd2A/workspaces/github/ngdpbase`)
-
-```bash
-npm run build          # Compile TypeScript (required after any .ts change)
-./server.sh restart    # Restart via PM2
-./server.sh start      # First start
-pm2 logs ngdpbase-ngdpbase --lines 50   # Tail logs
-```
-
-ngdpbase runs on port 3333. Admin panel at `/admin`, pages at `/view/<slug>`.
-
-## Architecture
-
-### How the addon loads
-
-**Local development (drop-in):** ngdpbase's `AddonsManager` discovers addons via the `addons-path` config key, finds `addons/geohazardwatch/index.js`, and calls `module.exports.register(engine, config)`. The `engine` object provides access to all ngdpbase managers and the Express app.
-
-**Production (packaged):** the addon is also published as an npm package, `@jwilleke/geohazardwatch-addon` (see `addons/geohazardwatch/package.json`), installed into a generic `ghcr.io/jwilleke/ngdpbase` image via `Dockerfile`'s `npm install` line. A `node_modules:@jwilleke/*-addon` entry in the instance's `addons-path` config discovers it from `node_modules` instead of a directory — same `register()` contract, only the discovery mechanism differs. This decouples the addon's version from the ngdpbase base-image version ([#152](https://github.com/jwilleke/geohazardwatch/issues/152), following ngdpbase's [addon-packaged.md](https://github.com/jwilleke/ngdpbase/blob/master/docs/platform/deployment/addon-packaged.md)). The published package's version is kept in lockstep with the repo's own version by `src/utils/version.ts`.
-
-```
-ngdpbase/src/managers/AddonsManager.ts
-  → loads addons/geohazardwatch/index.js
-  → calls register(engine, config)
-    → initialises VolcanoDataManager, EarthquakeDataManager, HansDataManager
-    → registers 7 plugins with PluginManager
-    → mounts Express static + API routes + admin routes (routes/admin.js)
-    → registers BackgroundJobManager jobs (HANS + earthquake refresh, timer-driven)
-    → registers an AddonsManager dashboard card
-    → seeds pages/ into ngdpbase data dir (first load only)
-```
-
-### Data flow
-
-```
-External API (GVP WFS / USGS / HANS)
-  → import/*.js scripts          (run manually, or on a timer via BackgroundJobManager)
-  → addons/geohazardwatch/data/*.json  (gitignored snapshots)
-  → managers/*DataManager.js     (load on addon start, serve from memory)
-  → plugins/*Plugin.js           (render HTML from manager data)
-  → routes/api.js                (REST endpoints for client-side widgets)
-```
-
-The Tsunami and Landslide pages (`pages/tsunamis.md`, `pages/landslides.md`) are a separate, content-only path: they carry no import script or data manager in this repo. They render live data via `[{DataFeed source='...'}]` markup, a plugin provided by ngdpbase's own `feeds` addon ([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)), configured independently in the instance's `app-custom-config.json`. See [Key Decisions](#key-decisions) and the page files themselves for the feed source config.
-
-### Plugin system
-
-Plugins are plain objects `{ name, execute(context, params) }` registered with ngdpbase's `PluginManager`. The markup `[{PluginName key='val'}]` is resolved at page render time. `context.engine.getManager('XxxDataManager')` gives plugin access to in-memory data.
-
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for repo structure, data pipeline depth, and guide to adding new data sources. See [addons/geohazardwatch/README.md](./addons/geohazardwatch/README.md) for config keys, plugin syntax, and API reference.
-
-## Key Decisions
-
-- **CommonJS, not ESM** — ngdpbase uses CommonJS `require()`. Addon must match.
-- **JSON snapshots, not live API calls** — plugins read pre-imported files for performance and offline resilience. Import scripts are the only place external APIs are called.
-- **Pages seeded, never overwritten** — `seedAddonPages()` in ngdpbase copies `.md` files from `pages/` on first load only. User edits are preserved.
-- **HansDataManager loads silently if `activity.json` is absent** — HANS data is optional; the addon starts cleanly without it.
-- **ESLint config targets TS but addon code is JS** — `.eslintrc.json` is from the project template and is wired for future TS work. Current `lint:code` targets `addons/**/*.js` with plain JS linting rules only.
-- **Tsunami/Landslide pages depend on an addon this repo does not own** — `pages/tsunamis.md` and `pages/landslides.md` render live data through `[{DataFeed}]` markup from ngdpbase's `feeds` addon ([ngdpbase#685](https://github.com/jwilleke/ngdpbase/issues/685)). If that addon is absent or its `tsunami-alerts` / `landslide-events` sources aren't configured, the pages fall back to static informational content — geohazardwatch never fetches or stores this data itself. Field mappings (esp. NASA COOLR) should be re-verified against the live upstream schema before relying on them.
-- **`type` vs `schemaType` on DataFeed sources** — `schemaType` stays `Article` for these two feeds until ngdpbase implements the `WarningAlert`/`Event` schema.org union types ([ngdpbase#762](https://github.com/jwilleke/ngdpbase/issues/762)); `type` carries the intended domain label in the meantime.
-- **Chrome pages declared via `domainDefaults`, not slug convention** — `package.json`'s `ngdpbase.domainDefaults` sets `ngdpbase.chrome.left-menu-page` / `ngdpbase.chrome.footer-page` to `left-menu-content` / `footer-content` explicitly ([ngdpbase#952](https://github.com/jwilleke/ngdpbase/issues/952), landed v3.68.1). Functionally a no-op today (those pages already won under the legacy slug-convention fallback this replaces), but it makes the override discoverable in config and gives a clear boot-time error if either page is ever renamed or removed, instead of silently reverting to core's `LeftMenu`/`Footer`. Operators can still override either key in their own `app-custom-config.json` — `applyDomainDefaults` skips any key already set there.
-
-## Open Issues
-
-Track all bugs and features on GitHub:
-
-- jwilleke/geohazardwatch — addon and deployment issues
-- jwilleke/ngdpbase — platform issues
-
-Key open issues:
-
-| Issue | Repo | Summary |
-|-------|------|---------|
-| #4 | geohazardwatch | NASA FIRMS satellite thermal data |
-| #6 | geohazardwatch | MIROVA/MODVOLC satellite monitoring |
-| #7 | geohazardwatch | VolcanoDiscovery RSS (licensing TBD) |
-| #36 | geohazardwatch | Best sources for (P2) |
-
-## Agent Priority Matrix
-
-### Agents CAN work autonomously on
-
-- Adding new import scripts or data managers following existing patterns
-- Adding new plugins (follow `plugins/*Plugin.js` pattern)
-- Bug fixes and lint/format issues
-- Documentation updates
-- Adding API routes to `routes/api.js`
-- Updating page seeds in `pages/`
-- Dependency updates (patch/minor)
-
-### Agents MUST request human review for
-
-- Changes to ngdpbase core (`/Volumes/hd2A/workspaces/github/ngdpbase/src/`)
-- New external data sources (licensing, API key requirements)
-- Changes to the addon's `register()` or `shutdown()` lifecycle
-- Breaking changes to API route shapes (clients may depend on them)
-- Production deployment
-
-## Project Log
-
-See [docs/project_log.md](docs/project_log.md) for session history and next steps.
-
-## Quick Navigation
-
-- [README.md](./README.md) — Setup and repo layout
-- [addons/geohazardwatch/README.md](./addons/geohazardwatch/README.md) — Plugin syntax and API reference
-- [GLOBAL-CODE-PREFERENCES.md](./GLOBAL-CODE-PREFERENCES.md) — Overarching principles
-- [CODE_STANDARDS.md](./CODE_STANDARDS.md) — Linting, formatting, commit conventions
-- [ARCHITECTURE.md](./ARCHITECTURE.md) — Repo structure, data pipeline, adding new sources
-- [docs/project_log.md](docs/project_log.md) — Session log
+Only committed files are linted: anything `.gitignore`d is generated or vendored, so its source is
+linted instead.

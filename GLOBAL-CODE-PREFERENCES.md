@@ -15,5 +15,5 @@ In all interactions and commit messages
 - Always create docs/project_log.md file as a log of work done on the project in format specified in document within "## Format"
 - Please think first and provide options
 - In Markdown documents:
-  - **bold** in list beginings.
+  - __bold__ in list beginings.
   - do not use "1. Headings" ok to use "## Step 1 ..."

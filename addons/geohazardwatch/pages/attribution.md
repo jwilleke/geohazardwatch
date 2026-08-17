@@ -13,41 +13,41 @@ geohazardwatch is a data platform, not a data producer. Every hazard record show
 
 ## Volcanoes & Eruptions
 
-**[Global Volcanism Program (GVP), Smithsonian Institution](https://volcano.si.edu/)** — the Volcanoes of the World (VOTW) database. Volcano records, eruption history, and global activity snapshots are imported from the [GVP-VOTW WFS service](https://webservices.volcano.si.edu/geoserver/GVP-VOTW/ows).
+__[Global Volcanism Program (GVP), Smithsonian Institution](https://volcano.si.edu/)__ — the Volcanoes of the World (VOTW) database. Volcano records, eruption history, and global activity snapshots are imported from the [GVP-VOTW WFS service](https://webservices.volcano.si.edu/geoserver/GVP-VOTW/ows).
 
 > Recommended citation: Global Volcanism Program, Smithsonian Institution. *Volcanoes of the World (VOTW) Database*. <https://volcano.si.edu/>
 
-**[VolcanoDiscovery](https://www.volcanodiscovery.com/)** — aggregated global volcanic activity reports, via their RSS feed. Used with permission (Dr. Tom Pfeiffer, VolcanoDiscovery, 2026-07-23); each item displayed here links back to its source page on volcanodiscovery.com.
+__[VolcanoDiscovery](https://www.volcanodiscovery.com/)__ — aggregated global volcanic activity reports, via their RSS feed. Used with permission (Dr. Tom Pfeiffer, VolcanoDiscovery, 2026-07-23); each item displayed here links back to its source page on volcanodiscovery.com.
 
 ## Earthquakes
 
-**[USGS Earthquake Hazards Program](https://earthquake.usgs.gov/)** — real-time and recent earthquake data via the [USGS earthquake summary feeds](https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary). A work of the U.S. Government; USGS earthquake data is in the public domain.
+__[USGS Earthquake Hazards Program](https://earthquake.usgs.gov/)__ — real-time and recent earthquake data via the [USGS earthquake summary feeds](https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary). A work of the U.S. Government; USGS earthquake data is in the public domain.
 
 ## US Volcano Alerts
 
-**[USGS Hazard Alert Notification System (HANS)](https://volcanoes.usgs.gov/hans-public/api/)** — current alert levels and color codes for USGS-monitored volcanoes. Also the source for **VONA** (Volcano Observatory Notification for Aviation) records, via HANS's `getVonasWithinLastYear` endpoint.
+__[USGS Hazard Alert Notification System (HANS)](https://volcanoes.usgs.gov/hans-public/api/)__ — current alert levels and color codes for USGS-monitored volcanoes. Also the source for __VONA__ (Volcano Observatory Notification for Aviation) records, via HANS's `getVonasWithinLastYear` endpoint.
 
 ## Aviation Volcanic Ash Advisories
 
-**[Aviation Weather Center, NOAA/NWS](https://aviationweather.gov/)** — Volcanic Ash SIGMETs (VA-SIGMETs), via the [Aviation Weather API](https://aviationweather.gov/data/api/).
+__[Aviation Weather Center, NOAA/NWS](https://aviationweather.gov/)__ — Volcanic Ash SIGMETs (VA-SIGMETs), via the [Aviation Weather API](https://aviationweather.gov/data/api/).
 
 ## Tsunamis
 
-**[National Weather Service, NOAA](https://www.weather.gov/)** — active tsunami warnings, watches, and advisories, via the [NWS Alerts API](https://api.weather.gov/). A work of the U.S. Government; NWS alert data is in the public domain.
+__[National Weather Service, NOAA](https://www.weather.gov/)__ — active tsunami warnings, watches, and advisories, via the [NWS Alerts API](https://api.weather.gov/). A work of the U.S. Government; NWS alert data is in the public domain.
 
-**[NOAA National Centers for Environmental Information (NCEI) / World Data Service (WDS) — Global Historical Tsunami Database](https://www.ncei.noaa.gov/products/natural-hazards)** — historical tsunami event records referenced on the [Tsunamis](/view/tsunamis) page.
+__[NOAA National Centers for Environmental Information (NCEI) / World Data Service (WDS) — Global Historical Tsunami Database](https://www.ncei.noaa.gov/products/natural-hazards)__ — historical tsunami event records referenced on the [Tsunamis](/view/tsunamis) page.
 
 ## Landslides
 
-**[NASA Cooperative Open Online Landslide Repository (COOLR)](https://gpm.nasa.gov/landslides/) / Global Landslide Catalog** — global landslide event records, via NASA's [maps.nccs.nasa.gov ArcGIS FeatureServer](https://maps.nccs.nasa.gov/). A work of the U.S. Government; NASA data is generally not subject to copyright in the United States.
+__[NASA Cooperative Open Online Landslide Repository (COOLR)](https://gpm.nasa.gov/landslides/) / Global Landslide Catalog__ — global landslide event records, via NASA's [maps.nccs.nasa.gov ArcGIS FeatureServer](https://maps.nccs.nasa.gov/). A work of the U.S. Government; NASA data is generally not subject to copyright in the United States.
 
-**[USGS Landslide Hazards Program](https://www.usgs.gov/programs/landslide-hazards)** — hazard mapping and technical reports referenced on the [Landslides](/view/landslides) page.
+__[USGS Landslide Hazards Program](https://www.usgs.gov/programs/landslide-hazards)__ — hazard mapping and technical reports referenced on the [Landslides](/view/landslides) page.
 
-**NASA Global Precipitation Measurement (GPM) / LHASA nowcast** — rainfall-triggered landslide nowcasting, referenced on the [Landslides](/view/landslides) page.
+__NASA Global Precipitation Measurement (GPM) / LHASA nowcast__ — rainfall-triggered landslide nowcasting, referenced on the [Landslides](/view/landslides) page.
 
 ## Platform
 
-geohazardwatch is built as a domain add-on for **[ngdpbase](https://github.com/jwilleke/ngdpbase)**, an open-source content platform.
+geohazardwatch is built as a domain add-on for __[ngdpbase](https://github.com/jwilleke/ngdpbase)__, an open-source content platform.
 
 ## Corrections
 
