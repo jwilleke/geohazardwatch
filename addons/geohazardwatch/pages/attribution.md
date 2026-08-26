@@ -4,7 +4,7 @@ uuid: efaa8c71-593a-4155-84cd-04c770bc5247
 slug: attribution
 system-category: documentation
 description: Credit and citation for every data source geohazardwatch imports, links to, or displays
-tags: [attribution, credits, data-sources, licensing, gvp, usgs, nasa, noaa]
+tags: [attribution, credits, data-sources, licensing, gvp, usgs, nasa, noaa, firms, fems]
 author: system
 ---
 ## Attribution
@@ -44,6 +44,12 @@ __[NASA Cooperative Open Online Landslide Repository (COOLR)](https://gpm.nasa.g
 __[USGS Landslide Hazards Program](https://www.usgs.gov/programs/landslide-hazards)__ — hazard mapping and technical reports referenced on the [Landslides](/view/landslides) page.
 
 __NASA Global Precipitation Measurement (GPM) / LHASA nowcast__ — rainfall-triggered landslide nowcasting, referenced on the [Landslides](/view/landslides) page.
+
+## Wildfire & Fire Danger
+
+__[NASA Fire Information for Resource Management System (FIRMS)](https://firms.modaps.eosdis.nasa.gov/)__ — global near-real-time thermal anomaly detections from the VIIRS Suomi-NPP product, shown on the [Wildfires](/view/wildfires) page. A work of the U.S. Government; NASA data is generally not subject to copyright in the United States.
+
+__[Fire Environment Mapping System (FEMS), USDA Forest Service](https://fems.fs2c.usda.gov/)__ — National Fire Danger Rating System (NFDRS) indices and fuel moisture, calculated from the interagency [RAWS](https://raws.nifc.gov/) weather station network and shown on the [Fire Danger](/view/nfdrs) page. A work of the U.S. Government; NFDRS outputs are in the public domain.
 
 ## Platform
 

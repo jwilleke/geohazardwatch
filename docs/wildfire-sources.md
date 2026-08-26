@@ -5,6 +5,7 @@
 | Our pipeline | Upstream (real source) | Kind | Poll interval | Rendered on |
 |---|---|---|---|---|
 | `firms-viirs` (ngdpbase `feeds` addon) → `FirmsHotspotsPlugin` | `firms.modaps.eosdis.nasa.gov/api/area/csv/<MAP_KEY>/VIIRS_SNPP_NRT/world/1` (NASA FIRMS, VIIRS Suomi-NPP near-real-time) | __Primary__ — global satellite thermal-anomaly detections | 60 min | only `geohazardwatch-plugins.md` (internal demo page) |
+| `fems-nfdr` (ngdpbase `feeds` addon) → `[{DataFeed}]` | `fems.fs2c.usda.gov/api/ext-climatology/download-nfdr-daily-summary/` (FEMS, USFS/interagency) | __Primary__ — NFDRS fire-danger indices + fuel moisture per RAWS station | 360 min | `/view/nfdrs` (geohazardwatch#173) |
 
 ## Important scoping note
 
@@ -24,6 +25,32 @@ So: the raw data ingested (`firms-viirs`) is genuinely wildfire-detection-capabl
 | acq_time | `acq_time` |
 
 Adapter: `csv` (unlike the other three hazard categories, which all use `geojson`).
+
+## FEMS / NFDRS (geohazardwatch#173)
+
+Fully declarative: a `csv` feed source plus `[{DataFeed format='table'}]` on `nfdrs.md`. __No import script, no data manager, no plugin__ — the same shape as the landslide and tsunami feeds, and the shape `volcano-sources.md` describes the repo migrating toward.
+
+### Why `-daily-summary` and not `-daily-avg`
+
+FEMS offers both. They are not interchangeable for our purposes:
+
+- `download-nfdr-daily-avg/` prepends a preamble line — `"Stations used in the building of the data sheet are: PINE CREEK"` — *before* the header row, and averages across the requested stations so no per-row station identity survives.
+- `download-nfdr-daily-summary/` has the header on row 0, no preamble, no BOM, and carries `StationName` and `StationId` on every row.
+
+That distinction is load-bearing. `csv.ts` takes `rows[0]` as the header unconditionally and exposes only a `delimiter` option — no `skipLines`, no `headerRow`. Pointed at `-daily-avg`, the parsed header becomes the single bogus preamble cell and __every index column is silently discarded__; the feed ingests rows that contain nothing but a date. `-daily-summary` needs no adapter change at all.
+
+### No API key, and no accumulation
+
+The `download-nfdr-*` endpoints are open — no credential, verified against live data. `dataFormat=json` is accepted and ignored; these endpoints return CSV regardless.
+
+`presetDate=-5Days7Days` keeps the URL static (5 days back plus a 7-day forecast, no date arithmetic to schedule). Because `RecordStore.upsertAll()` replaces the store rather than merging, each poll's 12 rows per station supersede the last — revised forecast rows do not accumulate, so no `dedupeBy` or `maxAgeHours` is needed.
+
+### What the open endpoint cannot give us
+
+- __Station coordinates and names catalogue.__ There is no public station-list endpoint (every candidate path 404s). Station numbers must be looked up by hand from the FEMS UI. This is why `/view/nfdrs` is a table and not a map — without lat/lon, `format='map'` is not available.
+- __The adjective rating__ (Low → Extreme). Not published by the API; it is a percentile of each station's own climatology against locally-set thresholds. Deliberately not computed — see the page's own "What this page does not show".
+
+FEMS does expose a GraphQL API at `/api/ext-climatology/graphql` with `nfdrsObs` and `stationMetaData` (which *would* supply the catalogue and coordinates), but it is unusable here on two counts: it requires a FEMS API-role key via a FAMAuth account, and it is POST-with-headers, which the feeds addon's `rest-json` adapter cannot issue — `restjson.ts` does a bare `fetch(cfg.url)` and `FeedSourceConfig` has no `method`/`headers`/`body`. Both would have to change before a key was worth anything.
 
 ## Wildfire alert design (decided, geohazardwatch#161)
 

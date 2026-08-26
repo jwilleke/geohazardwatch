@@ -14,6 +14,7 @@ author: geohazardwatch
 - [Landslides]
 - [Tsunamis]
 - [Wildfires]
+- [Fire Danger|nfdrs]
 - [Alerts]
 
 <h6 class="sidebar-heading text-muted fw-semibold mb-1 mt-3">More</h6>

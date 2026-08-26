@@ -66,6 +66,7 @@ __Status:__ page and feed wiring live. For live data outside this instance visit
 
 ## Related Pages
 
+- [Fire Danger|nfdrs] — NFDRS indices and fuel moisture, for conditions rather than active fires
 - [Volcanoes] — search, filter, and map every GVP-catalogued volcano
 - [Earthquakes] — recent seismic activity
 - [Alerts] — cross-hazard summary of what's currently active
