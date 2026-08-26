@@ -1,7 +1,7 @@
 ---
 title: TODO
 description: Priority bands and resume pointer for this repo.
-last_updated: "2026-07-28T08:15:14Z"
+last_updated: "2026-08-26T00:00:00Z"
 kit_version: "3aa1bb4"
 ---
 
@@ -15,15 +15,13 @@ kit_version: "3aa1bb4"
 
 ## 🟠 P1
 
-- *None.*
+- [#267](https://github.com/jwilleke/geohazardwatch/issues/267) — [FEATURE] ad to Attribution
 
 ## 🟡 P2
 
 - [#173](https://github.com/jwilleke/geohazardwatch/issues/173) — [FEATURE] National Fire Danger Rating System (NFDRS)
 - [#169](https://github.com/jwilleke/geohazardwatch/issues/169) — [FEATURE] Reverse geocode wildfire alert detections to nearest named place
 - [#164](https://github.com/jwilleke/geohazardwatch/issues/164) — [FEATURE] Create VolcanoInfobox with Images
-- [#148](https://github.com/jwilleke/geohazardwatch/issues/148) — [BUG] Tag-push trigger for publish-image.yml didn't fire for v1.2.92
-- [#141](https://github.com/jwilleke/geohazardwatch/issues/141) — Migrate VAAC advisories from bespoke code to the new xml-index feeds adapter (no longer blocked — ngdpbase#989 shipped)
 
 ## 🔵 In review
 
@@ -31,7 +29,7 @@ kit_version: "3aa1bb4"
 
 ## ⏸ Deferred
 
-- [#6](https://github.com/jwilleke/geohazardwatch/issues/6) — Import: satellite thermal monitoring — MIROVA / MODVOLC / MOUNTS
+- *None.*
 
 ## ❓ Needs triage
 
