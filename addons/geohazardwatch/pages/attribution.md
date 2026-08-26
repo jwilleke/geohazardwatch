@@ -4,7 +4,7 @@ uuid: efaa8c71-593a-4155-84cd-04c770bc5247
 slug: attribution
 system-category: documentation
 description: Credit and citation for every data source geohazardwatch imports, links to, or displays
-tags: [attribution, credits, data-sources, licensing, gvp, usgs, nasa, noaa]
+tags: [attribution, credits, data-sources, licensing, gvp, usgs, nasa, noaa, references]
 author: system
 ---
 ## Attribution
@@ -44,6 +44,18 @@ __[NASA Cooperative Open Online Landslide Repository (COOLR)](https://gpm.nasa.g
 __[USGS Landslide Hazards Program](https://www.usgs.gov/programs/landslide-hazards)__ — hazard mapping and technical reports referenced on the [Landslides](/view/landslides) page.
 
 __NASA Global Precipitation Measurement (GPM) / LHASA nowcast__ — rainfall-triggered landslide nowcasting, referenced on the [Landslides](/view/landslides) page.
+
+## Reference & Research
+
+Beyond the hazard feeds above, a handful of open reference platforms do the quiet work behind almost every page here — checking a place name, dating an eruption, tracing a citation, or catching an event as it unfolds. We are grateful to the people who write, edit, and maintain them.
+
+__[Wikipedia](https://www.wikipedia.org/)__ — the free encyclopedia, and our most-used reference for volcano, region, and historical-event background. Written and maintained by volunteers; text is available under the [Creative Commons Attribution-ShareAlike license](https://creativecommons.org/licenses/by-sa/4.0/). Thank you to every editor who has ever fixed a coordinate or sourced a date.
+
+__[Grokipedia](https://grokipedia.com/)__ — an AI-generated encyclopedia we consult for quick orientation on unfamiliar subjects and for cross-checking details against other references.
+
+__[X](https://x.com/)__ — often the fastest public signal that something is happening: eyewitness reports, observatory posts, and first images from an erupting volcano or a felt earthquake, frequently ahead of any formal bulletin.
+
+None of these are used as authoritative hazard data. Every record geohazardwatch publishes comes from the official providers credited above; the sources in this section inform the surrounding context, not the data.
 
 ## Platform
 
