@@ -46,48 +46,56 @@ For an official adjective rating, use the issuing unit's own posting or the [NWS
 
 ## Configuration
 
-The live feed is served by the ngdpbase `feeds` addon (#685). Enable it and declare the source in the instance `app-custom-config.json`, then restart:
+The live feed is served by the ngdpbase `feeds` addon (#685). Enable it and declare the source in the instance `app-custom-config.json`, then restart.
+
+Keys are written in __flat dot-notation__ below, matching how `app-custom-config.json` is written in practice (see also `docs/volcano-sources.md`). `AddonsManager` flattens `ngdpbase.addons.feeds.*` before the addon reads it, so a nested `"sources": { ... }` object works identically — but pick one style per file rather than mixing them.
 
 ```json
 {
   "ngdpbase.addons.feeds.enabled": true,
-  "ngdpbase.addons.feeds.sources": {
-    "fems-nfdr": {
-      "adapter": "csv",
-      "url": "https://fems.fs2c.usda.gov/api/ext-climatology/download-nfdr-daily-summary/?dataset=all&presetDate=-5Days7Days&dataFormat=csv&stationIds=101222,101708,102712,101710&fuelModels=Y",
-      "type": "Observation",
-      "intervalMinutes": 360,
-      "map": {
-        "station": "StationName",
-        "stationId": "StationId",
-        "date": "ObservationTime",
-        "type": "NFDRType",
-        "fuelModel": "FuelModel",
-        "erc": "ERC",
-        "bi": "BI",
-        "sc": "SC",
-        "ic": "IC",
-        "kbdi": "KBDI",
-        "gsi": "GSI",
-        "fm1hr": "1HrFM",
-        "fm10hr": "10HrFM",
-        "fm100hr": "100HrFM",
-        "fm1000hr": "1000HrFM",
-        "herbFm": "HerbFM",
-        "woodyFm": "WoodyFM"
-      }
-    }
-  }
+  "ngdpbase.addons.feeds.sources.fems-nfdr.adapter": "csv",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.url": "https://fems.fs2c.usda.gov/api/ext-climatology/download-nfdr-daily-summary/?dataset=all&presetDate=-5Days7Days&dataFormat=csv&stationIds=40611,45114,350912,241907,420403,291301,52301,92201,472603,500754,498012&fuelModels=Y",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.type": "Observation",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.intervalMinutes": 360,
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.station": "StationName",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.stationId": "StationId",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.date": "ObservationTime",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.type": "NFDRType",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.fuelModel": "FuelModel",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.erc": "ERC",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.bi": "BI",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.sc": "SC",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.ic": "IC",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.kbdi": "KBDI",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.gsi": "GSI",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.fm1hr": "1HrFM",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.fm10hr": "10HrFM",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.fm100hr": "100HrFM",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.fm1000hr": "1000HrFM",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.herbFm": "HerbFM",
+  "ngdpbase.addons.feeds.sources.fems-nfdr.map.woodyFm": "WoodyFM"
 }
 ```
 
-__No API key is required__ for this endpoint, and none should be added — the `download-nfdr-daily-summary` path is open. FEMS does publish a richer GraphQL API covering station metadata and coordinates, but it is key-gated behind a FAMAuth account and is POST-only, which the feeds addon's GET-only `rest-json` adapter cannot call (see `docs/wildfire-sources.md`).
+__Merge this into the existing `sources` keys — do not replace them.__ A live instance typically already carries several sources (`firms-viirs`, `vaac-advisories`, `tsunami-alerts`, and others); overwriting the block drops them silently, and the pages that depend on them go quiet with no error.
+
+__No API key is required__ for this endpoint, and none should be added — the `download-nfdr-daily-summary` path is open.
 
 ### Choosing stations
 
-`stationIds` is a comma-separated list of FEMS station numbers, and the four above are examples — replace them with stations relevant to your instance. There is __no public station-catalog endpoint__, so station numbers have to be looked up by hand from the station map and search on [fems.fs2c.usda.gov](https://fems.fs2c.usda.gov/), which lists roughly 2,200 RAWS across the US, Alaska, Hawaii, Guam, and Puerto Rico.
+`stationIds` is a comma-separated list of FEMS station numbers. The eleven above are one station per Geographic Area Coordination Center (GACC), chosen as the nearest NFDRS-producing station to each coordination area — a national overview rather than a local readout. Replace them with whatever suits your instance.
 
-FEMS limits how many stations one request may span: unlimited under a 2-week window, 10 stations for 2 weeks to a year, and 1 station beyond a year. `presetDate=-5Days7Days` is a 12-day window, so it sits in the unlimited tier — but each station adds 12 rows per poll, so keep the list to a curated handful rather than a region.
+__2,088 stations__ produce daily NFDRS across 53 states and territories, weighted heavily toward the fire-prone west (CA 407, OR 135, AK 117, MT 113). Stations can be browsed on the map at [fems.fs2c.usda.gov](https://fems.fs2c.usda.gov/), or the whole catalogue — with coordinates — can be listed in one call:
+
+```bash
+curl -s -X POST https://fems.fs2c.usda.gov/api/climatology/graphql/ \
+  -H 'Content-Type: application/json' \
+  -d '{"query":"query{stationMetaData(returnAll:true,nfdrsDailyVisible:TRUE){_metadata{total_count}data{station_id station_name latitude longitude state}}}"}'
+```
+
+__That endpoint is the FEMS UI's own internal backend__ (`/api/climatology/`), not the documented external API (`/api/ext-climatology/`). It answers without a key today, but it is undocumented and carries no stability guarantee — treat it as a lookup tool for choosing station numbers, not as something to depend on at runtime. The documented external GraphQL surface exposes the same data but requires a FEMS API-role key via a FAMAuth account, and is POST-with-headers, which the feeds addon's GET-only `rest-json` adapter cannot call (see `docs/wildfire-sources.md`).
+
+FEMS limits how many stations one request may span: unlimited under a 2-week window, 10 stations for 2 weeks to a year, and 1 station beyond a year. `presetDate=-5Days7Days` is a 12-day window, so it sits in the unlimited tier — but each station adds 12 rows per poll (the eleven above produce 132), so keep the list to a legible handful rather than a whole region.
 
 `fuelModels=Y` selects the NFDRS 2016 fuel model used most widely for general reporting. Other models can be requested, comma-separated, but every model returns its own row per station per day.
 

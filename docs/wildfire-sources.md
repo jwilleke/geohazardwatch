@@ -45,12 +45,26 @@ The `download-nfdr-*` endpoints are open — no credential, verified against liv
 
 `presetDate=-5Days7Days` keeps the URL static (5 days back plus a 7-day forecast, no date arithmetic to schedule). Because `RecordStore.upsertAll()` replaces the store rather than merging, each poll's 12 rows per station supersede the last — revised forecast rows do not accumulate, so no `dedupeBy` or `maxAgeHours` is needed.
 
-### What the open endpoint cannot give us
+### The station catalogue (corrected)
 
-- __Station coordinates and names catalogue.__ There is no public station-list endpoint (every candidate path 404s). Station numbers must be looked up by hand from the FEMS UI. This is why `/view/nfdrs` is a table and not a map — without lat/lon, `format='map'` is not available.
+An earlier version of this doc claimed there was no public station-catalogue endpoint. __That was wrong__, and the mistake was method: candidate REST paths were guessed (all 404) instead of watching what the FEMS UI itself calls.
+
+The UI uses `/api/climatology/graphql/` — the __internal__ path, not the documented `/api/ext-climatology/` — and it answers unauthenticated:
+
+```bash
+curl -s -X POST https://fems.fs2c.usda.gov/api/climatology/graphql/ \
+  -H 'Content-Type: application/json' \
+  -d '{"query":"query{stationMetaData(returnAll:true,nfdrsDailyVisible:TRUE){_metadata{total_count}data{station_id station_name latitude longitude state}}}"}'
+```
+
+That returns __2,088 stations__ producing daily NFDRS, with `latitude`/`longitude`/`state`, across 53 states and territories (CA 407, OR 135, AK 117, MT 113 …).
+
+__Treat it as a lookup tool, not a dependency.__ It is the UI's private backend: undocumented, unversioned, no stability guarantee, and plausibly not intended for third-party use. Using it to pick station numbers once is low-risk. Wiring the site to call it at runtime is not. The documented external equivalent (`/api/ext-climatology/graphql`) serves the same data but is key-gated behind a FEMS API-role FAMAuth account __and__ is POST-with-headers, which `restjson.ts` cannot issue — `fetch(cfg.url)` with no `method`/`headers`/`body` on `FeedSourceConfig`.
+
+### What the CSV feed still cannot give us
+
+- __Coordinates on the records themselves.__ The catalogue above has lat/lon, but the `download-nfdr-*` CSV does not, and nothing joins the two today. So `/view/nfdrs` is a table, not a map. Joining them would make `format='map'` viable — worth its own issue, and it would have to resolve the internal-endpoint dependency first.
 - __The adjective rating__ (Low → Extreme). Not published by the API; it is a percentile of each station's own climatology against locally-set thresholds. Deliberately not computed — see the page's own "What this page does not show".
-
-FEMS does expose a GraphQL API at `/api/ext-climatology/graphql` with `nfdrsObs` and `stationMetaData` (which *would* supply the catalogue and coordinates), but it is unusable here on two counts: it requires a FEMS API-role key via a FAMAuth account, and it is POST-with-headers, which the feeds addon's `rest-json` adapter cannot issue — `restjson.ts` does a bare `fetch(cfg.url)` and `FeedSourceConfig` has no `method`/`headers`/`body`. Both would have to change before a key was worth anything.
 
 ## Wildfire alert design (decided, geohazardwatch#161)
 
