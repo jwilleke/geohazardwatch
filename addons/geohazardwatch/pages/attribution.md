@@ -4,7 +4,7 @@ uuid: efaa8c71-593a-4155-84cd-04c770bc5247
 slug: attribution
 system-category: documentation
 description: Credit and citation for every data source geohazardwatch imports, links to, or displays
-tags: [attribution, credits, data-sources, licensing, gvp, usgs, nasa, noaa, firms, fems]
+tags: [attribution, credits, data-sources, licensing, gvp, usgs, nasa, noaa, firms, fems, references]
 author: system
 ---
 ## Attribution
@@ -50,6 +50,18 @@ __NASA Global Precipitation Measurement (GPM) / LHASA nowcast__ — rainfall-tri
 __[NASA Fire Information for Resource Management System (FIRMS)](https://firms.modaps.eosdis.nasa.gov/)__ — global near-real-time thermal anomaly detections from the VIIRS Suomi-NPP product, shown on the [Wildfires](/view/wildfires) page. A work of the U.S. Government; NASA data is generally not subject to copyright in the United States.
 
 __[Fire Environment Mapping System (FEMS), USDA Forest Service](https://fems.fs2c.usda.gov/)__ — National Fire Danger Rating System (NFDRS) indices and fuel moisture, calculated from the interagency [RAWS](https://raws.nifc.gov/) weather station network and shown on the [Fire Danger](/view/nfdrs) page. A work of the U.S. Government; NFDRS outputs are in the public domain.
+
+## Reference & Research
+
+Beyond the hazard feeds above, a handful of open reference platforms do the quiet work behind almost every page here — checking a place name, dating an eruption, tracing a citation, or catching an event as it unfolds. We are grateful to the people who write, edit, and maintain them.
+
+__[Wikipedia](https://www.wikipedia.org/)__ — the free encyclopedia, and our most-used reference for volcano, region, and historical-event background. Written and maintained by volunteers; text is available under the [Creative Commons Attribution-ShareAlike license](https://creativecommons.org/licenses/by-sa/4.0/). Thank you to every editor who has ever fixed a coordinate or sourced a date.
+
+__[Grokipedia](https://grokipedia.com/)__ — an AI-generated encyclopedia we consult for quick orientation on unfamiliar subjects and for cross-checking details against other references.
+
+__[X](https://x.com/)__ — often the fastest public signal that something is happening: eyewitness reports, observatory posts, and first images from an erupting volcano or a felt earthquake, frequently ahead of any formal bulletin.
+
+None of these are used as authoritative hazard data. Every record geohazardwatch publishes comes from the official providers credited above; the sources in this section inform the surrounding context, not the data.
 
 ## Platform
 

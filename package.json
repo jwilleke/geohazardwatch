@@ -1,6 +1,6 @@
 {
   "name": "geohazardwatch",
-  "version": "1.2.179",
+  "version": "1.2.188",
   "description": "Volcano & geology add-on for ngdpbase",
   "private": true,
   "scripts": {
@@ -25,9 +25,9 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^25.9.5",
-    "@typescript-eslint/eslint-plugin": "^8.67.0",
-    "@typescript-eslint/parser": "^8.67.0",
-    "eslint": "^10.8.1",
+    "@typescript-eslint/eslint-plugin": "^8.68.0",
+    "@typescript-eslint/parser": "^8.68.0",
+    "eslint": "^10.9.1",
     "express": "^5.2.1",
     "globals": "^17.11.0",
     "husky": "^9.1.7",
