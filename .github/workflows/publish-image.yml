@@ -89,12 +89,64 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Smoke test — start container
+      # ngdpbase #1087 (shipped in v4.12.0) makes a headless install REFUSE to
+      # create the bootstrap admin on the shipped password. The old smoke test
+      # booted exactly that container and asserted it came up, so it has failed
+      # on every release since the base was bumped to v4.12.0 (v1.2.193). Two
+      # halves now, mirroring ngdpbase's own docker-build.yml: the refusal must
+      # propagate into this image, and a configured install must come up.
+      # Tracked in ngdpbase#1195.
+      - name: Smoke test — an unconfigured headless install must REFUSE to boot
         run: |
+          docker rm -f ghw-smoke-refuse 2>/dev/null || true
+          docker run -d --name ghw-smoke-refuse \
+            -e HEADLESS_INSTALL=true \
+            -e NODE_ENV=production \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+          for i in $(seq 1 12); do
+            RUNNING=$(docker inspect --format='{{.State.Running}}' ghw-smoke-refuse 2>/dev/null || echo "false")
+            [ "$RUNNING" = "false" ] && break
+            echo "  attempt $i/12: still running"
+            sleep 5
+          done
+
+          if [ "$(docker inspect --format='{{.State.Running}}' ghw-smoke-refuse 2>/dev/null)" = "true" ]; then
+            echo "FAILED: a headless install with no admin password came up. ngdpbase#1087's"
+            echo "        guard is not working in this image — it would create admin/admin123."
+            docker logs ghw-smoke-refuse
+            docker rm -f ghw-smoke-refuse 2>/dev/null || true
+            exit 1
+          fi
+
+          if ! docker logs ghw-smoke-refuse 2>&1 | grep -q "Refusing to create the bootstrap admin account"; then
+            echo "FAILED: the container stopped, but not for #1087's reason."
+            docker logs ghw-smoke-refuse
+            docker rm -f ghw-smoke-refuse 2>/dev/null || true
+            exit 1
+          fi
+
+          echo "Refused to bootstrap on the shipped password, as ngdpbase#1087 requires."
+          docker rm -f ghw-smoke-refuse 2>/dev/null || true
+
+      - name: Smoke test — start a CONFIGURED container
+        run: |
+          # The config file is required: #1087's guard compares the RESOLVED
+          # password rather than reading the variable, so exporting
+          # NGDPBASE_ADMIN_PASSWORD alone still resolves to the shipped default.
+          mkdir -p "$RUNNER_TEMP/smoke-data/config"
+          cat > "$RUNNER_TEMP/smoke-data/config/app-custom-config.json" <<'JSON'
+          {
+            "ngdpbase.user.security.defaultpassword": "$NGDPBASE_ADMIN_PASSWORD"
+          }
+          JSON
+
           docker run -d --name ghw-smoke \
             -p 3000:3000 \
             -e HEADLESS_INSTALL=true \
             -e NODE_ENV=production \
+            -e NGDPBASE_ADMIN_PASSWORD="ci-smoke-$(openssl rand -hex 12)" \
+            -v "$RUNNER_TEMP/smoke-data:/app/data" \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
       - name: Smoke test — wait for healthy
@@ -126,7 +178,7 @@ jobs:
 
       - name: Smoke test — cleanup
         if: always()
-        run: docker rm -f ghw-smoke 2>/dev/null || true
+        run: docker rm -f ghw-smoke ghw-smoke-refuse 2>/dev/null || true
 
       - name: Trivy scan
         uses: aquasecurity/trivy-action@master
