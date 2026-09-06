@@ -41,6 +41,41 @@ const VolcanoMapPlugin       = require('./plugins/VolcanoMapPlugin');
 const EarthquakeListPlugin   = require('./plugins/EarthquakeListPlugin');
 const EarthquakeMapPlugin    = require('./plugins/EarthquakeMapPlugin');
 const HansAlertPlugin        = require('./plugins/HansAlertPlugin');
+
+/**
+ * The context a scheduled job runs under (ngdpbase #631 / #1179).
+ *
+ * `BackgroundJobManager.enqueue(jobId, requestedBy)` takes a mandatory
+ * JobContext — who asked, from where, why — so the audit record of the run
+ * names the scheduler rather than nobody. Calling it with one argument, as
+ * this file did until geohazardwatch#288, threw inside the manager's
+ * fire-and-forget promise and took the whole host down once per tick.
+ *
+ * Built here rather than imported: this addon is CommonJS and ngdpbase's
+ * `scheduleContext` helper lives in an ESM module. The shape is the same —
+ * the system principal's name from UserManager, origin `schedule`, a reason.
+ *
+ * @param {import('ngdpbase').WikiEngine} engine
+ * @param {string} reason
+ */
+function scheduleContext(engine, reason) {
+  const userManager = engine.getManager('UserManager');
+  const username = typeof userManager?.systemPrincipalName === 'function'
+    ? userManager.systemPrincipalName()
+    : 'system';
+  return { username, origin: 'schedule', reason, requestedAt: new Date().toISOString() };
+}
+
+/**
+ * Enqueue from a timer without letting a rejection escape (geohazardwatch#288).
+ * A timer callback has nobody to return to; an unhandled rejection there is
+ * a process exit.
+ */
+function enqueueScheduled(jobManager, engine, jobId, reason) {
+  jobManager.enqueue(jobId, scheduleContext(engine, reason)).catch((err) => {
+    console.error(`[geohazardwatch] scheduled enqueue of ${jobId} failed:`, err);
+  });
+}
 const VaacAdvisoriesPlugin   = require('./plugins/VaacAdvisoriesPlugin');
 const FirmsHotspotsPlugin    = require('./plugins/FirmsHotspotsPlugin');
 const { runImport: runHansImport }       = require('./import/import-hans');
@@ -169,12 +204,18 @@ module.exports = {
 
       if (hansIntervalMs > 0) {
         _intervals.push(
-          setInterval(() => jobManager.enqueue('geohazardwatch.import-hans'), hansIntervalMs)
+          setInterval(
+            () => enqueueScheduled(jobManager, engine, 'geohazardwatch.import-hans', 'geohazardwatch: scheduled HANS import'),
+            hansIntervalMs
+          )
         );
       }
       if (eqIntervalMs > 0) {
         _intervals.push(
-          setInterval(() => jobManager.enqueue('geohazardwatch.import-earthquakes'), eqIntervalMs)
+          setInterval(
+            () => enqueueScheduled(jobManager, engine, 'geohazardwatch.import-earthquakes', 'geohazardwatch: scheduled USGS earthquake import'),
+            eqIntervalMs
+          )
         );
       }
     }
