@@ -32,6 +32,12 @@ jobs:
       - name: Check TypeScript
         run: npx tsc --noEmit
 
+      - name: Typecheck addon against ngdpbase
+        run: bash scripts/typecheck-addon.sh
+
+      - name: Addon unit tests
+        run: npm test
+
   security-audit:
     runs-on: ubuntu-latest
 

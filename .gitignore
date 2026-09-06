@@ -5,8 +5,14 @@ yarn.lock
 pnpm-lock.yaml
 
 # Build output
+dist
 dist/
 build/
+addons/geohazardwatch/.ngdpbase-src
+addons/geohazardwatch/**/*.js
+addons/geohazardwatch/**/*.js.map
+!addons/geohazardwatch/public/**
+addons/geohazardwatch/.tsbuildinfo
 out/
 *.tsbuildinfo
 

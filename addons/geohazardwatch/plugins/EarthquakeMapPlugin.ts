@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * EarthquakeMapPlugin
  *
@@ -13,10 +11,12 @@
  *
  * @type {import('../../../src/managers/PluginManager').PluginObject}
  */
-module.exports = {
+
+import type { PluginContext, PluginParams, PluginObject } from '#ngdpbase/managers/PluginManager.js';
+const plugin: PluginObject = {
   name: 'EarthquakeMap',
 
-  execute(context, params) {
+  execute(_context: PluginContext, params: PluginParams) {
     const mapId       = 'em-map-' + Math.random().toString(36).slice(2, 8);
     const height      = Number(params.height) || 450;
     const centerLat   = Number(params.lat)    || 20;
@@ -25,15 +25,15 @@ module.exports = {
     const showVolcanoes = params.showVolcanoes === 'true';
 
     const eqParams = new URLSearchParams();
-    if (params.minMagnitude)  eqParams.set('minMagnitude',  params.minMagnitude);
-    if (params.maxMagnitude)  eqParams.set('maxMagnitude',  params.maxMagnitude);
-    if (params.nearVolcano)   eqParams.set('nearVolcano',   params.nearVolcano);
-    if (params.tsunamiOnly)   eqParams.set('tsunamiOnly',   params.tsunamiOnly);
-    if (params.volcanoNumber) eqParams.set('volcanoNumber', params.volcanoNumber);
+    if (params.minMagnitude)  eqParams.set('minMagnitude',  String(params.minMagnitude));
+    if (params.maxMagnitude)  eqParams.set('maxMagnitude',  String(params.maxMagnitude));
+    if (params.nearVolcano)   eqParams.set('nearVolcano',   String(params.nearVolcano));
+    if (params.tsunamiOnly)   eqParams.set('tsunamiOnly',   String(params.tsunamiOnly));
+    if (params.volcanoNumber) eqParams.set('volcanoNumber', String(params.volcanoNumber));
     eqParams.set('limit', String(Number(params.limit) || 5000));
 
     const volcParams = new URLSearchParams({ limit: '5000' });
-    if (params.epoch) volcParams.set('epoch', params.epoch);
+    if (params.epoch) volcParams.set('epoch', String(params.epoch));
 
     return `
 <div class="earthquake-map">
@@ -112,3 +112,5 @@ module.exports = {
 </script>`.trim();
   }
 };
+
+export default plugin;

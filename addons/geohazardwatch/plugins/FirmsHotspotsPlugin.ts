@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * FirmsHotspotsPlugin
  *
@@ -23,13 +21,25 @@
  * @type {import('../../../src/managers/PluginManager').PluginObject}
  */
 
+import type { PluginContext, PluginParams, PluginObject } from '#ngdpbase/managers/PluginManager.js';
+import type VolcanoDataManager from '../managers/VolcanoDataManager.js';
+import type { FeedManagerLike } from '../lib/types.js';
+import { asParamString } from '../lib/types.js';
 const PROXIMITY_KM = 5;
 const GRID_DEGREES = 1; // ≈111 km at the equator — comfortably larger than PROXIMITY_KM
 
-/** @type {{ fetchedAt: string, results: object[] } | null} */
-let cache = null;
+interface FirmsHit {
+  volcanoNumber: number;
+  volcanoName: string;
+  distanceKm: number;
+  frp: number;
+  confidence: unknown;
+  acqDateUtc: string | null;
+}
+interface FirmsCache { sourceId: string; fetchedAt: string; results: FirmsHit[] }
+let cache: FirmsCache | null = null;
 
-function distanceKm(lat1, lon1, lat2, lon2) {
+function distanceKm(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
@@ -40,22 +50,22 @@ function distanceKm(lat1, lon1, lat2, lon2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-function gridKey(lat, lon) {
+function gridKey(lat: number, lon: number) {
   return `${Math.round(lat / GRID_DEGREES)},${Math.round(lon / GRID_DEGREES)}`;
 }
 
 /** Bucket volcanoes by ~1° grid cell so each hotspot only checks nearby cells. */
-function buildVolcanoGrid(volcanoes) {
+function buildVolcanoGrid(volcanoes: import('../lib/types.js').VolcanoRecord[]) {
   const grid = new Map();
   for (const v of volcanoes) {
     const key = gridKey(v.latitude, v.longitude);
     if (!grid.has(key)) grid.set(key, []);
-    grid.get(key).push(v);
+    grid.get(key)?.push(v);
   }
   return grid;
 }
 
-function findNearestVolcano(lat, lon, grid) {
+function findNearestVolcano(lat: number, lon: number, grid: Map<string, import('../lib/types.js').VolcanoRecord[]>) {
   const cellLat = Math.round(lat / GRID_DEGREES);
   const cellLon = Math.round(lon / GRID_DEGREES);
   let nearest = null;
@@ -75,7 +85,7 @@ function findNearestVolcano(lat, lon, grid) {
 }
 
 /** Volcanoes currently showing a hotspot, strongest FRP first. Cached per feed refresh. */
-async function computeActiveVolcanoes(feedManager, volcanoManager, sourceId) {
+async function computeActiveVolcanoes(feedManager: import('../lib/types.js').FeedManagerLike, volcanoManager: import('../managers/VolcanoDataManager.js').default, sourceId: string) {
   const records = await feedManager.getRecords(sourceId);
   if (records.length === 0) return { fetchedAt: '', results: [] };
 
@@ -118,12 +128,12 @@ async function computeActiveVolcanoes(feedManager, volcanoManager, sourceId) {
   return cache;
 }
 
-module.exports = {
+const plugin: PluginObject = {
   name: 'FirmsHotspots',
 
-  async execute(context, params) {
-    const feedManager = context.engine.getManager('FeedManager');
-    const volcanoManager = context.engine.getManager('VolcanoDataManager');
+  async execute(context: PluginContext, params: PluginParams) {
+    const feedManager = context.engine.getManager<FeedManagerLike>('FeedManager');
+    const volcanoManager = context.engine.getManager<VolcanoDataManager>('VolcanoDataManager');
     if (!feedManager) {
       return '<span class="plugin-error">FirmsHotspots: FeedManager not available — enable the feeds addon</span>';
     }
@@ -131,7 +141,7 @@ module.exports = {
       return '<span class="plugin-error">FirmsHotspots: VolcanoDataManager not available</span>';
     }
 
-    const sourceId = params.source || 'firms-viirs';
+    const sourceId = asParamString(params.source) ?? 'firms-viirs';
     if (!feedManager.getSourceIds().includes(sourceId)) {
       return `<span class="plugin-error">FirmsHotspots: source '${escapeHtml(sourceId)}' not configured — add ngdpbase.addons.feeds.sources.${escapeHtml(sourceId)}.*</span>`;
     }
@@ -139,7 +149,7 @@ module.exports = {
     const active = await computeActiveVolcanoes(feedManager, volcanoManager, sourceId);
 
     let volcanoes = active.results;
-    const limit = params.limit !== undefined ? parseInt(params.limit, 10) : 0;
+    const limit = params.limit !== undefined ? parseInt(String(params.limit), 10) : 0;
     if (limit > 0) volcanoes = volcanoes.slice(0, limit);
 
     const lastUpdated = active.fetchedAt ? new Date(active.fetchedAt).toUTCString() : 'unknown';
@@ -152,7 +162,7 @@ module.exports = {
         </div>`;
     }
 
-    const rows = volcanoes.map(h => {
+    const rows = volcanoes.map((h: FirmsHit) => {
       const gvpUrl = `<a href="https://volcano.si.edu/volcano.cfm?vn=${h.volcanoNumber}" target="_blank" rel="noopener">${escapeHtml(h.volcanoName)}</a>`;
       return `
         <tr class="firms-row">
@@ -184,10 +194,12 @@ module.exports = {
   }
 };
 
-function escapeHtml(str) {
+function escapeHtml(str: unknown) {
   return String(str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
+
+export default plugin;

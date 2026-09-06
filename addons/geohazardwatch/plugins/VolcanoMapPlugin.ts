@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * VolcanoMapPlugin
  *
@@ -13,7 +11,9 @@
  *
  * @type {import('../../../src/managers/PluginManager').PluginObject}
  */
-module.exports = {
+
+import type { PluginContext, PluginParams, PluginObject } from '#ngdpbase/managers/PluginManager.js';
+const plugin: PluginObject = {
   name: 'VolcanoMap',
 
   /**
@@ -21,7 +21,7 @@ module.exports = {
    * @param {Record<string, string>} params
    * @returns {string}
    */
-  execute(context, params) {
+  execute(_context: PluginContext, params: PluginParams) {
     const mapId    = 'vm-map-' + Math.random().toString(36).slice(2, 8);
     const height   = Number(params.height) || 450;
     const centerLat = Number(params.lat) || 20;
@@ -30,12 +30,12 @@ module.exports = {
 
     // Build query string for the API call
     const apiParams = new URLSearchParams();
-    if (params.country)        apiParams.set('country', params.country);
-    if (params.region)         apiParams.set('region', params.region);
-    if (params.volcanoType)    apiParams.set('volcanoType', params.volcanoType);
-    if (params.epoch)          apiParams.set('epoch', params.epoch);
-    if (params.minElevation)   apiParams.set('minElevation', params.minElevation);
-    if (params.maxElevation)   apiParams.set('maxElevation', params.maxElevation);
+    if (params.country)        apiParams.set('country', String(params.country));
+    if (params.region)         apiParams.set('region', String(params.region));
+    if (params.volcanoType)    apiParams.set('volcanoType', String(params.volcanoType));
+    if (params.epoch)          apiParams.set('epoch', String(params.epoch));
+    if (params.minElevation)   apiParams.set('minElevation', String(params.minElevation));
+    if (params.maxElevation)   apiParams.set('maxElevation', String(params.maxElevation));
     apiParams.set('limit', String(Number(params.limit) || 5000));
 
     return `
@@ -94,3 +94,5 @@ module.exports = {
 </script>`.trim();
   }
 };
+
+export default plugin;

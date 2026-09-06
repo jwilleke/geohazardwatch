@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * VolcanoInfoboxPlugin
  *
@@ -12,7 +10,10 @@
  *
  * @type {import('../../../src/managers/PluginManager').PluginObject}
  */
-module.exports = {
+
+import type { PluginContext, PluginParams, PluginObject } from '#ngdpbase/managers/PluginManager.js';
+import type VolcanoDataManager from '../managers/VolcanoDataManager.js';
+const plugin: PluginObject = {
   name: 'VolcanoInfobox',
 
   /**
@@ -20,13 +21,13 @@ module.exports = {
    * @param {{ number?: string, style?: string, placement?: string }} params
    * @returns {string}
    */
-  execute(context, params) {
+  execute(context: PluginContext, params: PluginParams) {
     const number = params.number || '';
     if (!number) {
       return '<span class="plugin-error">VolcanoInfobox: number parameter is required</span>';
     }
 
-    const mgr = context.engine.getManager('VolcanoDataManager');
+    const mgr = context.engine.getManager<VolcanoDataManager>('VolcanoDataManager');
     if (!mgr) {
       return '<span class="plugin-error">VolcanoInfobox: VolcanoDataManager not available</span>';
     }
@@ -46,13 +47,13 @@ module.exports = {
 
 // Mirrors ngdpbase src/utils/pluginFormatters.ts → parsePlacementParam.
 // Inlined because the addon is plain CommonJS and runs cross-repo.
-function parsePlacement(value, defaultPlacement) {
+function parsePlacement(value: unknown, defaultPlacement: string) {
   if (!value) return defaultPlacement;
   const v = String(value).toLowerCase().trim();
   return ['right', 'left', 'block', 'inline'].includes(v) ? v : defaultPlacement;
 }
 
-function renderFull(v, placement) {
+function renderFull(v: import('../lib/types.js').VolcanoRecord, placement: string) {
   const photo = v.primaryPhotoLink
     ? `<div class="vib-photo"><img src="${esc(v.primaryPhotoLink)}" alt="${esc(v.volcanoName)}"${v.primaryPhotoCaption ? ` title="${esc(v.primaryPhotoCaption)}"` : ''}></div>`
     : '';
@@ -71,7 +72,7 @@ function renderFull(v, placement) {
     ['Rock Type',      v.dominantRockType],
     ['Tectonic',       v.tectonicSetting],
     ['Activity',       v.activityEvidence],
-    ['Last Eruption',  v.lastKnownEruption],
+    ['Last Eruption',  v.lastKnownEruption]
   ].filter(([, val]) => val).map(([label, val]) => {
     // GVP Number row contains a pre-built anchor — render it raw
     const tdContent = label === 'GVP Number' ? String(val) : esc(String(val));
@@ -98,15 +99,17 @@ function renderFull(v, placement) {
 </div>`.trim();
 }
 
-function renderCompact(v) {
+function renderCompact(v: import('../lib/types.js').VolcanoRecord) {
   return `<span class="volcano-inline" title="${esc(v.country)}, ${esc(v.volcanicRegion)}">${esc(v.volcanoName)}</span>`;
 }
 
 /** @param {string} str */
-function esc(str) {
+function esc(str: unknown) {
   return String(str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
+
+export default plugin;

@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * VolcanoSearchPlugin
  *
@@ -12,7 +10,10 @@
  *
  * @type {import('../../../src/managers/PluginManager').PluginObject}
  */
-module.exports = {
+
+import type { PluginContext, PluginParams, PluginObject } from '#ngdpbase/managers/PluginManager.js';
+import type VolcanoDataManager from '../managers/VolcanoDataManager.js';
+const plugin: PluginObject = {
   name: 'VolcanoSearch',
 
   /**
@@ -20,11 +21,11 @@ module.exports = {
    * @param {Record<string, string>} params
    * @returns {string}
    */
-  execute(context, params) {
+  execute(context: PluginContext, params: PluginParams) {
     const defaultEpoch = params.defaultEpoch || '';
     const defaultLimit = params.defaultLimit || '50';
 
-    const mgr = context.engine.getManager('VolcanoDataManager');
+    const mgr = context.engine.getManager<VolcanoDataManager>('VolcanoDataManager');
     const countries = mgr ? JSON.stringify(mgr.distinctValues('country')) : '[]';
     const regions   = mgr ? JSON.stringify(mgr.distinctValues('volcanicRegion')) : '[]';
     const types     = mgr ? JSON.stringify(mgr.distinctValues('primaryVolcanoType')) : '[]';
@@ -136,3 +137,5 @@ module.exports = {
 </script>`.trim();
   }
 };
+
+export default plugin;

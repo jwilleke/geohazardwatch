@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * HansAlertPlugin
  *
@@ -13,19 +11,26 @@
  *
  * @type {import('../../../src/managers/PluginManager').PluginObject}
  */
-module.exports = {
+
+import type { PluginContext, PluginParams, PluginObject } from '#ngdpbase/managers/PluginManager.js';
+import type HansDataManager from '../managers/HansDataManager.js';
+import { asParamString } from '../lib/types.js';
+const plugin: PluginObject = {
   name: 'HansAlerts',
 
-  execute(context, params) {
-    const mgr = context.engine.getManager('HansDataManager');
+  execute(context: PluginContext, params: PluginParams) {
+    const mgr = context.engine.getManager<HansDataManager>('HansDataManager');
     if (!mgr) {
       return '<span class="plugin-error">HansAlerts: HansDataManager not available — run npm run import:hans</span>';
     }
 
-    const filters = {};
-    if (params.alertLevel)  filters.alertLevel  = params.alertLevel;
-    if (params.colorCode)   filters.colorCode   = params.colorCode;
-    if (params.observatory) filters.observatory = params.observatory;
+    const filters: Record<string, string> = {};
+    const _alertLevel = asParamString(params.alertLevel);
+    if (_alertLevel)  filters.alertLevel = _alertLevel;
+    const _colorCode = asParamString(params.colorCode);
+    if (_colorCode)   filters.colorCode = _colorCode;
+    const _observatory = asParamString(params.observatory);
+    if (_observatory) filters.observatory = _observatory;
 
     const alerts = mgr.getElevated(filters);
     const status = mgr.status();
@@ -43,7 +48,7 @@ module.exports = {
     }
 
     // Sort: WARNING → WATCH → ADVISORY
-    const order = { WARNING: 0, WATCH: 1, ADVISORY: 2 };
+    const order: Record<string, number> = { WARNING: 0, WATCH: 1, ADVISORY: 2 };
     alerts.sort((a, b) => (order[a.alertLevel] ?? 9) - (order[b.alertLevel] ?? 9));
 
     const rows = alerts.map(a => {
@@ -86,10 +91,12 @@ module.exports = {
   }
 };
 
-function escapeHtml(str) {
+function escapeHtml(str: unknown) {
   return String(str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
+
+export default plugin;

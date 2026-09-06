@@ -45,6 +45,8 @@ COPY .npmrc ./
 RUN --mount=type=secret,id=github_token \
     NODE_AUTH_TOKEN="$(cat /run/secrets/github_token)" \
     npm install "@jwilleke/geohazardwatch-addon@${GEOHAZARDWATCH_ADDON_VERSION}" --omit=dev && \
+    ln -sfn /app/dist/src /app/node_modules/@jwilleke/geohazardwatch-addon/.ngdpbase-src && \
+    /app/node_modules/.bin/tsc -p /app/node_modules/@jwilleke/geohazardwatch-addon/tsconfig.json && \
     rm -f .npmrc
 
 # =============================================================================

@@ -2,6 +2,7 @@
   "name": "@jwilleke/geohazardwatch-addon",
   "version": "1.2.204",
   "description": "Volcano & geology data platform add-on for ngdpbase — GVP structured records, search, infoboxes, maps",
+  "type": "module",
   "main": "index.js",
   "ngdpbase": {
     "slug": "geohazardwatch",
@@ -14,6 +15,7 @@
   "files": [
     "config",
     "import",
+    "lib",
     "managers",
     "pages",
     "plugins",
@@ -21,8 +23,13 @@
     "routes",
     "views",
     "index.js",
+    "index.ts",
+    "tsconfig.json",
     "README.md"
   ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
   "dependencies": {
     "express": "^5.2.1"
   },

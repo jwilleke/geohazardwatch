@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * VolcanoListPlugin
  *
@@ -12,7 +10,11 @@
  *
  * @type {import('../../../src/managers/PluginManager').PluginObject}
  */
-module.exports = {
+
+import type { PluginContext, PluginParams, PluginObject } from '#ngdpbase/managers/PluginManager.js';
+import type VolcanoDataManager from '../managers/VolcanoDataManager.js';
+import { asParamString } from '../lib/types.js';
+const plugin: PluginObject = {
   name: 'VolcanoList',
 
   /**
@@ -20,8 +22,8 @@ module.exports = {
    * @param {Record<string, string>} params
    * @returns {string}
    */
-  execute(context, params) {
-    const mgr = context.engine.getManager('VolcanoDataManager');
+  execute(context: PluginContext, params: PluginParams) {
+    const mgr = context.engine.getManager<VolcanoDataManager>('VolcanoDataManager');
     if (!mgr) {
       return '<span class="plugin-error">VolcanoList: VolcanoDataManager not available</span>';
     }
@@ -30,15 +32,15 @@ module.exports = {
     const offset = Number(params.offset) || 0;
 
     const filters = {
-      query:           params.query           || undefined,
-      country:         params.country         || undefined,
-      region:          params.region          || undefined,
-      volcanoType:     params.volcanoType     || undefined,
-      rockType:        params.rockType        || undefined,
-      tectonicSetting: params.tectonicSetting || undefined,
-      epoch:           params.epoch           || undefined,
+      query: asParamString(params.query),
+      country: asParamString(params.country),
+      region: asParamString(params.region),
+      volcanoType: asParamString(params.volcanoType),
+      rockType: asParamString(params.rockType),
+      tectonicSetting: asParamString(params.tectonicSetting),
+      epoch: asParamString(params.epoch),
       limit,
-      offset,
+      offset
     };
 
     const { volcanoes, total } = mgr.search(filters);
@@ -48,7 +50,7 @@ module.exports = {
     }
 
     // Build API filter params (exclude undefined values)
-    const apiFilters = {};
+    const apiFilters: Record<string, string | number> = {};
     if (filters.query)           apiFilters.query           = filters.query;
     if (filters.country)         apiFilters.country         = filters.country;
     if (filters.region)          apiFilters.region          = filters.region;
@@ -95,7 +97,7 @@ module.exports = {
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  function buildRows(volcanoes) {
+  function buildRows(volcanoes: import('../lib/types.js').VolcanoRecord[]) {
     return volcanoes.map(function (v) {
       var gvpUrl = 'https://volcano.si.edu/volcano.cfm?vn=' + v.volcanoNumber;
       return '<tr>' +
@@ -138,7 +140,7 @@ module.exports = {
   }
 };
 
-function buildRows(volcanoes) {
+function buildRows(volcanoes: import('../lib/types.js').VolcanoRecord[]) {
   return volcanoes.map(v => {
     const gvpUrl = `https://volcano.si.edu/volcano.cfm?vn=${v.volcanoNumber}`;
     return `
@@ -155,7 +157,7 @@ function buildRows(volcanoes) {
   }).join('');
 }
 
-function formatCaption(offset, count, total, singular, plural) {
+function formatCaption(offset: number, count: number, total: number, singular: string, plural: string) {
   if (total > count) {
     return `Showing ${offset + 1}\u2013${offset + count} of ${total}`;
   }
@@ -163,10 +165,12 @@ function formatCaption(offset, count, total, singular, plural) {
 }
 
 /** @param {string} str */
-function esc(str) {
+function esc(str: unknown) {
   return String(str == null ? '' : str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
+
+export default plugin;

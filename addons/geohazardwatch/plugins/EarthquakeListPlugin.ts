@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * EarthquakeListPlugin
  *
@@ -12,11 +10,15 @@
  *
  * @type {import('../../../src/managers/PluginManager').PluginObject}
  */
-module.exports = {
+
+import type { PluginContext, PluginParams, PluginObject } from '#ngdpbase/managers/PluginManager.js';
+import type EarthquakeDataManager from '../managers/EarthquakeDataManager.js';
+import { asParamString } from '../lib/types.js';
+const plugin: PluginObject = {
   name: 'EarthquakeList',
 
-  execute(context, params) {
-    const mgr = context.engine.getManager('EarthquakeDataManager');
+  execute(context: PluginContext, params: PluginParams) {
+    const mgr = context.engine.getManager<EarthquakeDataManager>('EarthquakeDataManager');
     if (!mgr) {
       return '<span class="plugin-error">EarthquakeList: EarthquakeDataManager not available</span>';
     }
@@ -31,10 +33,10 @@ module.exports = {
       maxDepth:      params.maxDepth      ? Number(params.maxDepth)      : undefined,
       nearVolcano:   params.nearVolcano   === 'true' ? true : undefined,
       tsunamiOnly:   params.tsunamiOnly   === 'true' ? true : undefined,
-      alert:         params.alert         || undefined,
+      alert: asParamString(params.alert),
       volcanoNumber: params.volcanoNumber ? Number(params.volcanoNumber) : undefined,
       limit,
-      offset,
+      offset
     };
 
     const { earthquakes, total } = mgr.search(filters);
@@ -44,7 +46,7 @@ module.exports = {
     }
 
     // Build API filter params (exclude undefined values)
-    const apiFilters = {};
+    const apiFilters: Record<string, string | number> = {};
     if (filters.minMagnitude  != null) apiFilters.minMagnitude  = filters.minMagnitude;
     if (filters.maxMagnitude  != null) apiFilters.maxMagnitude  = filters.maxMagnitude;
     if (filters.minDepth      != null) apiFilters.minDepth      = filters.minDepth;
@@ -89,7 +91,7 @@ module.exports = {
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  function buildRows(earthquakes) {
+  function buildRows(earthquakes: import('../lib/types.js').EarthquakeRecord[]) {
     return earthquakes.map(function (e) {
       var alert = e.alert
         ? '<span class="eq-alert eq-alert-' + esc(e.alert) + '">' + esc(e.alert.toUpperCase()) + '</span>'
@@ -137,7 +139,7 @@ module.exports = {
   }
 };
 
-function buildRows(earthquakes) {
+function buildRows(earthquakes: import('../lib/types.js').EarthquakeRecord[]) {
   return earthquakes.map(e => {
     const alert = e.alert ? `<span class="eq-alert eq-alert-${esc(e.alert)}">${esc(e.alert.toUpperCase())}</span>` : '';
     const tsunami = e.tsunami ? '<span class="eq-tsunami">🌊</span>' : '';
@@ -155,15 +157,17 @@ function buildRows(earthquakes) {
   }).join('');
 }
 
-function formatCaption(offset, count, total) {
+function formatCaption(offset: number, count: number, total: number) {
   if (total > count) {
     return `Showing ${offset + 1}\u2013${offset + count} of ${total}`;
   }
   return `${total} earthquake${total !== 1 ? 's' : ''}`;
 }
 
-function esc(str) {
+function esc(str: unknown) {
   return String(str == null ? '' : str)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;')
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+
+export default plugin;

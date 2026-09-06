@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * VaacAdvisoriesPlugin
  *
@@ -28,30 +26,34 @@
  * @type {import('../../../src/managers/PluginManager').PluginObject}
  */
 
+import type { PluginContext, PluginParams, PluginObject } from '#ngdpbase/managers/PluginManager.js';
+import type { FeedManagerLike } from '../lib/types.js';
+import { asParamString } from '../lib/types.js';
 /** "FUEGO 342090" -> { name: 'FUEGO', gvpNumber: 342090 }. No match: name only. */
-function splitVolcanoName(raw) {
+function splitVolcanoName(raw: unknown) {
   const s = String(raw || '');
   const m = /^(.*\S)\s+(\d{4,6})$/.exec(s);
   return m ? { name: m[1], gvpNumber: Number(m[2]) } : { name: s, gvpNumber: null };
 }
 
-module.exports = {
+const plugin: PluginObject = {
   name: 'VaacAdvisories',
 
-  async execute(context, params) {
-    const feedManager = context.engine.getManager('FeedManager');
+  async execute(context: PluginContext, params: PluginParams) {
+    const feedManager = context.engine.getManager<FeedManagerLike>('FeedManager');
     if (!feedManager?.getRecords) {
       return '<span class="plugin-error">VaacAdvisories: feeds addon not available</span>';
     }
 
     const records = await feedManager.getRecords('vaac-advisories');
 
-    const filters = {};
-    if (params.region) filters.region = params.region;
+    const filters: Record<string, string> = {};
+    const _region = asParamString(params.region);
+    if (_region) filters.region = _region;
 
     const advisories = records
       .map(r => r.properties)
-      .filter(a => !filters.region || (a.region || '').toUpperCase() === filters.region.toUpperCase());
+      .filter((a) => !filters.region || String(a['region'] ?? '').toUpperCase() === filters.region.toUpperCase());
 
     const lastUpdated = records.length
       ? new Date(Math.max(...records.map(r => new Date(r.fetchedAt).getTime()))).toUTCString()
@@ -68,24 +70,24 @@ module.exports = {
     }
 
     const rows = advisories.map(a => {
-      const { name: volcanoName, gvpNumber } = splitVolcanoName(a.volcanoName);
+      const { name: volcanoName, gvpNumber } = splitVolcanoName(a['volcanoName']);
       const gvpUrl = gvpNumber
         ? `<a href="https://volcano.si.edu/volcano.cfm?vn=${gvpNumber}" target="_blank" rel="noopener">${escapeHtml(volcanoName)}</a>`
         : escapeHtml(volcanoName);
-      const motion = (a.directionOfMotionDeg != null && a.speedOfMotionKt != null)
-        ? `${a.directionOfMotionDeg}° @ ${a.speedOfMotionKt} kt`
+      const motion = (a['directionOfMotionDeg'] != null && a['speedOfMotionKt'] != null)
+        ? `${a['directionOfMotionDeg']}° @ ${a['speedOfMotionKt']} kt`
         : '—';
 
       return `
         <tr class="vaac-row">
           <td>${gvpUrl}</td>
-          <td>${escapeHtml(a.region || '')}</td>
-          <td><span class="vaac-fl">FL${a.ashCloudTopFl ?? '?'}</span></td>
+          <td>${escapeHtml(a['region'] ?? '')}</td>
+          <td><span class="vaac-fl">FL${a['ashCloudTopFl'] ?? '?'}</span></td>
           <td>${motion}</td>
-          <td>${a.issueTimeUtc ? new Date(a.issueTimeUtc).toUTCString() : 'unknown'}</td>
-          <td><a href="${a.sourceXmlUrl}" target="_blank" rel="noopener">Advisory ${escapeHtml(a.advisoryNumber || '')}</a></td>
+          <td>${a['issueTimeUtc'] ? new Date(String(a['issueTimeUtc'])).toUTCString() : 'unknown'}</td>
+          <td><a href="${a['sourceXmlUrl']}" target="_blank" rel="noopener">Advisory ${escapeHtml(a['advisoryNumber'] || '')}</a></td>
         </tr>
-        ${a.remarks ? `<tr class="vaac-remarks-row"><td colspan="6" class="vaac-remarks">${escapeHtml(a.remarks)}</td></tr>` : ''}`;
+        ${a['remarks'] ? `<tr class="vaac-remarks-row"><td colspan="6" class="vaac-remarks">${escapeHtml(a['remarks'])}</td></tr>` : ''}`;
     }).join('');
 
     return `
@@ -108,10 +110,12 @@ module.exports = {
   }
 };
 
-function escapeHtml(str) {
+function escapeHtml(str: unknown) {
   return String(str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
+
+export default plugin;
