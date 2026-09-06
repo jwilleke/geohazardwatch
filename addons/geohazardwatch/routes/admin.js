@@ -3,6 +3,25 @@
 const express = require('express');
 
 /**
+ * The context a manual "refresh now" runs under (ngdpbase #631 / #1179):
+ * the request's subject, forwarded — its name, delegation and address —
+ * never rebuilt from a bare username. `origin: 'request'` says a person asked.
+ * @param {import('express').Request} req
+ */
+function requestContext(req) {
+  const uc = req.userContext ?? {};
+  return {
+    username: uc.username ?? 'Anonymous',
+    origin: 'request',
+    requestedAt: new Date().toISOString(),
+    ...(uc.viaToken ? { viaToken: uc.viaToken } : {}),
+    ...(uc.viaShare ? { viaShare: uc.viaShare } : {}),
+    ...(uc.ipAddress ? { ipAddress: uc.ipAddress } : {})
+  };
+}
+
+
+/**
  * Admin routes for the geohazardwatch add-on.
  * Mounted at /addons/geohazardwatch in register().
  *
@@ -77,7 +96,7 @@ module.exports = function adminRoutes(engine) {
     if (!requireAdmin(req, res)) return;
     const jm = engine.getManager('BackgroundJobManager');
     if (!jm) { res.status(503).send('BackgroundJobManager not available'); return; }
-    jm.enqueue('geohazardwatch.import-hans');
+    jm.enqueue('geohazardwatch.import-hans', requestContext(req)).catch((err) => console.error('[geohazardwatch] enqueue of geohazardwatch.import-hans failed:', err));
     res.redirect('/addons/geohazardwatch?flash=hans-queued');
   });
 
@@ -86,7 +105,7 @@ module.exports = function adminRoutes(engine) {
     if (!requireAdmin(req, res)) return;
     const jm = engine.getManager('BackgroundJobManager');
     if (!jm) { res.status(503).send('BackgroundJobManager not available'); return; }
-    jm.enqueue('geohazardwatch.import-earthquakes');
+    jm.enqueue('geohazardwatch.import-earthquakes', requestContext(req)).catch((err) => console.error('[geohazardwatch] enqueue of geohazardwatch.import-earthquakes failed:', err));
     res.redirect('/addons/geohazardwatch?flash=eq-queued');
   });
 
