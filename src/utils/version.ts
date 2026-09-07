@@ -4,7 +4,7 @@
  *
  * Updates the version consistently across:
  *   - package.json
- *   - addons/geohazardwatch/index.js
+ *   - addons/geohazardwatch/index.ts
  *   - addons/geohazardwatch/package.json  (the published @jwilleke/geohazardwatch-addon package)
  *   - CHANGELOG.md  (prepends a new [x.y.z] section)
  *
@@ -65,19 +65,19 @@ function updatePackageJson(next: string): void {
   console.log(`  package.json              ${next}`);
 }
 
-function updateIndexJs(next: string): void {
-  const rel = 'addons/geohazardwatch/index.js';
+function updateIndexTs(next: string): void {
+  const rel = 'addons/geohazardwatch/index.ts';
   const content = readFile(rel);
   const updated = content.replace(
     /(\bversion:\s*['"])\d+\.\d+\.\d+(['"])/,
     `$1${next}$2`
   );
   if (updated === content) {
-    console.warn('  addons/geohazardwatch/index.js  — version string not found, skipped');
+    console.warn('  addons/geohazardwatch/index.ts  — version string not found, skipped');
     return;
   }
   writeFile(rel, updated);
-  console.log(`  addons/geohazardwatch/index.js  ${next}`);
+  console.log(`  addons/geohazardwatch/index.ts  ${next}`);
 }
 
 function updateAddonPackageJson(next: string): void {
@@ -133,7 +133,7 @@ function main(): void {
 
   console.log(`\nBumping ${prev} → ${next}\n`);
   updatePackageJson(next);
-  updateIndexJs(next);
+  updateIndexTs(next);
   updateAddonPackageJson(next);
   updateChangelog(next, prev);
 
