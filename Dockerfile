@@ -42,11 +42,18 @@ COPY .npmrc ./
 # The GitHub token is mounted only for this RUN step (BuildKit secret) and
 # is never written to an image layer; .npmrc is removed in the same layer
 # once the install completes.
+#
+# The addon ships its source as .ts (see package.json "files"); this stage
+# compiles it to .js before stage 2 copies node_modules into the runtime
+# image. typescript isn't a dependency of the addon package itself (it's
+# only needed here, at image-build time), so it's fetched via `npx` into
+# npm's cache rather than `npm install`ed into node_modules — that keeps it
+# out of the COPY'd tree instead of bloating the runtime image.
 RUN --mount=type=secret,id=github_token \
     NODE_AUTH_TOKEN="$(cat /run/secrets/github_token)" \
     npm install "@jwilleke/geohazardwatch-addon@${GEOHAZARDWATCH_ADDON_VERSION}" --omit=dev && \
     ln -sfn /app/dist/src /app/node_modules/@jwilleke/geohazardwatch-addon/.ngdpbase-src && \
-    /app/node_modules/.bin/tsc -p /app/node_modules/@jwilleke/geohazardwatch-addon/tsconfig.json && \
+    npx --yes -p typescript@6 tsc -p /app/node_modules/@jwilleke/geohazardwatch-addon/tsconfig.json && \
     rm -f .npmrc
 
 # =============================================================================
