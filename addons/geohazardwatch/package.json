@@ -12,6 +12,14 @@
       "ngdpbase.chrome.footer-page": "footer-content"
     }
   },
+  "peerDependencies": {
+    "express": "^5.2.1"
+  },
+  "peerDependenciesMeta": {
+    "express": {
+      "optional": true
+    }
+  },
   "files": [
     "config",
     "import",
@@ -29,9 +37,6 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json"
-  },
-  "dependencies": {
-    "express": "^5.2.1"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
