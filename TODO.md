@@ -1,7 +1,7 @@
 ---
 title: TODO
 description: Priority bands for this repo.
-last_updated: "2026-09-06T16:29:00Z"
+last_updated: "2026-09-13T12:00:00Z"
 kit_version: "3aa1bb4"
 ---
 
@@ -11,7 +11,11 @@ kit_version: "3aa1bb4"
 
 ## 🔴 P0 — Security & Critical
 
-- [#290](https://github.com/jwilleke/geohazardwatch/issues/290) — [BUG] LeftMenu declares access, which is NOT enforced
+- *None.*
+
+## 🟣 Epics
+
+- *None.*
 
 ## 🟠 P1
 
@@ -24,8 +28,7 @@ kit_version: "3aa1bb4"
 
 ## 🔵 In review
 
-- [#292](https://github.com/jwilleke/geohazardwatch/issues/292) — [FEATURE] Convert the addon to TypeScript and typecheck it against the ngdpbase base image's types in CI
-- [#291](https://github.com/jwilleke/geohazardwatch/issues/291) — [FEATURE] Migrate the addon from CommonJS to ESM so it can import ngdpbase's helpers
+- *None.*
 
 ## ⏸ Deferred
 
