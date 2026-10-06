@@ -4,7 +4,7 @@
  */
 
 import { Router, type Request, type Response } from 'express';
-import { ApiContext, ApiError, jobContextFromRequest } from '../lib/host.js';
+import { ApiContext, ApiError, jobContextFromRequest, requestCsrfToken, requestUserContext } from '../lib/host.js';
 import type { WikiEngine } from '#ngdpbase/types/WikiEngine.js';
 import type BackgroundJobManager from '#ngdpbase/managers/BackgroundJobManager.js';
 import type VolcanoDataManager from '../managers/VolcanoDataManager.js';
@@ -18,16 +18,20 @@ export default function adminRoutes(engine: WikiEngine): Router {
     void (async () => {
       try {
         const ctx = ApiContext.from(req, engine);
-        ctx.requireAuthenticated();
-
-        const isAdmin = ctx.roles.includes('admin');
+        // geohazardwatch#348: any ngdpbase admin administers any addon — core's
+        // admin-read views this page, admin-system runs its imports. Policy, not
+        // a role name; requirePermission answers 401/403 itself (ngdpbase#1430).
+        await ctx.requirePermission('admin-read');
+        // An affordance, not a gate: the job routes ask admin-system again.
+        const canRunImports = await ctx.hasPermission('admin-system');
         const dm = engine.getManager<VolcanoDataManager>('VolcanoDataManager');
         const em = engine.getManager<EarthquakeDataManager>('EarthquakeDataManager');
         const hm = engine.getManager<HansDataManager>('HansDataManager');
 
         res.render('admin-geohazardwatch', {
-          currentUser: { username: ctx.username, roles: ctx.roles, isAuthenticated: ctx.isAuthenticated },
-          isAdmin,
+          currentUser: requestUserContext(req),
+          canRunImports,
+          csrfToken: requestCsrfToken(req),
           volcanoCount: dm ? dm.volcanoCount() : 0,
           eruptionCount: dm ? dm.eruptionCount() : 0,
           earthquakeCount: em ? em.count() : 0,
@@ -50,18 +54,13 @@ export default function adminRoutes(engine: WikiEngine): Router {
     void (async () => {
       try {
         const ctx = ApiContext.from(req, engine);
-        ctx.requireAuthenticated();
         await ctx.requirePermission('admin-system');
         const jm = engine.getManager<BackgroundJobManager>('BackgroundJobManager');
         if (!jm) {
           res.status(503).send('BackgroundJobManager not available');
           return;
         }
-        jm.enqueue('geohazardwatch.import-hans', jobContextFromRequest({
-          username: ctx.username ?? undefined,
-          viaToken: ctx.viaToken,
-          viaShare: ctx.viaShare
-        })).catch((err: unknown) => {
+        jm.enqueue('geohazardwatch.import-hans', jobContextFromRequest(ctx)).catch((err: unknown) => {
           console.error('[geohazardwatch] enqueue of geohazardwatch.import-hans failed:', err);
         });
         res.redirect('/addons/geohazardwatch?flash=hans-queued');
@@ -79,18 +78,13 @@ export default function adminRoutes(engine: WikiEngine): Router {
     void (async () => {
       try {
         const ctx = ApiContext.from(req, engine);
-        ctx.requireAuthenticated();
         await ctx.requirePermission('admin-system');
         const jm = engine.getManager<BackgroundJobManager>('BackgroundJobManager');
         if (!jm) {
           res.status(503).send('BackgroundJobManager not available');
           return;
         }
-        jm.enqueue('geohazardwatch.import-earthquakes', jobContextFromRequest({
-          username: ctx.username ?? undefined,
-          viaToken: ctx.viaToken,
-          viaShare: ctx.viaShare
-        })).catch((err: unknown) => {
+        jm.enqueue('geohazardwatch.import-earthquakes', jobContextFromRequest(ctx)).catch((err: unknown) => {
           console.error('[geohazardwatch] enqueue of geohazardwatch.import-earthquakes failed:', err);
         });
         res.redirect('/addons/geohazardwatch?flash=eq-queued');
