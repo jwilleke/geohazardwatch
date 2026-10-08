@@ -167,6 +167,15 @@ jobs:
       - name: Smoke test — HTTP probe
         run: |
           BASE=http://localhost:3000
+          # "healthy" is the image's liveness check, which answers as soon as the
+          # server listens; the engine may still be starting (/ answers 503).
+          # Wait for readiness, which is 200 only once the engine is ready.
+          for i in $(seq 1 36); do
+            r=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/health/readiness")
+            [ "$r" = "200" ] && break
+            echo "  readiness attempt $i/36: HTTP $r"
+            sleep 5
+          done
           code=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/")
           echo "GET / -> HTTP $code"
           case "$code" in
