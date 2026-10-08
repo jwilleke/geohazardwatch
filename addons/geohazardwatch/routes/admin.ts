@@ -4,7 +4,7 @@
  */
 
 import { Router, type Request, type Response } from 'express';
-import { ApiContext, ApiError, jobContextFromRequest, requestCsrfToken, requestUserContext } from '../lib/host.js';
+import { ApiContext, ApiError, jobContextFromRequest } from '../lib/host.js';
 import type { WikiEngine } from '#ngdpbase/types/WikiEngine.js';
 import type BackgroundJobManager from '#ngdpbase/managers/BackgroundJobManager.js';
 import type VolcanoDataManager from '../managers/VolcanoDataManager.js';
@@ -29,9 +29,9 @@ export default function adminRoutes(engine: WikiEngine): Router {
         const hm = engine.getManager<HansDataManager>('HansDataManager');
 
         res.render('admin-geohazardwatch', {
-          currentUser: requestUserContext(req),
+          currentUser: req.userContext,
           canRunImports,
-          csrfToken: requestCsrfToken(req),
+          csrfToken: req.session?.csrfToken,
           volcanoCount: dm ? dm.volcanoCount() : 0,
           eruptionCount: dm ? dm.eruptionCount() : 0,
           earthquakeCount: em ? em.count() : 0,

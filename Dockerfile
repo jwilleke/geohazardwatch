@@ -65,7 +65,7 @@ RUN --mount=type=secret,id=github_token \
     NODE_AUTH_TOKEN="$(cat /run/secrets/github_token)" \
     npm install "@jwilleke/geohazardwatch-addon@${GEOHAZARDWATCH_ADDON_VERSION}" --omit=dev && \
     mkdir -p /tmp/tsbuild && cd /tmp/tsbuild && npm init -y >/dev/null && \
-    npm install --no-save typescript@6 @types/node @types/express && \
+    npm install --no-save typescript@6 @types/node @types/express @types/express-session @types/multer && \
     cd /app && \
     mkdir -p node_modules/@types && cp -r /tmp/tsbuild/node_modules/@types/. node_modules/@types/ && \
     ln -sfn /app/dist/src /app/node_modules/@jwilleke/geohazardwatch-addon/.ngdpbase-src && \
