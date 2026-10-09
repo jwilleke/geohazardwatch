@@ -71,14 +71,16 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push
-        id: build
+      # Build and load only. Flux deploys every new semver tag automatically
+      # (mj-infra-flux image automation), so nothing is pushed until the smoke
+      # tests below pass — 1.2.241/1.2.242 went out red when this step pushed.
+      - name: Build (load only, not pushed)
         uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64
-          push: true
+          push: false
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -190,6 +192,13 @@ jobs:
       - name: Smoke test — cleanup
         if: always()
         run: docker rm -f ghw-smoke ghw-smoke-refuse 2>/dev/null || true
+
+      # Push the exact image the smoke tests ran (loaded above), every tag.
+      - name: Push (smoke tests passed)
+        id: build
+        run: |
+          docker push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          echo "digest=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest | cut -d@ -f2)" >> "$GITHUB_OUTPUT"
 
       - name: Trivy scan
         uses: aquasecurity/trivy-action@master
