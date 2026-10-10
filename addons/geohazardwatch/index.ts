@@ -55,7 +55,7 @@ function enqueueScheduled(
 
 const geohazardwatchAddon: AddonModule = {
   name: 'geohazardwatch',
-  version: '1.2.248',
+  version: '1.2.249',
   description: 'Volcano & geology data platform — GVP structured records, search, infoboxes, maps',
   author: 'jwilleke',
   dependencies: [],
