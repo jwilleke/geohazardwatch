@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.27
+# syntax=docker/dockerfile:1.28
 
 # geohazardwatch — ngdpbase + geohazardwatch addon (packaged/npm model, #152)
 #
