@@ -7,6 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import type { HansAlert } from '../lib/types.js';
+import { egressPolicy, fetchJson, type EgressPolicy } from '../lib/egress.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const HANS_API = 'https://volcanoes.usgs.gov/hans-public/api';
@@ -33,23 +34,21 @@ interface HansMonitoredRaw {
   vnum?: string;
 }
 
-async function fetchJson<T>(endpoint: string, label: string): Promise<T> {
-  const url = `${HANS_API}${endpoint}`;
+function fetchHans<T>(endpoint: string, label: string, policy: EgressPolicy): Promise<T> {
   console.log(`Fetching ${label}...`);
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error(`Failed to fetch ${label}: ${res.status} ${res.statusText}`);
-  }
-  return res.json() as Promise<T>;
+  return fetchJson<T>(`${HANS_API}${endpoint}`, label, policy);
 }
 
-export async function runImport(dataDir: string): Promise<{ elevatedCount: number; monitoredCount: number }> {
+export async function runImport(
+  dataDir: string,
+  policy: EgressPolicy = egressPolicy()
+): Promise<{ elevatedCount: number; monitoredCount: number }> {
   console.log('Importing volcano activity from USGS HANS API...\n');
 
   const [elevated, dailySummary, monitored] = await Promise.all([
-    fetchJson<HansElevatedRaw[]>('/volcano/getElevatedVolcanoes', 'elevated volcanoes'),
-    fetchJson<HansSummaryRaw[]>('/notice/getDailySummaryData', 'daily summary'),
-    fetchJson<HansMonitoredRaw[]>('/volcano/getMonitoredVolcanoes', 'monitored volcanoes')
+    fetchHans<HansElevatedRaw[]>('/volcano/getElevatedVolcanoes', 'elevated volcanoes', policy),
+    fetchHans<HansSummaryRaw[]>('/notice/getDailySummaryData', 'daily summary', policy),
+    fetchHans<HansMonitoredRaw[]>('/volcano/getMonitoredVolcanoes', 'monitored volcanoes', policy)
   ]);
 
   const synopsisMap = new Map<string, HansSummaryRaw>();

@@ -7,6 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import type { EruptionRecord, VolcanoRecord } from '../lib/types.js';
+import { egressPolicy, fetchJson, type EgressPolicy } from '../lib/egress.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WFS_BASE = 'https://webservices.volcano.si.edu/geoserver/GVP-VOTW/ows';
@@ -39,14 +40,9 @@ function buildWfsUrl(typeName: string, maxFeatures = 50000): string {
   return `${WFS_BASE}?${params}`;
 }
 
-async function fetchGeoJSON(typeName: string, label: string): Promise<GeoJson> {
-  const url = buildWfsUrl(typeName);
+async function fetchGeoJSON(typeName: string, label: string, policy: EgressPolicy): Promise<GeoJson> {
   console.log(`Fetching ${label}...`);
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch ${label}: ${response.status} ${response.statusText}`);
-  }
-  const data = (await response.json()) as GeoJson;
+  const data = await fetchJson<GeoJson>(buildWfsUrl(typeName), label, policy);
   console.log(`  Received ${data.features.length} of ${data.totalFeatures} features`);
   return data;
 }
@@ -163,7 +159,8 @@ function mapContinuingEruption(props: Record<string, unknown>): ContinuingErupti
 
 export async function runImport(
   dataDir: string,
-  flags: { eruptions?: boolean; activity?: boolean } = {}
+  flags: { eruptions?: boolean; activity?: boolean } = {},
+  policy: EgressPolicy = egressPolicy()
 ): Promise<{ total: number; holocene: number; pleistocene: number }> {
   const includeEruptions = flags.eruptions === true;
   const includeActivity = flags.activity === true;
@@ -175,8 +172,8 @@ export async function runImport(
   }
 
   const [holoceneData, pleistoceneData] = await Promise.all([
-    fetchGeoJSON(ENDPOINTS.holoceneVolcanoes, 'Holocene volcanoes'),
-    fetchGeoJSON(ENDPOINTS.pleistoceneVolcanoes, 'Pleistocene volcanoes')
+    fetchGeoJSON(ENDPOINTS.holoceneVolcanoes, 'Holocene volcanoes', policy),
+    fetchGeoJSON(ENDPOINTS.pleistoceneVolcanoes, 'Pleistocene volcanoes', policy)
   ]);
 
   const holoceneVolcanoes = holoceneData.features.map((f) => mapHolocene(f.properties));
@@ -193,7 +190,7 @@ export async function runImport(
   console.log(`  Written to:  ${volcanoesPath}`);
 
   if (includeEruptions) {
-    const eruptionsData = await fetchGeoJSON(ENDPOINTS.holoceneEruptions, 'Holocene eruptions');
+    const eruptionsData = await fetchGeoJSON(ENDPOINTS.holoceneEruptions, 'Holocene eruptions', policy);
     const eruptions = eruptionsData.features.map((f) => mapEruption(f.properties));
     const eruptionsPath = path.join(dataDir, 'eruptions.json');
     fs.writeFileSync(eruptionsPath, JSON.stringify(eruptions, null, 2), 'utf8');
@@ -203,7 +200,7 @@ export async function runImport(
   }
 
   if (includeActivity) {
-    const e3Data = await fetchGeoJSON(ENDPOINTS.eruptionsSince1960, 'eruptions since 1960 (global activity)');
+    const e3Data = await fetchGeoJSON(ENDPOINTS.eruptionsSince1960, 'eruptions since 1960 (global activity)', policy);
     const continuing = e3Data.features
       .filter((f) => f.properties['ContinuingEruption'] === 'True')
       .map((f) => mapContinuingEruption(f.properties))

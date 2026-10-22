@@ -267,34 +267,25 @@ VAAC ash advisories have no dedicated API endpoint here — they're served by th
 
 ## Import scripts
 
-Run from the geohazardwatch repo root (requires internet access).
+Run from a built ngdpbase checkout (requires internet access): the importers fetch through ngdpbase's `guardedFetch` under the default egress policy, loaded from `dist/` in the current directory ([#349](https://github.com/jwilleke/geohazardwatch/issues/349)). Data goes to `addons/geohazardwatch/data/` unless `--data-dir` is given.
 
 ```sh
-# Volcanoes only
-npm run import
+cd /path/to/ngdpbase
+GW=/path/to/geohazardwatch/addons/geohazardwatch/import
 
-# Volcanoes + eruption records
-npm run import:eruptions
+# Volcanoes only; add --eruptions (eruption records) and/or --activity (global activity snapshot)
+npx tsx $GW/import-volcanoes.ts --eruptions --activity
 
-# Volcanoes + eruptions + global activity snapshot
-npm run import:all
-
-# Earthquake data (M4.5+ past 7 days — default)
-npm run import:earthquakes
-
-# Earthquake data (M4.5+ past 30 days)
-npm run import:earthquakes:month
-
-# Global activity snapshot
-npm run import:activity
+# Earthquake data (M4.5+ past 7 days — default; --feed=4.5-month for 30 days)
+npx tsx $GW/import-earthquakes.ts
 
 # USGS HANS real-time US volcano alert levels
-npm run import:hans
+npx tsx $GW/import-hans.ts
 ```
 
 Washington VAAC ash advisories have no import script — the ngdpbase `feeds` addon fetches them, same as FIRMS/VIIRS (see [`docs/volcano-sources.md`](../../docs/volcano-sources.md#configuration-vaac-advisories)).
 
-Custom options (run directly):
+Custom options (the compiled `.js` in a packaged install, also from the ngdpbase root):
 
 ```sh
 # Custom data directory

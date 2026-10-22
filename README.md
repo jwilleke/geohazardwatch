@@ -42,10 +42,9 @@ Need to run without Docker? See [SETUP.md](./SETUP.md) for the direct install pa
 git clone https://github.com/jwilleke/geohazardwatch.git
 cd geohazardwatch
 npm install
-npm run import:all && npm run import:earthquakes && npm run import:hans
 ```
 
-Then wire to ngdpbase and restart — see [SETUP.md](./SETUP.md) for full instructions.
+Then import data from a built ngdpbase checkout, wire to ngdpbase and restart — see [SETUP.md](./SETUP.md) for full instructions.
 
 ## Documentation
 

@@ -21,12 +21,14 @@ npm install
 
 ## Step 2 — Import data
 
-Volcano data must be imported before starting ngdpbase:
+Volcano data must be imported before the addon is enabled. The importers fetch through ngdpbase's `guardedFetch`, loaded from `dist/` in the current directory ([#349](https://github.com/jwilleke/geohazardwatch/issues/349)), so run them from a built ngdpbase checkout:
 
 ```bash
-npm run import:all          # Volcanoes + eruptions + global activity
-npm run import:earthquakes  # USGS M4.5+ earthquakes (past 7 days)
-npm run import:hans         # USGS HANS US volcano alert levels
+cd /path/to/ngdpbase && npm run build
+GW=/path/to/geohazardwatch/addons/geohazardwatch/import
+npx tsx $GW/import-volcanoes.ts --eruptions --activity  # Volcanoes + eruptions + global activity
+npx tsx $GW/import-earthquakes.ts                       # USGS M4.5+ earthquakes (past 7 days)
+npx tsx $GW/import-hans.ts                              # USGS HANS US volcano alert levels
 ```
 
 Data is written to `addons/geohazardwatch/data/` (gitignored). Re-run any time to refresh. For all import options (custom feeds, data directories) see [addons/geohazardwatch/README.md](./addons/geohazardwatch/README.md#import-scripts).

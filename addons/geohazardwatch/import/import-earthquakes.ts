@@ -7,6 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import type { EarthquakeRecord, NearestVolcano, VolcanoRecord } from '../lib/types.js';
+import { egressPolicy, fetchJson, type EgressPolicy } from '../lib/egress.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FEED_BASE = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary';
@@ -99,7 +100,8 @@ function loadVolcanoes(dataDir: string): VolcanoRecord[] {
 
 export async function runImport(
   dataDir: string,
-  feedName = DEFAULT_FEED
+  feedName = DEFAULT_FEED,
+  policy: EgressPolicy = egressPolicy()
 ): Promise<{ total: number; nearVolcano: number }> {
   if (!FEEDS[feedName]) {
     throw new Error(`Unknown feed: ${feedName}. Available: ${Object.keys(FEEDS).join(', ')}`);
@@ -116,12 +118,7 @@ export async function runImport(
   }
 
   console.log('Fetching earthquake feed…');
-  const response = await fetch(feedUrl);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch feed: ${response.status} ${response.statusText}`);
-  }
-
-  const data = (await response.json()) as { features: UsgsFeature[]; metadata: { title: string } };
+  const data = await fetchJson<{ features: UsgsFeature[]; metadata: { title: string } }>(feedUrl, 'feed', policy);
   console.log(`  Received ${data.features.length} earthquakes (${data.metadata.title})`);
 
   const earthquakes = data.features.map((f) => mapEarthquake(f, volcanoes));

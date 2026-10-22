@@ -16,6 +16,7 @@ import type AddonsManager from '#ngdpbase/managers/AddonsManager.js';
 import type BackgroundJobManager from '#ngdpbase/managers/BackgroundJobManager.js';
 import type { JobContext } from '#ngdpbase/context/JobContext.js';
 import { scheduleContext } from './lib/host.js';
+import { egressPolicy } from './lib/egress.js';
 
 import VolcanoDataManager from './managers/VolcanoDataManager.js';
 import EarthquakeDataManager from './managers/EarthquakeDataManager.js';
@@ -30,7 +31,7 @@ import HansAlertPlugin from './plugins/HansAlertPlugin.js';
 import VaacAdvisoriesPlugin from './plugins/VaacAdvisoriesPlugin.js';
 import FirmsHotspotsPlugin from './plugins/FirmsHotspotsPlugin.js';
 import { runImport as runHansImport } from './import/import-hans.js';
-import { runImport as runEarthquakeImport } from './import/import-earthquakes.js';
+import { DEFAULT_FEED, runImport as runEarthquakeImport } from './import/import-earthquakes.js';
 import apiRoutes from './routes/api.js';
 import adminRoutes from './routes/admin.js';
 
@@ -110,6 +111,12 @@ const geohazardwatchAddon: AddonModule = {
 
     const jobManager = engine.getManager<BackgroundJobManager>('BackgroundJobManager');
     if (jobManager) {
+      // #349: the site's egress policy, resolved per run so a config change applies.
+      const configManager = engine.getManager<{ getProperty?: (k: string, f?: unknown) => unknown }>(
+        'ConfigurationManager'
+      );
+      const readConfig = (key: string, fallback?: unknown): unknown =>
+        configManager?.getProperty?.(key, fallback) ?? fallback;
       const hans = hansManager;
       const earthquakes = earthquakeManager;
       jobManager.registerJob({
@@ -117,7 +124,7 @@ const geohazardwatchAddon: AddonModule = {
         displayName: 'Refresh HANS volcano alerts',
         run: async (reportProgress: (msg: string) => void, _ctx: JobContext) => {
           reportProgress('Fetching USGS HANS API…');
-          const result = await runHansImport(dataPath);
+          const result = await runHansImport(dataPath, egressPolicy(readConfig));
           await hans?.load();
           return {
             success: true,
@@ -131,7 +138,7 @@ const geohazardwatchAddon: AddonModule = {
         displayName: 'Refresh earthquake data',
         run: async (reportProgress: (msg: string) => void, _ctx: JobContext) => {
           reportProgress('Fetching USGS earthquake feed…');
-          const result = await runEarthquakeImport(dataPath);
+          const result = await runEarthquakeImport(dataPath, DEFAULT_FEED, egressPolicy(readConfig));
           await earthquakes?.load();
           return {
             success: true,
