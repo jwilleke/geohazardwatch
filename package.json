@@ -19,8 +19,8 @@
     "lint:fix": "npm run lint:code:fix && npm run lint:md:fix",
     "format": "prettier --write \"addons/**/*.ts\"",
     "format:check": "prettier --check \"addons/**/*.ts\"",
-    "typecheck:addon": "bash scripts/typecheck-addon.sh",
-    "test": "tsx --test addons/geohazardwatch/managers/*.test.ts addons/geohazardwatch/lib/*.test.ts",
+    "typecheck:addon": "npm --prefix addons/geohazardwatch run typecheck",
+    "test": "npm --prefix addons/geohazardwatch test",
     "prepare": "husky install",
     "version:bump": "tsx src/utils/version.ts"
   },

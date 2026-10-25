@@ -35,9 +35,19 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           scope: '@jwilleke'
 
+      # The package ships compiled .js, not .ts (ngdpbase#2055), so it is
+      # built before it is published; the Dockerfile no longer compiles it.
+      - name: Install the addon's build tools
+        working-directory: addons/geohazardwatch
+        run: npm ci
+
+      - name: Build @jwilleke/geohazardwatch-addon
+        working-directory: addons/geohazardwatch
+        run: npm run build
+
       - name: Publish @jwilleke/geohazardwatch-addon
         working-directory: addons/geohazardwatch
-        run: npm publish
+        run: npm publish --registry https://npm.pkg.github.com
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

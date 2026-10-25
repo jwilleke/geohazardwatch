@@ -43,34 +43,12 @@ COPY .npmrc ./
 # is never written to an image layer; .npmrc is removed in the same layer
 # once the install completes.
 #
-# The addon ships its source as .ts (see package.json "files"); this stage
-# compiles it to .js before stage 2 copies node_modules into the runtime
-# image. typescript and @types/* aren't dependencies of the addon package
-# itself — only needed here, at image-build time — and tsconfig.json's
-# strict mode + "types": ["node"] means tsc needs both @types/node and
-# @types/express resolvable to compile at all.
-#
-# This base image's -devtools variant was itself built with `npm ci
-# --omit=dev`, so even though its own package.json declares a
-# `typescript` devDependency, `npm install typescript` inside /app just
-# re-validates that already-declared (but omitted) spec instead of
-# installing it — and `--include=dev` would pull ngdpbase's entire
-# ~300-package dev toolchain just for tsc. Installed instead into an
-# isolated throwaway project (/tmp/tsbuild) that has no lockfile/omit-dev
-# baggage of its own; its @types/* are copied into /app/node_modules/@types
-# so tsc's default typeRoots resolution (walking up from the compiled
-# files) finds them, then removed after compiling so stage 2's COPY
-# doesn't bake them into the runtime image.
+# The package ships compiled .js, the same tarball shape core's installer
+# takes (ngdpbase#2055): publish-image.yml builds the addon before it
+# publishes, so nothing is compiled here.
 RUN --mount=type=secret,id=github_token \
     NODE_AUTH_TOKEN="$(cat /run/secrets/github_token)" \
     npm install "@jwilleke/geohazardwatch-addon@${GEOHAZARDWATCH_ADDON_VERSION}" --omit=dev && \
-    mkdir -p /tmp/tsbuild && cd /tmp/tsbuild && npm init -y >/dev/null && \
-    npm install --no-save typescript@6 @types/node @types/express @types/express-session @types/multer && \
-    cd /app && \
-    mkdir -p node_modules/@types && cp -r /tmp/tsbuild/node_modules/@types/. node_modules/@types/ && \
-    ln -sfn /app/dist/src /app/node_modules/@jwilleke/geohazardwatch-addon/.ngdpbase-src && \
-    /tmp/tsbuild/node_modules/.bin/tsc -p /app/node_modules/@jwilleke/geohazardwatch-addon/tsconfig.json && \
-    rm -rf node_modules/@types /tmp/tsbuild && \
     rm -f .npmrc
 
 # =============================================================================

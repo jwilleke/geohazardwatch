@@ -1,0 +1,71 @@
+name: Add-on against ngdpbase
+
+# Typechecks, builds and tests the add-on against two ngdpbase releases: the
+# oldest it claims to run on (ngdpbase.minVersion) and the newest. Runs daily
+# as well as on pushes and pull requests, so a core release that breaks the
+# add-on turns this red before a site restarts onto it (ngdpbase#2055).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '23 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  versions:
+    runs-on: ubuntu-latest
+    outputs:
+      ngdpbase: ${{ steps.v.outputs.ngdpbase }}
+    steps:
+      - uses: actions/checkout@v7
+
+      # The newest release is the highest vX.Y.Z tag on ngdpbase (a patch
+      # release may have a tag and images but no GitHub Release).
+      - name: minVersion and the newest ngdpbase release
+        id: v
+        run: |
+          min=$(node -p "require('./addons/geohazardwatch/package.json').ngdpbase.minVersion")
+          latest=$(git ls-remote --tags --refs https://github.com/jwilleke/ngdpbase.git 'v*' \
+            | sed -n 's#.*refs/tags/v\([0-9]*\.[0-9]*\.[0-9]*\)$#\1#p' | sort -V | tail -1)
+          if [ -z "$min" ] || [ -z "$latest" ]; then
+            echo "::error::could not resolve ngdpbase versions (minVersion '$min', newest '$latest')"; exit 1
+          fi
+          echo "minVersion $min, newest $latest"
+          echo "ngdpbase=$(node -e 'console.log(JSON.stringify([...new Set(process.argv.slice(1))]))' "$min" "$latest")" >> "$GITHUB_OUTPUT"
+
+  addon:
+    needs: versions
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ngdpbase: ${{ fromJSON(needs.versions.outputs.ngdpbase) }}
+    name: ngdpbase ${{ matrix.ngdpbase }}
+    env:
+      # scripts/link-core-types.sh takes core's types from this release's
+      # ghcr.io/jwilleke/ngdpbase:<version>-devtools image.
+      NGDPBASE_VERSION: ${{ matrix.ngdpbase }}
+    defaults:
+      run:
+        working-directory: addons/geohazardwatch
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+          cache: npm
+          cache-dependency-path: addons/geohazardwatch/package-lock.json
+
+      - run: npm ci
+      # tsc -p typechecks against that release's types and emits the .js the package ships.
+      - name: Typecheck and build
+        run: npm run build
+      - name: Test
+        run: npm test
