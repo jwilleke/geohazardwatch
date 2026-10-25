@@ -33,7 +33,7 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Typecheck addon against ngdpbase
-        run: bash scripts/typecheck-addon.sh
+        run: npm run typecheck:addon
 
       - name: Addon unit tests
         run: npm test

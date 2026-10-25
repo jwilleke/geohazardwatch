@@ -20,6 +20,8 @@ const sharedRules = {
 };
 
 module.exports = [
+  // Core's type tree, copied in by scripts/link-core-types.sh; not this repo's code.
+  { ignores: ['addons/geohazardwatch/.ngdpbase-src/**'] },
   js.configs.recommended,
   {
     files: ['addons/**/*.ts'],

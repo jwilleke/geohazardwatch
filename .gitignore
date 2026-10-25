@@ -1,6 +1,8 @@
 # Dependencies
 node_modules/
 package-lock.json
+# The add-on's own lockfile: publish.yml runs npm ci in addons/geohazardwatch.
+!addons/geohazardwatch/package-lock.json
 yarn.lock
 pnpm-lock.yaml
 

@@ -48,7 +48,7 @@ const geohazardwatchAddon: AddonModule = {
 
   async register(engine: WikiEngine, config: Record<string, unknown>, host?: AddonHost): Promise<void> {
     if (!host) {
-      throw new Error('geohazardwatch: no host from core — this add-on needs ngdpbase 5.29.1 or later');
+      throw new Error('geohazardwatch: no host from core — this add-on needs the ngdpbase release named in its package.json ngdpbase.minVersion, or later');
     }
     const dataPath = String(config['dataPath'] || './data/geohazardwatch');
     dataManager = new VolcanoDataManager(dataPath);
