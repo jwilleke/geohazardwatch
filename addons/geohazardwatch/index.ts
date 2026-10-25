@@ -41,7 +41,7 @@ let hansManager: HansDataManager | null = null;
 
 const geohazardwatchAddon: AddonModule = {
   name: 'geohazardwatch',
-  version: '1.2.283',
+  version: '1.2.284',
   description: 'Volcano & geology data platform — GVP structured records, search, infoboxes, maps',
   author: 'jwilleke',
   dependencies: [],
