@@ -8,7 +8,6 @@
 
 import path from 'path';
 import { fileURLToPath } from 'url';
-import express from 'express';
 import type { WikiEngine } from '#ngdpbase/types/WikiEngine.js';
 import type { AddonModule } from '#ngdpbase/managers/AddonsManager.js';
 import type PluginManager from '#ngdpbase/managers/PluginManager.js';
@@ -80,7 +79,7 @@ const geohazardwatchAddon: AddonModule = {
     if (!app) {
       throw new Error('geohazardwatch: engine.app is not set');
     }
-    app.use('/addons/geohazardwatch', express.static(path.join(__dirname, 'public')));
+    app.use('/addons/geohazardwatch', engine.serveStatic(path.join(__dirname, 'public')));
 
     const addonsManager = engine.getManager<AddonsManager>('AddonsManager');
     if (addonsManager) {
@@ -95,7 +94,7 @@ const geohazardwatchAddon: AddonModule = {
     const existingViews = app.get('views') ?? [];
     app.set('views', [...[existingViews].flat(), path.join(__dirname, 'views')]);
 
-    app.use('/addons/geohazardwatch', adminRoutes(engine));
+    app.use('/addons/geohazardwatch', adminRoutes(engine, host));
 
     // ngdpbase#2054: the data refresh is core's scheduled jobs, not a timer here.
     const jobManager = engine.getManager<BackgroundJobManager>('BackgroundJobManager');

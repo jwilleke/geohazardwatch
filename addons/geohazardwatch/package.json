@@ -13,14 +13,6 @@
       "ngdpbase.chrome.footer-page": "footer-content"
     }
   },
-  "peerDependencies": {
-    "express": "^5.3.0"
-  },
-  "peerDependenciesMeta": {
-    "express": {
-      "optional": true
-    }
-  },
   "files": [
     "index.js",
     "import/*.js",

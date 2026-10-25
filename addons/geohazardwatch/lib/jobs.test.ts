@@ -3,12 +3,13 @@
  * the default schedules, a run through the host's guarded fetch, no timer of
  * the add-on's own, and a failed fetch reported as a failed run.
  */
-import { describe, it, before, after } from 'node:test';
+import { describe, it, after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import express from 'express';
 import type { JobDefinition, JobRunContext } from '#ngdpbase/managers/BackgroundJobManager.js';
 import type { GuardedResponse } from '#ngdpbase/http/guardedFetch.js';
 import type { EgressPolicy } from '#ngdpbase/http/ssrf.js';
@@ -267,30 +268,6 @@ describe('geohazardwatch jobs (ngdpbase#2054)', () => {
 });
 
 describe('register() (ngdpbase#2054)', () => {
-  const cwd = process.cwd();
-  let stubRoot = '';
-
-  before(() => {
-    // lib/host.ts loads core's request contexts from dist/ in the working
-    // directory; stand them in, so register() can be called without a site.
-    stubRoot = tmp();
-    const ctxDir = path.join(stubRoot, 'dist/src/context');
-    fs.mkdirSync(ctxDir, { recursive: true });
-    fs.writeFileSync(
-      path.join(ctxDir, 'JobContext.js'),
-      'export const jobContextFromRequest = () => ({});\n'
-    );
-    fs.writeFileSync(
-      path.join(ctxDir, 'ApiContext.js'),
-      'export class ApiContext {}\nexport class ApiError extends Error {}\n'
-    );
-    process.chdir(stubRoot);
-  });
-
-  after(() => {
-    process.chdir(cwd);
-  });
-
   it('registers the jobs on their schedules and starts no timer of its own', async () => {
     const { default: addon } = await import('../index.js');
     const jm = fakeJobManager();
@@ -298,6 +275,8 @@ describe('register() (ngdpbase#2054)', () => {
     const app = { use: () => undefined, get: () => [], set: () => undefined };
     const engine = {
       app,
+      createRouter: () => express.Router(),
+      serveStatic: () => () => undefined,
       registerManager: (name: string, m: unknown) => {
         managers.set(name, m);
       },
@@ -308,6 +287,9 @@ describe('register() (ngdpbase#2054)', () => {
     const host = {
       guardedFetch: mockGuardedFetch(fetchCalls),
       resolveEgressPolicy: () => ({ policy }),
+      ApiContext: class {},
+      ApiError: class extends Error {},
+      jobContextFromRequest: () => ({}),
       logger: { error: () => undefined }
     };
 

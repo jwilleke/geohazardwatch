@@ -3,7 +3,7 @@
  * Mounted at /api/geohazardwatch in register().
  */
 
-import { Router, type Request, type Response } from 'express';
+import type { Router, Request, Response } from 'express';
 import type { WikiEngine } from '#ngdpbase/types/WikiEngine.js';
 import type VolcanoDataManager from '../managers/VolcanoDataManager.js';
 import type EarthquakeDataManager from '../managers/EarthquakeDataManager.js';
@@ -79,7 +79,7 @@ function parseFilters(q: Request['query']): VolcanoSearchFilters {
 }
 
 export default function apiRoutes(engine: WikiEngine, _config: Record<string, unknown>): Router {
-  const router = Router();
+  const router = engine.createRouter();
 
   router.get('/search', (req: Request, res: Response) => {
     try {
