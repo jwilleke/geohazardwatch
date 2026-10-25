@@ -1,13 +1,17 @@
 #!/usr/bin/env node
 /**
  * Import volcano data from the GVP (Global Volcanism Program) WFS API.
+ *
+ * `runImport` is the import; the add-on's `geohazardwatch.import-volcanoes`
+ * job calls it with the host's guarded fetch (../lib/jobs.ts). Run as a
+ * command, this file is a manual entry point to the same code.
  */
 
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import type { EruptionRecord, VolcanoRecord } from '../lib/types.js';
-import { egressPolicy, fetchJson, type EgressPolicy } from '../lib/egress.js';
+import type { FetchJson } from '../lib/fetch.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WFS_BASE = 'https://webservices.volcano.si.edu/geoserver/GVP-VOTW/ows';
@@ -40,9 +44,9 @@ function buildWfsUrl(typeName: string, maxFeatures = 50000): string {
   return `${WFS_BASE}?${params}`;
 }
 
-async function fetchGeoJSON(typeName: string, label: string, policy: EgressPolicy): Promise<GeoJson> {
+async function fetchGeoJSON(typeName: string, label: string, fetchJson: FetchJson): Promise<GeoJson> {
   console.log(`Fetching ${label}...`);
-  const data = await fetchJson<GeoJson>(buildWfsUrl(typeName), label, policy);
+  const data = await fetchJson<GeoJson>(buildWfsUrl(typeName), label);
   console.log(`  Received ${data.features.length} of ${data.totalFeatures} features`);
   return data;
 }
@@ -159,8 +163,8 @@ function mapContinuingEruption(props: Record<string, unknown>): ContinuingErupti
 
 export async function runImport(
   dataDir: string,
-  flags: { eruptions?: boolean; activity?: boolean } = {},
-  policy: EgressPolicy = egressPolicy()
+  flags: { eruptions?: boolean; activity?: boolean },
+  fetchJson: FetchJson
 ): Promise<{ total: number; holocene: number; pleistocene: number }> {
   const includeEruptions = flags.eruptions === true;
   const includeActivity = flags.activity === true;
@@ -172,8 +176,8 @@ export async function runImport(
   }
 
   const [holoceneData, pleistoceneData] = await Promise.all([
-    fetchGeoJSON(ENDPOINTS.holoceneVolcanoes, 'Holocene volcanoes', policy),
-    fetchGeoJSON(ENDPOINTS.pleistoceneVolcanoes, 'Pleistocene volcanoes', policy)
+    fetchGeoJSON(ENDPOINTS.holoceneVolcanoes, 'Holocene volcanoes', fetchJson),
+    fetchGeoJSON(ENDPOINTS.pleistoceneVolcanoes, 'Pleistocene volcanoes', fetchJson)
   ]);
 
   const holoceneVolcanoes = holoceneData.features.map((f) => mapHolocene(f.properties));
@@ -190,7 +194,7 @@ export async function runImport(
   console.log(`  Written to:  ${volcanoesPath}`);
 
   if (includeEruptions) {
-    const eruptionsData = await fetchGeoJSON(ENDPOINTS.holoceneEruptions, 'Holocene eruptions', policy);
+    const eruptionsData = await fetchGeoJSON(ENDPOINTS.holoceneEruptions, 'Holocene eruptions', fetchJson);
     const eruptions = eruptionsData.features.map((f) => mapEruption(f.properties));
     const eruptionsPath = path.join(dataDir, 'eruptions.json');
     fs.writeFileSync(eruptionsPath, JSON.stringify(eruptions, null, 2), 'utf8');
@@ -200,7 +204,7 @@ export async function runImport(
   }
 
   if (includeActivity) {
-    const e3Data = await fetchGeoJSON(ENDPOINTS.eruptionsSince1960, 'eruptions since 1960 (global activity)', policy);
+    const e3Data = await fetchGeoJSON(ENDPOINTS.eruptionsSince1960, 'eruptions since 1960 (global activity)', fetchJson);
     const continuing = e3Data.features
       .filter((f) => f.properties['ContinuingEruption'] === 'True')
       .map((f) => mapContinuingEruption(f.properties))
@@ -238,13 +242,10 @@ if (isCli) {
   const args = process.argv.slice(2);
   const includeEruptions = args.includes('--eruptions');
   const includeActivity = args.includes('--activity');
-  const dataDirIdx = args.indexOf('--data-dir');
-  const dataDir =
-    dataDirIdx >= 0 && args[dataDirIdx + 1]
-      ? args[dataDirIdx + 1]
-      : path.join(__dirname, '..', 'data');
+  const { cliFetchJson, dataDirArg } = await import('./cli.js');
+  const dataDir = dataDirArg(args, path.join(__dirname, '..', 'data'));
 
-  runImport(dataDir, { eruptions: includeEruptions, activity: includeActivity }).catch((err: unknown) => {
+  runImport(dataDir, { eruptions: includeEruptions, activity: includeActivity }, await cliFetchJson()).catch((err: unknown) => {
     console.error('Import failed:', err instanceof Error ? err.message : err);
     process.exit(1);
   });

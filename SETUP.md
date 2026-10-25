@@ -21,7 +21,9 @@ npm install
 
 ## Step 2 — Import data
 
-Volcano data must be imported before the addon is enabled. The importers fetch through ngdpbase's `guardedFetch`, loaded from `dist/` in the current directory ([#349](https://github.com/jwilleke/geohazardwatch/issues/349)), so run them from a built ngdpbase checkout:
+Once enabled, the addon refreshes its data itself, as ngdpbase scheduled jobs ([ngdpbase#2054](https://github.com/jwilleke/ngdpbase/issues/2054)): HANS every 10 minutes, earthquakes every 20, and the GVP volcano catalog daily at 08:00 New York time. On a new instance, fill everything at once with __Run now__ on each `geohazardwatch.import-*` job in Admin → Scheduled Jobs (`/admin/jobs`), volcanoes first (the earthquake import matches quakes to volcanoes). See [Data refresh jobs](./addons/geohazardwatch/README.md#data-refresh-jobs).
+
+The import scripts remain as a manual alternative. They fetch through ngdpbase's `guardedFetch`, loaded from `dist/` in the current directory ([#349](https://github.com/jwilleke/geohazardwatch/issues/349)), so run them from a built ngdpbase checkout:
 
 ```bash
 cd /path/to/ngdpbase && npm run build
@@ -82,8 +84,8 @@ The Husky pre-commit hook runs `npm run lint` automatically. Commits are rejecte
 
 __Addon not loading:__ Check `pm2 logs` — common causes are missing `node_modules` in the geohazardwatch directory or incorrect `addons-path` config.
 
-__Empty API responses `{ volcanoes: [], total: 0 }`:__ Data files are missing — run `npm run import:all`.
+__Empty API responses `{ volcanoes: [], total: 0 }`:__ Data files are missing — Run now `geohazardwatch.import-volcanoes` in Admin → Scheduled Jobs, and check its history there for a failed run.
 
-__HANS data not showing:__ `activity.json` is absent — run `npm run import:hans`. The addon starts cleanly without it; HANS is optional.
+__HANS data not showing:__ `activity.json` is absent — Run now `geohazardwatch.import-hans` in Admin → Scheduled Jobs. The addon starts cleanly without it; HANS is optional.
 
-__Earthquake proximity not working:__ `volcanoes.json` must exist before running `import:earthquakes` — the proximity match requires volcano coordinates.
+__Earthquake proximity not working:__ `volcanoes.json` must exist before the earthquake import runs — the proximity match requires volcano coordinates.

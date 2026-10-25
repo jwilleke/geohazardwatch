@@ -1,13 +1,17 @@
 #!/usr/bin/env node
 /**
  * Import volcano alert data from the USGS HANS API.
+ *
+ * `runImport` is the import; the add-on's `geohazardwatch.import-hans` job
+ * calls it with the host's guarded fetch (../lib/jobs.ts). Run as a command,
+ * this file is a manual entry point to the same code.
  */
 
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import type { HansAlert } from '../lib/types.js';
-import { egressPolicy, fetchJson, type EgressPolicy } from '../lib/egress.js';
+import type { FetchJson } from '../lib/fetch.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const HANS_API = 'https://volcanoes.usgs.gov/hans-public/api';
@@ -34,21 +38,21 @@ interface HansMonitoredRaw {
   vnum?: string;
 }
 
-function fetchHans<T>(endpoint: string, label: string, policy: EgressPolicy): Promise<T> {
+function fetchHans<T>(endpoint: string, label: string, fetchJson: FetchJson): Promise<T> {
   console.log(`Fetching ${label}...`);
-  return fetchJson<T>(`${HANS_API}${endpoint}`, label, policy);
+  return fetchJson<T>(`${HANS_API}${endpoint}`, label);
 }
 
 export async function runImport(
   dataDir: string,
-  policy: EgressPolicy = egressPolicy()
+  fetchJson: FetchJson
 ): Promise<{ elevatedCount: number; monitoredCount: number }> {
   console.log('Importing volcano activity from USGS HANS API...\n');
 
   const [elevated, dailySummary, monitored] = await Promise.all([
-    fetchHans<HansElevatedRaw[]>('/volcano/getElevatedVolcanoes', 'elevated volcanoes', policy),
-    fetchHans<HansSummaryRaw[]>('/notice/getDailySummaryData', 'daily summary', policy),
-    fetchHans<HansMonitoredRaw[]>('/volcano/getMonitoredVolcanoes', 'monitored volcanoes', policy)
+    fetchHans<HansElevatedRaw[]>('/volcano/getElevatedVolcanoes', 'elevated volcanoes', fetchJson),
+    fetchHans<HansSummaryRaw[]>('/notice/getDailySummaryData', 'daily summary', fetchJson),
+    fetchHans<HansMonitoredRaw[]>('/volcano/getMonitoredVolcanoes', 'monitored volcanoes', fetchJson)
   ]);
 
   const synopsisMap = new Map<string, HansSummaryRaw>();
@@ -109,13 +113,10 @@ const isCli =
   import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
 if (isCli) {
   const args = process.argv.slice(2);
-  const dataDirIdx = args.indexOf('--data-dir');
-  const dataDir =
-    dataDirIdx >= 0 && args[dataDirIdx + 1]
-      ? args[dataDirIdx + 1]
-      : path.join(__dirname, '..', 'data');
+  const { cliFetchJson, dataDirArg } = await import('./cli.js');
+  const dataDir = dataDirArg(args, path.join(__dirname, '..', 'data'));
 
-  runImport(dataDir).catch((err: unknown) => {
+  runImport(dataDir, await cliFetchJson()).catch((err: unknown) => {
     console.error('HANS import failed:', err instanceof Error ? err.message : err);
     process.exit(1);
   });

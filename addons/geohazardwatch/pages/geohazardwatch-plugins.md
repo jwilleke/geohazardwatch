@@ -171,7 +171,7 @@ __What it renders:__ A paginated table of recent earthquakes — columns for dat
 
 __When to use it:__ On earthquake or hazard monitoring pages, or on volcano pages to show local seismic activity.
 
-__Data:__ Reflects the most recent import snapshot. Run `npm run import:earthquakes` to refresh. Default feed covers M4.5+ earthquakes from the past 7 days.
+__Data:__ Reflects the most recent import snapshot, refreshed automatically (by default every 20 minutes). Default feed covers M4.5+ earthquakes from the past 7 days.
 
 ### All recent M4.5+ earthquakes
 
@@ -288,7 +288,7 @@ __Limitation:__ Covers US volcanoes only. For global volcanic activity, use Volc
 | WATCH | ORANGE | Heightened unrest, increased eruption potential |
 | WARNING | RED | Eruption imminent or underway |
 
-__Data:__ Reflects the most recent import snapshot. Run `npm run import:hans` to refresh. For live HANS data visit [volcanoes.usgs.gov](https://volcanoes.usgs.gov/).
+__Data:__ Reflects the most recent import snapshot, refreshed automatically (by default every 10 minutes). For live HANS data visit [volcanoes.usgs.gov](https://volcanoes.usgs.gov/).
 
 ---
 
@@ -388,13 +388,13 @@ Some plugins work especially well together on the same page:
 
 ## Data freshness
 
-All plugins read from local data snapshots imported from public APIs. Data is __not live__ — it reflects the state at the time of the last import.
+All plugins read from local data snapshots imported from public APIs. Data is __not live__ — it reflects the state at the time of the last import. The site refreshes each one automatically; the times below are the defaults, and an administrator can change them or refresh at once.
 
-| Data | Source | Import command |
-|------|--------|---------------|
-| Volcano catalog | Smithsonian GVP | `npm run import` |
-| Eruption records | Smithsonian GVP | `npm run import:eruptions` |
-| Earthquake data | USGS (M4.5+, past 7 days) | `npm run import:earthquakes` |
-| US volcano alerts | USGS HANS | `npm run import:hans` |
+| Data | Source | Refreshed |
+|------|--------|-----------|
+| Volcano catalog | Smithsonian GVP | Daily, 08:00 New York time |
+| Eruption records | Smithsonian GVP | Daily, 08:00 New York time |
+| Earthquake data | USGS (M4.5+, past 7 days) | Every 20 minutes |
+| US volcano alerts | USGS HANS | Every 10 minutes |
 
 For live data visit the source portals directly — links on the [About geohazardwatch](/view/geohazardwatch-about) page.

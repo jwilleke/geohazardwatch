@@ -1,13 +1,17 @@
 #!/usr/bin/env node
 /**
  * Import earthquake data from the USGS Earthquake Hazards Program feeds.
+ *
+ * `runImport` is the import; the add-on's `geohazardwatch.import-earthquakes`
+ * job calls it with the host's guarded fetch (../lib/jobs.ts). Run as a
+ * command, this file is a manual entry point to the same code.
  */
 
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import type { EarthquakeRecord, NearestVolcano, VolcanoRecord } from '../lib/types.js';
-import { egressPolicy, fetchJson, type EgressPolicy } from '../lib/egress.js';
+import type { FetchJson } from '../lib/fetch.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FEED_BASE = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary';
@@ -100,8 +104,8 @@ function loadVolcanoes(dataDir: string): VolcanoRecord[] {
 
 export async function runImport(
   dataDir: string,
-  feedName = DEFAULT_FEED,
-  policy: EgressPolicy = egressPolicy()
+  feedName: string,
+  fetchJson: FetchJson
 ): Promise<{ total: number; nearVolcano: number }> {
   if (!FEEDS[feedName]) {
     throw new Error(`Unknown feed: ${feedName}. Available: ${Object.keys(FEEDS).join(', ')}`);
@@ -118,7 +122,7 @@ export async function runImport(
   }
 
   console.log('Fetching earthquake feed…');
-  const data = await fetchJson<{ features: UsgsFeature[]; metadata: { title: string } }>(feedUrl, 'feed', policy);
+  const data = await fetchJson<{ features: UsgsFeature[]; metadata: { title: string } }>(feedUrl, 'feed');
   console.log(`  Received ${data.features.length} earthquakes (${data.metadata.title})`);
 
   const earthquakes = data.features.map((f) => mapEarthquake(f, volcanoes));
@@ -178,13 +182,10 @@ if (isCli) {
     process.exit(1);
   }
 
-  const dataDirIdx = args.indexOf('--data-dir');
-  const dataDir =
-    dataDirIdx >= 0 && args[dataDirIdx + 1]
-      ? args[dataDirIdx + 1]
-      : path.join(__dirname, '..', 'data');
+  const { cliFetchJson, dataDirArg } = await import('./cli.js');
+  const dataDir = dataDirArg(args, path.join(__dirname, '..', 'data'));
 
-  runImport(dataDir, feedName).catch((err: unknown) => {
+  runImport(dataDir, feedName, await cliFetchJson()).catch((err: unknown) => {
     console.error('Earthquake import failed:', err instanceof Error ? err.message : err);
     process.exit(1);
   });

@@ -49,4 +49,4 @@ Real-time alert levels for monitored US volcanoes, sourced from the [USGS Hazard
 
 ## Data Source
 
-HANS data is imported via `npm run import:hans` and reflects a point-in-time snapshot. For live data visit [volcanoes.usgs.gov](https://volcanoes.usgs.gov/).
+HANS data is a point-in-time snapshot, refreshed automatically (by default every 10 minutes). For live data visit [volcanoes.usgs.gov](https://volcanoes.usgs.gov/).
