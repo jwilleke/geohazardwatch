@@ -3,16 +3,17 @@
  * Mounted at /addons/geohazardwatch in register().
  */
 
-import { Router, type Request, type Response } from 'express';
-import { ApiContext, ApiError, jobContextFromRequest } from '../lib/host.js';
+import type { Router, Request, Response } from 'express';
 import type { WikiEngine } from '#ngdpbase/types/WikiEngine.js';
+import type { AddonHost } from '#ngdpbase/utils/addonHost.js';
 import type BackgroundJobManager from '#ngdpbase/managers/BackgroundJobManager.js';
 import type VolcanoDataManager from '../managers/VolcanoDataManager.js';
 import type EarthquakeDataManager from '../managers/EarthquakeDataManager.js';
 import type HansDataManager from '../managers/HansDataManager.js';
 
-export default function adminRoutes(engine: WikiEngine): Router {
-  const router = Router();
+export default function adminRoutes(engine: WikiEngine, host: AddonHost): Router {
+  const { ApiContext, ApiError, jobContextFromRequest } = host;
+  const router = engine.createRouter();
 
   router.get('/', (req: Request, res: Response) => {
     void (async () => {
