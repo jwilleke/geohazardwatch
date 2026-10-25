@@ -96,6 +96,8 @@ export function jobDefinitions(deps: JobDeps): Record<JobName, JobDefinition> {
     earthquakes: {
       id: JOB_IDS.earthquakes,
       displayName: 'GeoHazardWatch: refresh USGS earthquakes',
+      // Every 20 minutes: a success is neither audited nor notified; a failure still is.
+      routine: true,
       run: (reportProgress) =>
         outcome('USGS earthquake import', async () => {
           reportProgress('Fetching USGS earthquake feed…');
@@ -107,6 +109,8 @@ export function jobDefinitions(deps: JobDeps): Record<JobName, JobDefinition> {
     hans: {
       id: JOB_IDS.hans,
       displayName: 'GeoHazardWatch: refresh USGS HANS volcano alerts',
+      // Every 10 minutes: a success is neither audited nor notified; a failure still is.
+      routine: true,
       run: (reportProgress) =>
         outcome('USGS HANS import', async () => {
           reportProgress('Fetching USGS HANS API…');

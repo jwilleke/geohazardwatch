@@ -194,6 +194,15 @@ describe('geohazardwatch jobs (ngdpbase#2054)', () => {
     assert.deepEqual(errors, []);
   });
 
+  it('marks the frequent jobs routine, so a success is neither audited nor notified', () => {
+    const jm = fakeJobManager();
+    registerJobs(jm, deps(tmp(), mockGuardedFetch([])));
+    assert.equal(jm.defs.get(JOB_IDS.earthquakes)?.routine, true);
+    assert.equal(jm.defs.get(JOB_IDS.hans)?.routine, true);
+    // The daily volcano refresh is one someone wants to know happened.
+    assert.notEqual(jm.defs.get(JOB_IDS.volcanoes)?.routine, true);
+  });
+
   it('registers a job with no schedule configured unscheduled, and says so', () => {
     const jm = fakeJobManager();
     const errors: string[] = [];
