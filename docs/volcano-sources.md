@@ -6,7 +6,7 @@ Where volcano-related data actually comes from, which of our pipelines are prima
 
 | Our pipeline | Upstream (real source) | Kind | Poll interval | Rendered on |
 |---|---|---|---|---|
-| `VolcanoDataManager` (static import) | `webservices.volcano.si.edu/geoserver/GVP-VOTW/ows` (Smithsonian GVP WFS) | __Primary__ | manual (`npm run import`) | `/api/geohazardwatch/search`, VolcanoInfobox/List/Search/Map plugins |
+| `VolcanoDataManager` (static import) | `webservices.volcano.si.edu/geoserver/GVP-VOTW/ows` (Smithsonian GVP WFS) | __Primary__ | daily 08:00 America/New_York (job `geohazardwatch.import-volcanoes`) | `/api/geohazardwatch/search`, VolcanoInfobox/List/Search/Map plugins |
 | `HansDataManager` | `volcanoes.usgs.gov/hans-public/api` | __Primary__ | 10 min | `US Volcano Alerts (USGS HANS)` page |
 | `vona` (ngdpbase `feeds` addon) | `volcanoes.usgs.gov/hans-public/api/notice/getVonasWithinLastYear` | __Primary__ — same USGS API family as HANS, different endpoint (VONA notices, not alert levels) | 30 min | __nowhere__ — orphaned config, see Known Issues |
 | `va-sigmets` (ngdpbase `feeds` addon) | `aviationweather.gov/api/data/isigmet` (FAA/NWS) | __Primary__, independent of the USGS sources | 20 min | __nowhere__ — orphaned config, see Known Issues |

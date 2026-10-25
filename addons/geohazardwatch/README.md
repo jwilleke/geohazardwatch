@@ -214,7 +214,7 @@ __Common use:__ `[{FirmsHotspots}]` on a global hazard summary page alongside Ha
 
 ## Admin panel
 
-`/addons/geohazardwatch` — status dashboard (record counts, HANS elevated alerts). Requires an authenticated session; the refresh buttons require the `admin` role.
+`/addons/geohazardwatch` — status dashboard (record counts, HANS elevated alerts). Viewing it needs `admin-read`; the refresh buttons need `admin-system`.
 
 | Method | Path | Description |
 |--------|------|-------------|
@@ -222,7 +222,25 @@ __Common use:__ `[{FirmsHotspots}]` on a global hazard summary page alongside Ha
 | POST | `/addons/geohazardwatch/jobs/hans` | Enqueue a HANS refresh job (admin) |
 | POST | `/addons/geohazardwatch/jobs/earthquakes` | Enqueue an earthquake refresh job (admin) |
 
-Both jobs also run automatically on a timer via ngdpbase's `BackgroundJobManager` — see `hansIntervalMs` / `eqIntervalMs` in Configuration keys. VAAC advisories (and FIRMS/VIIRS) are refreshed by the ngdpbase `feeds` addon's own poll scheduler instead — no admin button here.
+The buttons start the same jobs that run on their schedules — see [Data refresh jobs](#data-refresh-jobs). VAAC advisories (and FIRMS/VIIRS) are refreshed by the ngdpbase `feeds` addon's own poll scheduler instead — no admin button here.
+
+---
+
+## Data refresh jobs
+
+The add-on refreshes its data as ngdpbase scheduled jobs on core's `BackgroundJobManager` ([ngdpbase#2054](https://github.com/jwilleke/ngdpbase/issues/2054)). No Kubernetes CronJob and no timer of the add-on's own are involved.
+
+| Job id | Imports | Default schedule | Config key |
+|--------|---------|------------------|------------|
+| `geohazardwatch.import-volcanoes` | GVP volcanoes, eruptions and global activity (`volcanoes.json`, `eruptions.json`, `global-activity.json`) | daily 08:00 America/New_York | `ngdpbase.addons.geohazardwatch.volcanoesSchedule` |
+| `geohazardwatch.import-earthquakes` | USGS M4.5+ past week (`earthquakes.json`) | every 20 minutes | `ngdpbase.addons.geohazardwatch.earthquakesSchedule` |
+| `geohazardwatch.import-hans` | USGS HANS alert levels (`activity.json`) | every 10 minutes | `ngdpbase.addons.geohazardwatch.hansSchedule` |
+
+- __Schedules__ are core schedules: a shorthand (`every 10m`, `daily 06:00`, `hourly`), an RRULE, or `{ "rrule": "…", "tz": "America/New_York" }`. Without `tz` the site's `ngdpbase.default.timezone` applies. Cron is not accepted. A schedule that is missing or does not compile leaves that job unscheduled (Run now still works) and logs an error at start. Core's own `ngdpbase.jobs.<job id>.schedule` also overrides one, and `ngdpbase.jobs.<job id>.enabled: false` pauses it.
+- __What core does:__ each slot runs once, as the system principal; a failed run (a fetch error, a non-2xx answer, a refused address) is tried again after 1, 5 and 15 minutes, then recorded as failed, audited and posted to admins; a slot missed while the server was down is caught up once; a slot that comes due while the job is still running is skipped. The previous snapshot stays in place when a run fails.
+- __Run now:__ admins start any of them from Admin → Scheduled Jobs (`/admin/jobs`, needs `admin-system`), which also shows the next slot and the run history. The HANS and earthquake buttons on this add-on's admin panel do the same.
+- __Where it writes:__ `dataPath`, the folder the add-on's managers read; each manager reloads after its import.
+- __Outbound HTTP__ is `host.guardedFetch` under the site's egress policy as it is at each run, with the site's User-Agent and core's 30 s timeout. `maxResponseBytes` raises core's 8 MiB response limit, since GVP's Holocene eruptions alone are larger.
 
 ---
 
@@ -267,7 +285,7 @@ VAAC ash advisories have no dedicated API endpoint here — they're served by th
 
 ## Import scripts
 
-Run from a built ngdpbase checkout (requires internet access): the importers fetch through ngdpbase's `guardedFetch` under the default egress policy, loaded from `dist/` in the current directory ([#349](https://github.com/jwilleke/geohazardwatch/issues/349)). Data goes to `addons/geohazardwatch/data/` unless `--data-dir` is given.
+Manual entry points to the same code the jobs run (`runImport` in each file); nothing depends on them. Use [Run now](#data-refresh-jobs) on a running site instead. A script run from a shell has no host, so it loads `guardedFetch` and the default egress policy from `dist/` in the current directory: run it from a built ngdpbase checkout (requires internet access). Data goes to `addons/geohazardwatch/data/` unless `--data-dir` is given.
 
 ```sh
 cd /path/to/ngdpbase
@@ -299,7 +317,7 @@ node addons/geohazardwatch/import/import-earthquakes.js --feed=significant-week
 node addons/geohazardwatch/import/import-hans.js --data-dir /path/to/data
 ```
 
-Earthquake import requires `volcanoes.json` to already exist (for proximity matching). HANS import needs no auth and covers US volcanoes only (~65 monitored); it writes `activity.json`, which `HansDataManager` treats as optional — the addon starts cleanly without it. Both refresh automatically on a timer once the addon is registered (see `hansIntervalMs` / `eqIntervalMs` below), or on demand from the Admin panel.
+Earthquake import uses `volcanoes.json` when it exists (for proximity matching). HANS import needs no auth and covers US volcanoes only (~65 monitored); it writes `activity.json`, which `HansDataManager` treats as optional — the addon starts cleanly without it.
 
 ---
 
@@ -311,8 +329,12 @@ Set in your ngdpbase `app-custom-config.json`:
 |-----|---------|-------------|
 | `ngdpbase.addons.geohazardwatch.enabled` | `false` | Enable the add-on |
 | `ngdpbase.addons.geohazardwatch.dataPath` | `./data/geohazardwatch` | Path to data directory |
-| `ngdpbase.addons.geohazardwatch.hansIntervalMs` | `600000` (10 min) | HANS background refresh interval; `0` disables polling |
-| `ngdpbase.addons.geohazardwatch.eqIntervalMs` | `1200000` (20 min) | Earthquake background refresh interval; `0` disables polling |
+| `ngdpbase.addons.geohazardwatch.volcanoesSchedule` | `{ "rrule": "daily 08:00", "tz": "America/New_York" }` | GVP import schedule ([Data refresh jobs](#data-refresh-jobs)) |
+| `ngdpbase.addons.geohazardwatch.earthquakesSchedule` | `every 20m` | USGS earthquake import schedule |
+| `ngdpbase.addons.geohazardwatch.hansSchedule` | `every 10m` | USGS HANS import schedule |
+| `ngdpbase.addons.geohazardwatch.maxResponseBytes` | `33554432` (32 MiB) | Largest upstream response an import accepts |
+
+`hansIntervalMs` and `eqIntervalMs` are gone: a site that set either to `0` to stop polling sets `ngdpbase.jobs.geohazardwatch.import-hans.enabled` (or `…import-earthquakes.enabled`) to `false` instead.
 
 The Tsunami and Landslide pages, and VAAC advisories, render live data through a separate ngdpbase `feeds` addon, configured independently — see [Tsunami & Landslide pages](#tsunami--landslide-pages) below and [`docs/volcano-sources.md`](../../docs/volcano-sources.md#configuration-vaac-advisories) for VAAC.
 
@@ -348,10 +370,14 @@ addons/geohazardwatch/
 │   └── admin.js                    ← /addons/geohazardwatch admin panel + refresh jobs
 ├── views/
 │   └── admin-geohazardwatch.ejs    ← Admin panel template
+├── lib/
+│   ├── jobs.ts                     ← The scheduled refresh jobs (registerJobs)
+│   └── fetch.ts                    ← JSON over the guarded fetch the caller hands in
 ├── import/
 │   ├── import-volcanoes.js         ← GVP WFS API importer (volcanoes, eruptions, activity)
 │   ├── import-earthquakes.js       ← USGS feed importer + proximity matching
-│   └── import-hans.js              ← USGS HANS alert importer
+│   ├── import-hans.js              ← USGS HANS alert importer
+│   └── cli.ts                      ← The guarded fetch for a manual run from a shell
 ├── pages/                          ← Seeded into ngdpbase on first load, never overwritten
 │   ├── volcanoes-and-earthquakes.md
 │   ├── geohazardwatch-about.md

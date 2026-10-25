@@ -1,7 +1,9 @@
 {
-  "_comment": "Default configuration for the geohazardwatch addon. Override any key in app-custom-config.json.",
+  "_comment": "Default configuration for the geohazardwatch addon. Override any key in app-custom-config.json. Schedules are core scheduled-job schedules (a shorthand, an RRULE, or { rrule, tz }); ngdpbase.jobs.<jobId>.enabled: false pauses a job.",
   "ngdpbase.addons.geohazardwatch.dataPath": "",
-  "ngdpbase.addons.geohazardwatch.hansIntervalMs": 600000,
-  "ngdpbase.addons.geohazardwatch.eqIntervalMs": 1200000,
+  "ngdpbase.addons.geohazardwatch.maxResponseBytes": 33554432,
+  "ngdpbase.addons.geohazardwatch.volcanoesSchedule": { "rrule": "daily 08:00", "tz": "America/New_York" },
+  "ngdpbase.addons.geohazardwatch.earthquakesSchedule": "every 20m",
+  "ngdpbase.addons.geohazardwatch.hansSchedule": "every 10m",
   "ngdpbase.application.registration": false
 }

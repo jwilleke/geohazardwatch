@@ -20,7 +20,7 @@
     "format": "prettier --write \"addons/**/*.ts\"",
     "format:check": "prettier --check \"addons/**/*.ts\"",
     "typecheck:addon": "bash scripts/typecheck-addon.sh",
-    "test": "tsx --test addons/geohazardwatch/managers/*.test.ts",
+    "test": "tsx --test addons/geohazardwatch/managers/*.test.ts addons/geohazardwatch/lib/*.test.ts",
     "prepare": "husky install",
     "version:bump": "tsx src/utils/version.ts"
   },

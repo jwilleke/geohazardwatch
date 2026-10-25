@@ -6,7 +6,7 @@ Not one of the four the user asked about by name, but the same treatment applies
 
 | Our pipeline | Upstream (real source) | Kind | Poll/import cadence | Rendered on |
 |---|---|---|---|---|
-| `EarthquakeDataManager` | `earthquake.usgs.gov/earthquakes/feed/v1.0/summary/<feed>.geojson` (USGS) | __Primary__, single source, no re-publishers involved | manual (`npm run import:earthquakes[:month]`) | `earthquakes.md`, EarthquakeList/Map plugins, `/api/geohazardwatch/*` |
+| `EarthquakeDataManager` | `earthquake.usgs.gov/earthquakes/feed/v1.0/summary/<feed>.geojson` (USGS) | __Primary__, single source, no re-publishers involved | 20 min (job `geohazardwatch.import-earthquakes`) | `earthquakes.md`, EarthquakeList/Map plugins, `/api/geohazardwatch/*` |
 
 USGS's own standard summary feeds — no third party in between, unlike the volcano-activity situation. Available feed variants (selectable via `--feed=`):
 
@@ -25,5 +25,5 @@ USGS's own standard summary feeds — no third party in between, unlike the volc
 
 ## Known issues / follow-ups
 
-- Import is manual (`npm run import:earthquakes`), not on a poll interval like the `feeds`-addon-based hazard types — no automatic refresh unless someone runs the script or a scheduled job triggers it. Worth checking whether a CronJob already handles this in production (the `geohazardwatch-data-refresh` CronJob seen in the cluster) or whether it needs to be added.
+- Refreshed by the add-on's own scheduled job, `geohazardwatch.import-earthquakes` on ngdpbase's BackgroundJobManager (default every 20 minutes, `ngdpbase.addons.geohazardwatch.earthquakesSchedule`; [ngdpbase#2054](https://github.com/jwilleke/ngdpbase/issues/2054)). No CronJob or timer is involved. See the [add-on README](../addons/geohazardwatch/README.md#data-refresh-jobs).
 - Same single-source risk profile as landslides/tsunamis: no fallback if USGS's feed has an outage, but USGS's summary feeds are about as authoritative and reliable as earthquake data gets, so this is lower-priority than the volcano-side redundancy/orphaned-pipeline issues.
