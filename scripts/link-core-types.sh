@@ -9,8 +9,8 @@
 #   - dist/src at the repository root: publish.yml builds ngdpbase at
 #     ngdpbase.minVersion and links it there;
 #   - the ghcr.io/jwilleke/ngdpbase:<version>-devtools image, when Docker is
-#     present. <version> is NGDPBASE_VERSION, else the Dockerfile's
-#     NGDPBASE_VERSION, else the add-on's ngdpbase.minVersion;
+#     present. <version> is NGDPBASE_VERSION, else the add-on's
+#     ngdpbase.minVersion;
 #   - ../ngdpbase/dist/src, a sibling checkout.
 set -euo pipefail
 
@@ -33,9 +33,6 @@ if [[ -d "$ROOT/dist/src" ]]; then
 fi
 
 VER="${NGDPBASE_VERSION:-}"
-if [[ -z "$VER" && -f "$ROOT/Dockerfile" ]]; then
-  VER="$(grep -E '^ARG NGDPBASE_VERSION=' "$ROOT/Dockerfile" | cut -d= -f2)"
-fi
 if [[ -z "$VER" ]]; then
   VER="$(node -p "require('$ADDON/package.json').ngdpbase.minVersion")"
 fi

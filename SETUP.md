@@ -47,7 +47,7 @@ This is the __drop-in__ path — the right choice for local development (edit-in
 }
 ```
 
-> Production instead installs the addon as a versioned npm package (`@jwilleke/geohazardwatch-addon`) into a generic ngdpbase image — see `Dockerfile` and [#152](https://github.com/jwilleke/geohazardwatch/issues/152). That config uses `"node_modules:@jwilleke/*-addon"` in `addons-path` instead of a directory path. Local dev keeps using drop-in as shown above.
+> A production site instead runs the stock ngdpbase image and has core install the published package (`@jwilleke/geohazardwatch-addon`) from npm, named in the site's `ngdpbase.addons.install` config. See the README's [Run it on a site](./README.md#run-it-on-a-site). Local dev keeps using drop-in as shown above.
 
 ## Step 4 — Restart ngdpbase
 
