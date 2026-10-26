@@ -80,3 +80,10 @@ where there is no `package.json`.
 
 Only committed files are linted: anything `.gitignore`d is generated or vendored, so its source is
 linted instead.
+<!-- KIT:END -->
+
+## Cursor Cloud
+
+Node __24.22.1__ and npm __12.2.1__ live in `/usr/local`. A login shell finds the image's Node 22 first, because nvm is earlier on `PATH`. Run `export PATH="/usr/local/bin:$PATH"` before `node` or `npm`.
+
+The site is the published ngdpbase image __5.34.0__ (`ghcr.io/jwilleke/ngdpbase:5.34.0`) with this add-on mounted from `/workspace/addons`. It listens on port 3000. Instance data is `/var/lib/geohazardwatch/data`. Core types for `npm run typecheck:addon` are `/opt/ngdpbase/dist-src`, selected with `NGDPBASE_DIST_SRC`. The generated admin password is `/opt/ngdpbase/admin.password` (user `admin`).
