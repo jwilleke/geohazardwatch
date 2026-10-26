@@ -16,23 +16,6 @@
       "allowedVersions": "<7"
     },
     {
-      "description": "Auto-merge minor and patch updates for the ngdpbase base image",
-      "matchManagers": ["dockerfile"],
-      "matchPackageNames": ["ghcr.io/jwilleke/ngdpbase"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
-      "automergeType": "pr",
-      "platformAutomerge": true
-    },
-    {
-      "description": "Major bumps of the ngdpbase base image require manual review",
-      "matchManagers": ["dockerfile"],
-      "matchPackageNames": ["ghcr.io/jwilleke/ngdpbase"],
-      "matchUpdateTypes": ["major"],
-      "automerge": false,
-      "labels": ["dependencies", "major-bump", "needs-review"]
-    },
-    {
       "description": "Auto-merge minor and patch npm updates",
       "matchManagers": ["npm"],
       "matchUpdateTypes": ["minor", "patch"],

@@ -74,7 +74,7 @@ npm run test:coverage     # Check coverage
 
 ### Renaming the addon ID
 
-The addon's identity is the `name:` field at the top of `addons/geohazardwatch/index.js`. It's referenced by string in __downstream config repos__, not just here — most importantly in `jwilleke/mj-infra-flux/apps/production/geohazardwatch/configmap.yaml`, which gates the addon at boot via `ngdpbase.addons.<id>.enabled`.
+The addon's identity is the `name:` field at the top of `addons/geohazardwatch/index.js`. It's referenced by string in __each site's configuration__, not just here — most importantly geohazardwatch.com's `app-custom-config.json` on its data volume, which gates the addon at boot via `ngdpbase.addons.<id>.enabled` and names it in `ngdpbase.addons.install`.
 
 Renaming the field here without updating downstream configs will silently disable the addon in production: `AddonsManager` discovers the renamed addon by directory but doesn't find the matching `enabled` key under its new name, so plugins and managers register zero. This actually happened on 2026-05-10 — see [`jwilleke/ngdpbase#671`](https://github.com/jwilleke/ngdpbase/issues/671) for the post-mortem.
 
@@ -88,16 +88,15 @@ Before merging an addon-rename PR:
   gh search code "ngdpbase.addons.<old-id>" --owner jwilleke
   ```
 
-  Every match needs a follow-up commit in that repo before this addon's next image deploys. Today the only known consumer is `jwilleke/mj-infra-flux`, but new clusters / forks may add others.
+  Every match needs a follow-up commit in that repo before a site installs the renamed release. Site configuration on a data volume is not in any repo, so check each site's `app-custom-config.json` too.
 
 - [ ] Mention the downstream impact and the linked downstream PR(s) in this PR's description, so the reviewer can confirm the follow-up landed
 - [ ] Bump `package.json` version with __major__ semver (per the conventional-commits `!`) — addon-id renames are breaking changes for any consumer that names the addon by string
 - [ ] Use the conventional-commits `!` marker on the rename commit (e.g., `refactor!: rename addon id from foo to bar`)
 
-After merge, before the new image lands in production:
+After merge, before a site installs the renamed release:
 
-- [ ] Open the corresponding `mj-infra-flux` PR with the matching configmap change (rename `ngdpbase.addons.<old-id>` keys to `ngdpbase.addons.<new-id>`)
-- [ ] Coordinate the merge order: the configmap PR must reach the cluster __before__ (or simultaneously with) the new image. Easiest path is to merge `mj-infra-flux` first; Flux will reconcile the configmap, then the next addon image deploy lands cleanly.
+- [ ] In each site's `app-custom-config.json`, rename the `ngdpbase.addons.<old-id>` keys to `ngdpbase.addons.<new-id>` and the `ngdpbase.addons.install` entry, in the same edit that bumps the installed version, then restart the site.
 
 The `addon-rename-detector` GitHub Actions workflow (`.github/workflows/addon-rename-detector.yml`) runs on every push and PR. It diffs the addon's `name:` field against the previous tag and posts a check-run failure if it detects a rename without an accompanying downstream update. The CI is the safety net; this checklist is the dev-time discipline.
 

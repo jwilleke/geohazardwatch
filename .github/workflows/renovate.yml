@@ -4,11 +4,10 @@ name: Renovate
 # renovate.json at the repo root. No dependency on Mend's hosted service.
 #
 # What it does:
-#   - Polls dependency sources (GHCR for the ngdpbase base image, npm for
-#     deps) every hour.
+#   - Polls dependency sources (npm and GitHub Actions) every hour.
 #   - Opens PRs for available updates.
 #   - Auto-merges minor + patch updates per the rules in renovate.json
-#     (ngdpbase base image and npm deps): opens a PR (automergeType: "pr"),
+#     (npm deps and actions): opens a PR (automergeType: "pr"),
 #     which triggers ci.yml's normal pull_request-scoped checks, then
 #     GitHub's native automerge (platformAutomerge: true) merges it once
 #     green. Do NOT switch this to automergeType: "branch" — that skips
@@ -18,18 +17,19 @@ name: Renovate
 #     deadlocked the ngdpbase auto-bump for ~15h (2026-07-20 20:40 through
 #     2026-07-21 11:26, discovered when v3.54.0/v3.55.0 both failed to land
 #     despite the cron running hourly the whole time) before being caught.
-#   - Auto-merged Dockerfile bumps trigger auto-tag.yml → publish-image.yml,
-#     which is the whole point — keeps this satellite current with upstream
-#     ngdpbase patches and minors without operator action.
+#   - This repository no longer builds a site image, so there is no ngdpbase
+#     base image to bump: geohazardwatch.com runs the stock ngdpbase image
+#     (Flux image automation in mj-infra-flux) and core installs this add-on
+#     from npm. core-compat.yml tests the add-on against new core releases.
 #
 # Required secret:
 #   RENOVATE_TOKEN — fine-grained PAT scoped to this repo with:
 #     - Contents: read & write
 #     - Pull requests: read & write
 #     - Workflows: read & write
-#   The Workflows scope is required so Renovate's auto-merged commits trigger
-#   downstream workflows (auto-tag.yml etc.). The default GITHUB_TOKEN cannot
-#   trigger other workflows, which would break the rebuild cascade.
+#   The Workflows scope is required so Renovate can update files under
+#   .github/workflows/ (action version bumps). The default GITHUB_TOKEN
+#   cannot trigger other workflows, so its PRs would get no CI checks.
 #
 #   Operator may reuse RELEASE_PAT for this secret if its scopes match.
 #
